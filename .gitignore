@@ -51,7 +51,7 @@ mlruns/            # The directory MLflow uses to store experiment tracking data
 .mlflow/
 
 # Datasets and models
-data/              # If you download large datasets into a 'data' folder
+datasets/              # If you download large datasets into a 'data' folder
 *.csv
 *.xlsx
 *.pkl              # Pickled models/objects
