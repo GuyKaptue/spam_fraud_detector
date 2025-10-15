@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/6e85a724b46c4276ad837fddd0676ce6/artifacts
+end_time: 1760541070204
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6e85a724b46c4276ad837fddd0676ce6
+run_name: KNeighbors_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760541070192
+status: 3
+tags: []
+user_id: guykaptue

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/daeb07b06cff4a5e9f8fbe15e32ed447/artifacts
+end_time: 1760546390246
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: daeb07b06cff4a5e9f8fbe15e32ed447
+run_name: GradientBoosting_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760546390235
+status: 3
+tags: []
+user_id: guykaptue

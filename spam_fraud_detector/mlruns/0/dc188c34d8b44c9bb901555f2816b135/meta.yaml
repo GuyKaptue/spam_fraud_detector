@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/dc188c34d8b44c9bb901555f2816b135/artifacts
+end_time: 1760512030806
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: dc188c34d8b44c9bb901555f2816b135
+run_name: MLP_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760512030795
+status: 3
+tags: []
+user_id: guykaptue

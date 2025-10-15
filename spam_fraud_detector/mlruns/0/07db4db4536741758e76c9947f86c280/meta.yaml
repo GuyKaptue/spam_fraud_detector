@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/07db4db4536741758e76c9947f86c280/artifacts
+end_time: 1760511964085
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 07db4db4536741758e76c9947f86c280
+run_name: LogisticRegression_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760511964072
+status: 3
+tags: []
+user_id: guykaptue

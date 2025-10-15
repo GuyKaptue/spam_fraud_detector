@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/99c00c7757f64b9b9766a40391293273/artifacts
+end_time: 1760512010720
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 99c00c7757f64b9b9766a40391293273
+run_name: SVC_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760512010707
+status: 3
+tags: []
+user_id: guykaptue

@@ -1,0 +1,19 @@
+# Core libraries
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+
+# Boosting models
+xgboost
+lightgbm
+
+# Experiment tracking
+mlflow
+
+# Kaggle dataset access
+kagglehub
+
+# Optional: Jupyter support for notebooks
+notebook

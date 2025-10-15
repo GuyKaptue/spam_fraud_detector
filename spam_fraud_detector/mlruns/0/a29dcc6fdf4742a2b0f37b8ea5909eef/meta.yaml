@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/a29dcc6fdf4742a2b0f37b8ea5909eef/artifacts
+end_time: 1760466864605
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a29dcc6fdf4742a2b0f37b8ea5909eef
+run_name: LGBM_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760466864595
+status: 3
+tags: []
+user_id: guykaptue
