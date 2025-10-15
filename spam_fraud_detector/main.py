@@ -4,7 +4,7 @@ import sys
 
 # Import necessary classes from the src module
 try:
-    from core import (
+    from spam_fraud_detector.core import (
         KaggleDataLoader,
         ClassifierGroupComparer,
         ModelVisualizer
