@@ -3,12 +3,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="spam-fraud-detector",  # Updated to match project directory
+    name="spam-fraud-detector",
     version="0.1.0",
     author="Guy Kaptue",
     description="Modular benchmarking framework for binary classification tasks (spam, fraud, etc.)",
-    url="https://github.com/GuyKaptue/classifier-bench", # Keep this if it's the correct repo
-    packages=find_packages(include=['spam_fraud_detector', 'spam_fraud_detector.*']), # Explicitly include the main package
+    url="https://github.com/GuyKaptue/spam-fraud-detector", 
+    packages=find_packages(include=['spam_fraud_detector', 'spam_fraud_detector.*']),
     install_requires=[
         "pandas",
         "numpy",
@@ -26,9 +26,9 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
-        "License :: OSI Approved :: MIT License", # A common addition
+        "License :: OSI Approved :: MIT License",
     ],
-    # You might also want to add an entry point for your main script
+    # Console entry point for running the main script
     entry_points={
         'console_scripts': [
             'run-detector=spam_fraud_detector.main:main',
