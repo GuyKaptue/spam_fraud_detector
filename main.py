@@ -1,4 +1,4 @@
-# main.py
+# spam_fraud_detector/main.py
 
 import sys
 
