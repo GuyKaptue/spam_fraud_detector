@@ -7,7 +7,7 @@ import seaborn as sns
 from sklearn.metrics import roc_curve, auc, precision_recall_curve
 from matplotlib.backends.backend_pdf import PdfPages
 
-from core.utils import ensure_dir
+from spam_fraud_detector.core.utils import ensure_dir
 
 class ModelVisualizer:
     def __init__(self, results: dict, report_name: str = "spam_detection", yticklabels: list = None):

@@ -23,8 +23,8 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 
-from core.utils import format_metrics, safe_model_name
-from core.data_loader import KaggleDataLoader
+from spam_fraud_detector.core.utils import format_metrics, safe_model_name
+from spam_fraud_detector.core.data_loader import KaggleDataLoader
 
 class ClassifierGroupComparer:
     def __init__(

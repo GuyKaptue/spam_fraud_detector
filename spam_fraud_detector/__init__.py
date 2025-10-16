@@ -1,6 +1,6 @@
-# spam_fraud_detector/__init__.py
+# spam_fraud_detector/spam_fraud_detector/__init__.py
 
-from core import (
+from spam_fraud_detector.core import (
  ClassifierGroupComparer,
  ModelVisualizer,
  KaggleDataLoader,

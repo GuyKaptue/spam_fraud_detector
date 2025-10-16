@@ -12,6 +12,10 @@ except ImportError as e:
     print("Ensure that the classes (KaggleDataLoader, ClassifierGroupComparer, ModelVisualizer) are correctly defined within the 'src' package.")
     sys.exit(1)
 
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+
 
 class SpamFraudDetector:
     """

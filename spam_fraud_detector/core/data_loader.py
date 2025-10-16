@@ -4,7 +4,7 @@ import os
 import pandas as pd 
 import kagglehub 
 from kagglehub import KaggleDatasetAdapter 
-from core.utils import get_dataset_config, ensure_dir, save_dataframe
+from spam_fraud_detector.core.utils import get_dataset_config, ensure_dir, save_dataframe
 
 class KaggleDataLoader:
     def __init__(self, task: str, adapter=KaggleDatasetAdapter.PANDAS, save_dir: str = "datasets"):
