@@ -12,7 +12,10 @@ from core import (
  get_dataset_config,
  DATASETS
 )
+
+from .main import SpamFraudDetector
 __all__ = [
+    "SpamFraudDetector",
     "ClassifierGroupComparer",
     "ModelVisualizer",
     "KaggleDataLoader",

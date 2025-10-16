@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/eb57e01ab73042cabd1ecf5d4857810d/artifacts
+end_time: 1760597088111
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: eb57e01ab73042cabd1ecf5d4857810d
+run_name: XGB_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760597088098
+status: 3
+tags: []
+user_id: guykaptue
