@@ -11,7 +11,7 @@ setup(
     name="spam-fraud-detector",
     version="0.1.0",
     author="Guy Kaptue",
-    author_email="your.email@example.com",  # Optional: add your email
+    author_email="guyKaptue24@gmail.com",
     description="Modular benchmarking framework for binary classification tasks (spam, fraud, etc.)",
     long_description=long_description,
     long_description_content_type="text/markdown",
