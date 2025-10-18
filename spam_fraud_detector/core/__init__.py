@@ -10,6 +10,7 @@ from .utils import (
     safe_model_name,
     save_dataframe,
     get_dataset_config,
+    load_dataset,
     DATASETS
 )
 
@@ -23,5 +24,6 @@ __all__ = [
     "safe_model_name",
     "save_dataframe",
     "get_dataset_config",
+    "load_dataset",
     "DATASETS"
 ]
