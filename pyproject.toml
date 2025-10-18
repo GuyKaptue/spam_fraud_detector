@@ -28,7 +28,11 @@ dependencies = [
     "lightgbm",
     "mlflow",
     "kagglehub",
-    "openpyxl"
+    "openpyxl",
+    "dash",
+    "plotly",
+    "jinja2",
+    "streamlit"
 ]
 
 [project.optional-dependencies]

@@ -23,10 +23,11 @@ def get_dataset_config(task: str) -> dict:
     return DATASETS[task]
 
 def ensure_dir(path: str):
-    """Create directory if it doesn't exist."""
-    dir_path = os.path.dirname(path)
+    """Ensure a directory exists. Handles both file paths and directory paths."""
+    dir_path = path if os.path.isdir(path) or path.endswith("/") else os.path.dirname(path)
     if dir_path and not os.path.exists(dir_path):
         os.makedirs(dir_path)
+
 
 def format_metrics(metrics: dict, round_digits: int = 4):
     """Round and format only scalar metrics."""
@@ -64,4 +65,22 @@ def save_dataframe(data: pd.DataFrame, path: str, format: str = "csv") -> str:
     except Exception as e:
         print(f"Saving failed: {e}")
         return ""
+    
+def load_dataset(task: str="fraud") -> pd.DataFrame:
+    """Load the dataset for the given task ('spam' or 'fraud') from Kaggle."""
+    config = get_dataset_config(task)
+    dataset_dir = os.path.join("datasets", task)
+    file_path = os.path.join(dataset_dir, config["file_path"])
 
+    # Ensure the dataset file exists
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(
+            f"Dataset file not found: {file_path}\n"
+            f"Make sure you've downloaded it from Kaggle using:\n"
+            f"!kaggle datasets download -d {config['dataset_name']} -p {dataset_dir} --unzip"
+        )
+
+    # Load the dataset
+    df = pd.read_csv(file_path)
+    print(f"{task.capitalize()} dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+    return df

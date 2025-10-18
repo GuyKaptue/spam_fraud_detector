@@ -22,6 +22,8 @@ class ModelVisualizer:
         self.unscaled_conf_matrices = results["unscaled_confusion_matrices"]
         self.scaled_probs = {k: v["probs"] for k, v in results["scaled_raw"].items() if v["probs"] is not None}
         self.unscaled_probs = {k: v["probs"] for k, v in results["unscaled_raw"].items() if v["probs"] is not None}
+        self.scaled_precision_df = results.get("scaled_precision", pd.DataFrame())
+        self.unscaled_precision_df = results.get("unscaled_precision", pd.DataFrame())
         self.y_true = results["scaled_raw"][next(iter(results["scaled_raw"]))]["true"]
         self.yticklabels = yticklabels if yticklabels else ["Spam", "Not Spam"]
 
@@ -45,6 +47,17 @@ class ModelVisualizer:
 
     def save_f1_scores(self):
         self._save_plot(self.plot_f1_scores, f"{self.report_name}_f1_scores.png")
+
+    def plot_avg_precision_scores(self, ax):
+        combined = pd.concat([self.scaled_precision_df, self.unscaled_precision_df])
+        combined = combined.reset_index().rename(columns={"index": "Model", "Average Precision": "Precision"})
+        sns.barplot(data=combined, x="Precision", y="Model", ax=ax, palette="mako", hue="Model", dodge=False, legend=False)
+        ax.set_title("Model Comparison by Average Precision")
+        ax.set_xlabel("Average Precision Score")
+        ax.set_ylabel("Model")
+
+    def save_avg_precision_scores(self):
+        self._save_plot(self.plot_avg_precision_scores, f"{self.report_name}_avg_precision_scores.png")
 
     def plot_group_comparison(self, ax):
         df = self.group_comparison_df.T.reset_index().melt(id_vars="index", var_name="Group", value_name="Score")
@@ -115,6 +128,8 @@ class ModelVisualizer:
             self.scaled_metrics_df.to_excel(writer, sheet_name="Scaled Models")
             self.unscaled_metrics_df.to_excel(writer, sheet_name="Unscaled Models")
             self.group_comparison_df.to_excel(writer, sheet_name="Group Comparison")
+            self.scaled_precision_df.to_excel(writer, sheet_name="Scaled Precision")
+            self.unscaled_precision_df.to_excel(writer, sheet_name="Unscaled Precision")
         print(f"Metrics exported to {path}")
 
     def export_plots_to_pdf(self):
@@ -123,6 +138,7 @@ class ModelVisualizer:
         with PdfPages(path) as pdf:
             for plot_func in [
                 self.plot_f1_scores,
+                self.plot_avg_precision_scores,
                 self.plot_group_comparison,
                 self.plot_roc_curves,
                 self.plot_precision_recall_curves

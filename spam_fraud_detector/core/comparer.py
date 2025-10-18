@@ -6,7 +6,8 @@ import mlflow
 from sklearn.model_selection import train_test_split
 from sklearn.base import ClassifierMixin
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+    accuracy_score, precision_score, recall_score, f1_score, 
+    confusion_matrix, roc_curve, auc, precision_recall_curve
 )
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -124,6 +125,14 @@ class ClassifierGroupComparer:
             else:
                 probs = None
 
+            if probs is not None:
+                fpr, tpr, _ = roc_curve(self.y_test, probs)
+                roc_auc = auc(fpr, tpr)
+                precision, recall, _ = precision_recall_curve(self.y_test, probs)
+            else:
+                fpr, tpr, roc_auc = None, None, None
+                precision, recall = None, None
+
             acc = accuracy_score(self.y_test, preds)
             prec = precision_score(self.y_test, preds)
             rec = recall_score(self.y_test, preds)
@@ -136,6 +145,8 @@ class ClassifierGroupComparer:
                 mlflow.log_metric("precision", prec)
                 mlflow.log_metric("recall", rec)
                 mlflow.log_metric("f1", f1)
+                if roc_auc is not None:
+                    mlflow.log_metric("roc_auc", roc_auc)
                 mlflow.log_dict({"confusion_matrix": cm.tolist()}, "confusion_matrix.json")
 
             return {
@@ -145,7 +156,12 @@ class ClassifierGroupComparer:
                 "f1": f1,
                 "confusion_matrix": cm,
                 "probs": probs,
-                "true": self.y_test
+                "true": self.y_test,
+                "fpr": fpr,
+                "tpr": tpr,
+                "roc_auc": roc_auc,
+                "precision_curve": precision,
+                "recall_curve": recall
             }
 
         except ValueError as e:
@@ -181,12 +197,32 @@ class ClassifierGroupComparer:
             "Unscaled Avg": df_unscaled.mean()
         })
 
+        scaled_auc = {k: v["roc_auc"] for k, v in results_scaled.items() if v and v["roc_auc"] is not None}
+        unscaled_auc = {k: v["roc_auc"] for k, v in results_unscaled.items() if v and v["roc_auc"] is not None}
+
+        df_scaled_auc = pd.DataFrame.from_dict(scaled_auc, orient="index", columns=["AUC"]).sort_values("AUC", ascending=False)
+        df_unscaled_auc = pd.DataFrame.from_dict(unscaled_auc, orient="index", columns=["AUC"]).sort_values("AUC", ascending=False)
+
+        scaled_avg_prec = {
+            k: v["average_precision"] for k, v in results_scaled.items() if v and v["average_precision"] is not None
+        }
+        unscaled_avg_prec = {
+            k: v["average_precision"] for k, v in results_unscaled.items() if v and v["average_precision"] is not None
+        }
+
+        df_scaled_avg_prec = pd.DataFrame.from_dict(scaled_avg_prec, orient="index", columns=["Average Precision"]).sort_values("Average Precision", ascending=False)
+        df_unscaled_avg_prec = pd.DataFrame.from_dict(unscaled_avg_prec, orient="index", columns=["Average Precision"]).sort_values("Average Precision", ascending=False)
+
         return {
             "scaled_metrics": df_scaled.sort_values("f1", ascending=False),
             "unscaled_metrics": df_unscaled.sort_values("f1", ascending=False),
             "group_comparison": group_comparison,
             "scaled_confusion_matrices": {k: v["confusion_matrix"] for k, v in results_scaled.items() if v},
             "unscaled_confusion_matrices": {k: v["confusion_matrix"] for k, v in results_unscaled.items() if v},
+            "scaled_auc": df_scaled_auc,
+            "unscaled_auc": df_unscaled_auc,
+            "scaled_precision": df_scaled_avg_prec,
+            "unscaled_precision": df_unscaled_avg_prec,
             "scaled_raw": results_scaled,
             "unscaled_raw": results_unscaled
         }

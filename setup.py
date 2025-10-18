@@ -29,7 +29,11 @@ setup(
         "lightgbm",
         "mlflow",
         "kagglehub",
-        "openpyxl"
+        "openpyxl",
+        "dash",
+        "plotly",
+        "jinja2",
+        "streamlit"
     ],
     extras_require={
         "viz": ["matplotlib", "seaborn"],
