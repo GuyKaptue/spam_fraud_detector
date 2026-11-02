@@ -229,15 +229,46 @@ make test
 
 ## 12. Documentation Index
 
-| Document | Contents |
-|---|---|
-| **docs/FRAMEWORK.md** | Architecture whitepaper: pipeline, methodology, statistical validation, reproducibility |
-| **docs/PAPER.md** | Publication-ready results, significance testing, threshold comparison |
-| **docs/SPAM_DETECTION.md** | Spam detection case study: metrics, statistical validation, error analysis |
-| **docs/FRAUD_DETECTION.md** | Fraud detection validation report: cost analysis, threshold sensitivity, model risk |
-| **docs/EXPLAINABILITY.md** | Explainability framework: three personas, SHAP analysis, case investigations |
-| **docs/MODEL_VALIDATION_REPORT.md** | Industry-grade model validation: data quality, model risk, approval recommendation |
-| **docs/EVIDENCE_INVENTORY.json** | Machine-readable evidence inventory (25 models, 2 domains, 15 tables) |
+| Document | Location | Description |
+|---|---|---|
+| **[README](README.md)** | Root | Executive summary, architecture, methodology, results, reproducibility, FAQ |
+| **[Core Module Docs](spam_fraud_detector/core/README.md)** | `spam_fraud_detector/core/` | Per-module documentation: 14 core modules with What/How/Produces/Use sections |
+| **[Reports Index](spam_fraud_detector/reports/README.md)** | `spam_fraud_detector/reports/` | Reports directory overview, domain structure, evidence inventory, figure gallery |
+| **[Spam Detection Case Study](spam_fraud_detector/reports/spam_detection/README.md)** | `spam_fraud_detector/reports/spam_detection/` | Spam domain dataset, candidate models, performance results, statistical validation |
+| **[Fraud Detection Case Study](spam_fraud_detector/reports/fraud_detection/README.md)** | `spam_fraud_detector/reports/fraud_detection/` | Fraud domain dataset, candidate models, performance results, business cost analysis |
+| **[MLflow Tracking](spam_fraud_detector/mlruns/README.md)** | `spam_fraud_detector/mlruns/` | MLflow experiment tracking, params, metrics, tags, artifacts |
+| **[Tests Documentation](tests/README.md)** | `tests/` | Test suite purpose, structure, running tests, CI/CD integration |
+
+### Architecture & Methodology
+| Document | Location | Description |
+|---|---|---|
+| **[FRAMEWORK.md](spam_fraud_detector/reports/docs/FRAMEWORK.md)** | `spam_fraud_detector/reports/docs/` | Architecture whitepaper: pipeline, methodology, statistical validation, reproducibility |
+| **[PAPER.md](spam_fraud_detector/reports/docs/PAPER.md)** | `spam_fraud_detector/reports/docs/` | Publication-ready results, significance testing, threats to validity |
+| **[SPAM_DETECTION.md](spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md)** | `spam_fraud_detector/reports/spam_detection/docs/` | Spam detection case study: metrics, statistical validation |
+| **[FRAUD_DETECTION.md](spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md)** | `spam_fraud_detector/reports/fraud_detection/docs/` | Fraud detection validation report: cost analysis, threshold sensitivity |
+
+### Evidence & Validation
+| Document | Location | Description |
+|---|---|---|
+| **[EVIDENCE_INVENTORY.json](spam_fraud_detector/reports/docs/EVIDENCE_INVENTORY.json)** | `spam_fraud_detector/reports/docs/` | Machine-readable evidence: 25 models, 2 domains, 15 dashboard tables |
+| **[MODEL_VALIDATION_REPORT.md](spam_fraud_detector/reports/docs/MODEL_VALIDATION_REPORT.md)** | `spam_fraud_detector/reports/docs/` | Industry-grade model validation: data quality, model risk, approval recommendation |
+| **[EXPLAINABILITY.md](spam_fraud_detector/reports/docs/EXPLAINABILITY.md)** | `spam_fraud_detector/reports/docs/` | Explainability framework: three personas, SHAP analysis, case investigations |
+| **[SPAM_DETECTION.md](spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md)** | `spam_fraud_detector/reports/spam_detection/docs/` | Spam domain detailed case study |
+| **[FRAUD_DETECTION.md](spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md)** | `spam_fraud_detector/reports/fraud_detection/docs/` | Fraud domain detailed validation report |
+
+### Data Pipeline
+| Document | Location | Description |
+|---|---|---|
+| **[DATA_PIPELINE.md](spam_fraud_detector/reports/docs/DATA_PIPELINE.md)** | `spam_fraud_detector/reports/docs/` | Six-stage data pipeline (L1–L6): cleaning → features |
+
+### Reference & Style
+| Document | Location | Description |
+|---|---|---|
+| **[CORE_README_STYLE.md](spam_fraud_detector/reports/docs/CORE_README_STYLE.md)** | `spam_fraud_detector/reports/docs/` | Authoring standards for core module documentation |
+| **[BADGES.md](spam_fraud_detector/reports/docs/BADGES.md)** | `spam_fraud_detector/reports/docs/` | CI/CD badge reference |
+| **[MAKEFILE.md](spam_fraud_detector/reports/docs/MAKEFILE.md)** | `spam_fraud_detector/reports/docs/` | Makefile targets reference |
+| **[CITATION.cff](CITATION.cff)** | Root | Academic citation metadata |
+| **[LICENSE](LICENSE)** | Root | MIT license |
 
 ## 13. Citation
 
