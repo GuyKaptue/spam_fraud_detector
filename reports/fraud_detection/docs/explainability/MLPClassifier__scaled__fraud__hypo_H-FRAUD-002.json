@@ -10,7 +10,7 @@
     "V17": 0.15,
     "V4": -0.2
   },
-  "narrative": "A hypothetical customer like Mateo Alvarez (small-amount daytime domestic transaction) would be scored 0.006. The top drivers are V27 (+0.00), V28 (-0.00), V7 (+0.00). This hypothetical case would not be flagged at threshold 0.73.",
+  "narrative": "A hypothetical customer like Mateo Alvarez (small-amount daytime domestic transaction) would be scored 0.006. The top drivers are V27 (+0.00), V28 (-0.00), V12 (+0.00). This hypothetical case would not be flagged at threshold 0.73.",
   "persona": "fraud",
   "provenance": {
     "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
@@ -18,7 +18,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "scaled",
     "model": "MLPClassifier",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -27,7 +27,7 @@
     "estimated_cost_if_missed": "n/a — hypothetical customer, not a real one",
     "priority": "medium",
     "reason": "Hypothetical scenario 'Small-amount daytime domestic transaction' scored 0.006. Verify the model behaves as expected for this feature combination.",
-    "reviewer_notes_template": "Case H-FRAUD-002 — Mateo Alvarez. Score 0.006 (threshold 0.73). Top features: V27 (+0.00), V28 (-0.00), V7 (+0.00). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case H-FRAUD-002 — Mateo Alvarez. Score 0.006 (threshold 0.73). Top features: V27 (+0.00), V28 (-0.00), V12 (+0.00). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
       "Confirm with the analytics team that 'Small-amount daytime domestic transaction' is representative of real fraud patterns.",
       "If it matches a known novel pattern, add it as a labeled training example.",
@@ -60,35 +60,35 @@
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V27",
-      "shap_value": 0.003024766158210331,
+      "shap_value": 0.0033772905752290005,
       "value": 0.0
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V28",
-      "shap_value": -0.0030247661582103154,
+      "shap_value": -0.003377290575228992,
       "value": 0.0
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
-      "name": "V7",
-      "shap_value": 0.0023756812204928433,
-      "value": 0.0
+      "name": "V12",
+      "shap_value": 0.0011860335339844827,
+      "value": 0.3
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
-      "name": "V8",
-      "shap_value": -0.0023756812204928424,
+      "name": "V11",
+      "shap_value": -0.001186033533984457,
       "value": 0.0
     },
     {
-      "direction": "decreases_fraud_risk",
+      "direction": "increases_fraud_risk",
       "explanation": "",
-      "name": "V5",
-      "shap_value": -0.0017449357867913163,
+      "name": "V2",
+      "shap_value": 0.001148753595729427,
       "value": 0.0
     }
   ],

@@ -18,7 +18,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "GradientBoosting",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:28:14.918723+00:00",
     "split": "val"
   },
   "recommendation": {

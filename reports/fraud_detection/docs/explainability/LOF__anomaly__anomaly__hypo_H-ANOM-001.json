@@ -9,7 +9,7 @@
     "V12": -0.98,
     "V14": -3.1
   },
-  "narrative": "A hypothetical customer like Gustav Weber (large cross-border night transaction, dissimilar to historical fraud) would be scored -0.052. The top drivers are V7 (+0.05), V8 (-0.05), V9 (+0.05). This hypothetical case would not be flagged at threshold 0.75.",
+  "narrative": "A hypothetical customer like Gustav Weber (large cross-border night transaction, dissimilar to historical fraud) would be scored -0.052. The top drivers are V1 (+0.14), V2 (-0.14), V3 (+0.11). This hypothetical case would not be flagged at threshold 0.75.",
   "persona": "anomaly",
   "provenance": {
     "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
@@ -17,7 +17,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "anomaly",
     "model": "LOF",
-    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "recorded_at": "2026-11-02T10:33:48.537059+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -58,36 +58,36 @@
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V7",
-      "shap_value": 0.05286454903137838,
+      "name": "V1",
+      "shap_value": 0.14335640897228155,
       "value": 0.0
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
-      "name": "V8",
-      "shap_value": -0.05286454903137838,
+      "name": "V2",
+      "shap_value": -0.14335640897228155,
       "value": 0.0
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V9",
-      "shap_value": 0.05051363528209866,
+      "name": "V3",
+      "shap_value": 0.10738194403206504,
       "value": 0.0
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
-      "name": "V10",
-      "shap_value": -0.05051363528209866,
-      "value": -0.51
+      "name": "V4",
+      "shap_value": -0.10738194403206504,
+      "value": 0.0
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V15",
-      "shap_value": 0.03487816953323683,
+      "name": "V13",
+      "shap_value": 0.016834430714627174,
       "value": 0.0
     }
   ],

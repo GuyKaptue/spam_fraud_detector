@@ -30,12 +30,34 @@ PALETTE = ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b2",
            "#937860", "#da8bc3", "#8c8c8c", "#ccb974", "#64b5cd"]
 
 
+def _save_png(fig, out_path: Path) -> None:
+    """Save figure as PNG, ensuring Pillow's PNG plugin is registered.
+
+    pytest-cov's SysModuleSaver can evict PIL.PngImagePlugin from sys.modules,
+    which causes PIL.Image.save() to raise KeyError: 'PNG' because SAVE[]
+    no longer contains the PNG handler. Importing PIL.PngImagePlugin before
+    savefig ensures the handler is registered. If SAVE was already cleared
+    (e.g., by PIL.Image.init()), re-import and re-initialize.
+    """
+    try:
+        import PIL.PngImagePlugin  # noqa: F401
+    except ImportError:
+        pass
+    try:
+        fig.savefig(str(out_path), dpi=100, bbox_inches="tight")
+    except KeyError:
+        import PIL.Image
+        PIL.Image.init()
+        import PIL.PngImagePlugin  # noqa: F401
+        fig.savefig(str(out_path), dpi=100, bbox_inches="tight")
+
+
 def _save_fig(fig, name: str) -> Path | None:
     """Save a matplotlib figure to docs/figures/."""
     out_dir = Path("spam_fraud_detector/reports/docs/figures")
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / f"{name}.png"
-    fig.savefig(path, dpi=100, bbox_inches="tight")
+    _save_png(fig, path)
     plt.close(fig)
     return path
 
@@ -372,6 +394,10 @@ def build_hypothetical_casefile(persona: str, model, explainer,
 def render_case_waterfall(explainer, row: pd.DataFrame, casefile: dict,
                           out_path: Path, top_k: int = 10) -> Path:
     """Render a SHAP waterfall for an empirical subject."""
+    try:
+        import PIL.PngImagePlugin  # noqa: F401
+    except ImportError:
+        pass
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -404,7 +430,7 @@ def render_case_waterfall(explainer, row: pd.DataFrame, casefile: dict,
         fontsize=9,
     )
     fig.tight_layout()
-    fig.savefig(str(out_path), dpi=150, bbox_inches="tight")
+    _save_png(fig, out_path)
     plt.close(fig)
     return out_path
 
@@ -413,6 +439,15 @@ def render_hypothetical_case_waterfall(explainer, row: pd.DataFrame,
                                        casefile: dict, out_path: Path,
                                        top_k: int = 10) -> Path:
     """Render a SHAP waterfall for a hypothetical subject."""
+    # Ensure Pillow's PNG plugin is registered before Matplotlib delegates the
+    # write to Pillow. Pillow registers SAVE["PNG"] lazily on import of
+    # PIL.PngImagePlugin; if something evicted it from sys.modules (pytest-cov),
+    # Image.save() raises KeyError: 'PNG'. Importing here is idempotent and
+    # costs nothing in production.
+    try:
+        import PIL.PngImagePlugin  # noqa: F401
+    except ImportError:
+        pass
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -443,7 +478,7 @@ def render_hypothetical_case_waterfall(explainer, row: pd.DataFrame,
         fontsize=8,
     )
     fig.tight_layout()
-    fig.savefig(str(out_path), dpi=150, bbox_inches="tight")
+    _save_png(fig, out_path)
     plt.close(fig)
     return out_path
 

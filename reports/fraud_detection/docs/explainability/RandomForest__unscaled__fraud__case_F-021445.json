@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "RandomForest",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "row_id": 21445,
     "split": "val"
   },
@@ -19,7 +19,7 @@
     "estimated_cost_if_missed": "€0.00 + follow-up risk",
     "priority": "medium",
     "reason": "Score 1.000 exceeds threshold 0.56 (1.8×); standard manual review.",
-    "reviewer_notes_template": "Case F-021445 — Freya Andersen. Score 1.000 (threshold 0.56). Top features: V27 (-0.25), V28 (+0.25), V24 (+0.20). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case F-021445 — Freya Andersen. Score 1.000 (threshold 0.56). Top features: V28 (+0.25), V27 (-0.25), V24 (+0.20). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
       "Review Freya Andersen's transaction history for related activity.",
       "Cross-check Unknown Merchant against the known-merchant allowlist.",
@@ -45,38 +45,38 @@
   "threshold": 0.56,
   "top_features": [
     {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.2516621013522166,
+      "value": -0.394905372194808
+    },
+    {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V27",
-      "shap_value": -0.2543139920620615,
+      "shap_value": -0.25166210135221645,
       "value": 1.6499059092424
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
-      "name": "V28",
-      "shap_value": 0.2543139920620613,
-      "value": -0.394905372194808
-    },
-    {
-      "direction": "increases_fraud_risk",
-      "explanation": "",
       "name": "V24",
-      "shap_value": 0.1978788284268378,
+      "shap_value": 0.20049603517756048,
       "value": -0.339449869297565
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V23",
-      "shap_value": -0.1978788284268378,
+      "shap_value": -0.20049603517756037,
       "value": 0.127214424071711
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V19",
-      "shap_value": -0.12479837136863567,
+      "shap_value": -0.11612945486774767,
       "value": 0.897402406121681
     }
   ],

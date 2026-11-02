@@ -112,11 +112,6 @@ figures:
 gifs:
 	python scripts/make_gifs.py
 
-docs-figures: figures gifs
-	@echo "figures + gifs regenerated"
-
-gifs:
-	$(PYTHON) scripts/make_gifs.py
 
 pdf:
 	@echo "pdf"
@@ -174,7 +169,7 @@ test-integration:
 	pytest -q tests/integration
 
 test-cov:
-	pytest --cov=spam_fraud_detector.core --cov-report=term-missing
+	@$(PYTHON) -c "import numpy; import numpy.fft; import pytest; pytest.main(['-q', 'tests/unit', '--cov=spam_fraud_detector.core', '--cov-report=term-missing'])"
 
 lint:
 	ruff check .

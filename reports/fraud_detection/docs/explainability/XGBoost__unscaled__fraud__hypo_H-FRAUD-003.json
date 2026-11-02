@@ -18,7 +18,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "XGBoost",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -60,14 +60,14 @@
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V4",
-      "shap_value": 7.259647104270053e-05,
+      "shap_value": 0.0001438312623356467,
       "value": 0.0
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V3",
-      "shap_value": -7.25899879087549e-05,
+      "shap_value": -0.00014382623625422755,
       "value": 0.0
     },
     {

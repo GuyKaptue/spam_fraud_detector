@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
     "group": "unscaled",
     "model": "GradientBoosting",
-    "recorded_at": "2026-11-02T08:29:18.626723+00:00",
+    "recorded_at": "2026-11-02T10:10:47.545428+00:00",
     "row_id": 349,
     "split": "val"
   },
@@ -48,35 +48,35 @@
       "direction": "decreases_spam_probability",
       "explanation": "",
       "name": "by",
-      "shap_value": -0.11333870780452229,
+      "shap_value": -0.11095068516696224,
       "value": 0.0
     },
     {
       "direction": "increases_spam_probability",
       "explanation": "",
       "name": "com",
-      "shap_value": 0.11333870780452227,
+      "shap_value": 0.11095068516696213,
       "value": 8.0
-    },
-    {
-      "direction": "increases_spam_probability",
-      "explanation": "",
-      "name": "effective",
-      "shap_value": 0.10034911833601935,
-      "value": 0.0
     },
     {
       "direction": "decreases_spam_probability",
       "explanation": "",
       "name": "w",
-      "shap_value": -0.10034911833601935,
+      "shap_value": -0.10420677903790362,
       "value": 12.0
     },
     {
       "direction": "increases_spam_probability",
       "explanation": "",
-      "name": "board",
-      "shap_value": 0.08173344281876604,
+      "name": "effective",
+      "shap_value": 0.10420677903790349,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "gb",
+      "shap_value": -0.08386974174761246,
       "value": 0.0
     }
   ],

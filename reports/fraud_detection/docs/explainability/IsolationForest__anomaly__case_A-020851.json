@@ -10,7 +10,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "anomaly",
     "model": "IsolationForest",
-    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "recorded_at": "2026-11-02T10:33:48.537059+00:00",
     "row_id": 20851,
     "split": "val"
   },
@@ -21,7 +21,7 @@
     "estimated_cost_if_missed": "€0.00 + up to €15000 (typical follow-up) + reputational risk (supervised model missed it)",
     "priority": "high",
     "reason": "Anomaly score 0.999 is high but supervised model scored 0.000 (below threshold). This is a novel anomaly — the supervised model missed it; a human must review.",
-    "reviewer_notes_template": "Case A-020851 — Lena Schmidt. Anomaly 0.999 but supervised 0.000. Novel anomaly. Top features: V24 (+0.01), V23 (-0.01), V21 (-0.01). Action: escalate. Reviewed by: [NAME] on [DATE].",
+    "reviewer_notes_template": "Case A-020851 — Lena Schmidt. Anomaly 0.999 but supervised 0.000. Novel anomaly. Top features: V18 (+0.01), V17 (-0.01), V24 (+0.01). Action: escalate. Reviewed by: [NAME] on [DATE].",
     "suggested_next_steps": [
       "Escalate to the fraud analyst team with a 'novel anomaly' tag.",
       "Contact Lena Schmidt via registered phone to confirm the €0.00 transaction.",
@@ -52,37 +52,37 @@
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
+      "name": "V18",
+      "shap_value": 0.006635453435061244,
+      "value": -0.194171389193135
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V17",
+      "shap_value": -0.006635453435061244,
+      "value": -0.141655875330193
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
       "name": "V24",
-      "shap_value": 0.0067925597688025165,
+      "shap_value": 0.006163574909413094,
       "value": -0.0122643916828955
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
       "name": "V23",
-      "shap_value": -0.0067925597688025165,
+      "shap_value": -0.006163574909413094,
       "value": 0.0844202226084035
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
       "name": "V21",
-      "shap_value": -0.00633517655896501,
+      "shap_value": -0.0057144595887373625,
       "value": -0.31059173243039
-    },
-    {
-      "direction": "increases_anomaly_score",
-      "explanation": "",
-      "name": "V22",
-      "shap_value": 0.00633517655896501,
-      "value": -0.887620820768657
-    },
-    {
-      "direction": "increases_anomaly_score",
-      "explanation": "",
-      "name": "V18",
-      "shap_value": 0.0057720476135181865,
-      "value": -0.194171389193135
     }
   ],
   "y_pred": 1,

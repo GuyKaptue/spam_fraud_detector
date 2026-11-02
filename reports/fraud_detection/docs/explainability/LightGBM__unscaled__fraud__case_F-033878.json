@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "LightGBM",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "row_id": 33878,
     "split": "val"
   },
@@ -19,7 +19,7 @@
     "estimated_cost_if_missed": "€0.00 + follow-up risk",
     "priority": "medium",
     "reason": "Score 1.000 exceeds threshold 1.00 (1.0×); standard manual review.",
-    "reviewer_notes_template": "Case F-033878 — Priya Nakamura. Score 1.000 (threshold 1.00). Top features: V28 (+0.18), V27 (-0.18), V13 (-0.09). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case F-033878 — Priya Nakamura. Score 1.000 (threshold 1.00). Top features: V28 (+0.19), V27 (-0.19), V13 (-0.11). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
       "Review Priya Nakamura's transaction history for related activity.",
       "Cross-check Unknown Merchant against the known-merchant allowlist.",
@@ -48,36 +48,36 @@
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V28",
-      "shap_value": 0.17906460844727137,
+      "shap_value": 0.19188384520447824,
       "value": -0.731800816194097
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V27",
-      "shap_value": -0.17906460844727123,
+      "shap_value": -0.19188384520447815,
       "value": 0.78012548401824
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V13",
-      "shap_value": -0.09174914303267548,
+      "shap_value": -0.10527677541162055,
       "value": -1.02747932747206
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V14",
-      "shap_value": 0.09174914303267541,
+      "shap_value": 0.1052767754116203,
       "value": -7.11387278226069
     },
     {
-      "direction": "decreases_fraud_risk",
+      "direction": "increases_fraud_risk",
       "explanation": "",
-      "name": "V5",
-      "shap_value": -0.08371557598624722,
-      "value": -0.615816842763718
+      "name": "V2",
+      "shap_value": 0.08532410724382905,
+      "value": 1.65851450876035
     }
   ],
   "y_pred": 1,

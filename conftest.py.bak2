@@ -1,0 +1,15 @@
+import sys as _sys
+
+try:
+    import numpy as _np  # noqa: F401
+    import numpy._core as _np_core  # noqa: F401
+    import numpy._core._multiarray_umath as _np_umath  # noqa: F401
+
+    for _mod_name, _mod_obj in (
+        ("numpy", _np),
+        ("numpy._core", _np_core),
+        ("numpy._core._multiarray_umath", _np_umath),
+    ):
+        _sys.modules.setdefault(_mod_name, _mod_obj)
+except ImportError:
+    pass

@@ -18,7 +18,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "LightGBM",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -60,35 +60,35 @@
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V5",
-      "shap_value": -0.007746337313955258,
+      "shap_value": -0.009086714247485979,
       "value": 0.0
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V6",
-      "shap_value": 0.007746337313955219,
+      "shap_value": 0.009086714247485934,
       "value": 0.0
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V22",
-      "shap_value": -0.005539939431958365,
+      "shap_value": -0.005153709275161446,
       "value": 0.0
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V21",
-      "shap_value": 0.005539939431958331,
+      "shap_value": 0.0051537092751614095,
       "value": 0.0
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
-      "name": "V11",
-      "shap_value": -0.0020305879270670307,
+      "name": "V20",
+      "shap_value": -0.0026090984398107818,
       "value": 0.0
     }
   ],

@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
     "group": "unscaled",
     "model": "GradientBoosting",
-    "recorded_at": "2026-11-02T08:29:18.626723+00:00",
+    "recorded_at": "2026-11-02T10:10:47.545428+00:00",
     "row_id": 14,
     "split": "val"
   },
@@ -48,35 +48,35 @@
       "direction": "increases_spam_probability",
       "explanation": "",
       "name": "com",
-      "shap_value": 0.14212385060119054,
+      "shap_value": 0.13579008448268162,
       "value": 0.0
     },
     {
       "direction": "decreases_spam_probability",
       "explanation": "",
       "name": "by",
-      "shap_value": -0.14212385060119048,
+      "shap_value": -0.1357900844826815,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "effective",
+      "shap_value": 0.1155675505261999,
       "value": 0.0
     },
     {
       "direction": "decreases_spam_probability",
       "explanation": "",
       "name": "w",
-      "shap_value": -0.12346047882539007,
+      "shap_value": -0.11556755052619981,
       "value": 18.0
-    },
-    {
-      "direction": "increases_spam_probability",
-      "explanation": "",
-      "name": "effective",
-      "shap_value": 0.12346047882538985,
-      "value": 0.0
     },
     {
       "direction": "decreases_spam_probability",
       "explanation": "",
       "name": "zeroed",
-      "shap_value": -0.07824960589829376,
+      "shap_value": -0.07656271970859742,
       "value": 0.0
     }
   ],

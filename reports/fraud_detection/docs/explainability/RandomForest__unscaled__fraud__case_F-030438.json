@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "RandomForest",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "row_id": 30438,
     "split": "val"
   },
@@ -19,9 +19,9 @@
     "estimated_cost_if_missed": "€0.00 + risk of model deploying similar misses in production",
     "priority": "high",
     "reason": "Score 0.520 is BELOW threshold 0.56, but ground truth is fraud — the model missed it.",
-    "reviewer_notes_template": "Case F-030438 — Elena Fischer. Score 0.520 (threshold 0.56). Top features: V27 (-0.17), V28 (+0.17), V8 (+0.10). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case F-030438 — Elena Fischer. Score 0.520 (threshold 0.56). Top features: V27 (-0.17), V28 (+0.17), V7 (-0.10). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
-      "Investigate why V27 (-0.17), V28 (+0.17), V8 (+0.10) did not trigger the model.",
+      "Investigate why V27 (-0.17), V28 (+0.17), V7 (-0.10) did not trigger the model.",
       "Add this row to the training set with the fraud label.",
       "Consider lowering the threshold or adjusting the feature engineering for V27."
     ]
@@ -48,35 +48,35 @@
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V27",
-      "shap_value": -0.17007475451760776,
+      "shap_value": -0.1707130873423742,
       "value": 0.668496565754242
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V28",
-      "shap_value": 0.17007475451760762,
+      "shap_value": 0.17071308734237398,
       "value": 0.595609828713858
-    },
-    {
-      "direction": "increases_fraud_risk",
-      "explanation": "",
-      "name": "V8",
-      "shap_value": 0.10203309107241655,
-      "value": -2.62778128431688
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V7",
-      "shap_value": -0.10203309107241647,
+      "shap_value": -0.10239565092355415,
       "value": -1.79988483348006
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V8",
+      "shap_value": 0.10239565092355409,
+      "value": -2.62778128431688
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V19",
-      "shap_value": -0.07844666237116987,
+      "shap_value": -0.07805819565044964,
       "value": 0.994829500437418
     }
   ],

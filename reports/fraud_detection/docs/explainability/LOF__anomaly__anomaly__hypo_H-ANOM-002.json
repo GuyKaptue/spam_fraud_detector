@@ -9,7 +9,7 @@
     "V12": 0.0,
     "V14": 0.0
   },
-  "narrative": "A hypothetical customer like Rosa Petrov (small daytime domestic transaction) would be scored 0.026. The top drivers are Amount (-2334296.74), V25 (-1243139.80), V26 (+1243139.80). This hypothetical case would not be flagged at threshold 0.75.",
+  "narrative": "A hypothetical customer like Rosa Petrov (small daytime domestic transaction) would be scored 0.026. The top drivers are V26 (-0.07), V25 (+0.07), Amount (+0.06). This hypothetical case would not be flagged at threshold 0.75.",
   "persona": "anomaly",
   "provenance": {
     "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
@@ -17,7 +17,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "anomaly",
     "model": "LOF",
-    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "recorded_at": "2026-11-02T10:21:16.404890+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -58,36 +58,36 @@
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
+      "name": "V26",
+      "shap_value": -0.06896007762996997,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V25",
+      "shap_value": 0.06896007762996997,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
       "name": "Amount",
-      "shap_value": -2334296.741346748,
+      "shap_value": 0.05806020730708054,
       "value": 15.0
     },
     {
-      "direction": "decreases_anomaly_score",
-      "explanation": "",
-      "name": "V25",
-      "shap_value": -1243139.8029509694,
-      "value": 0.0
-    },
-    {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V26",
-      "shap_value": 1243139.8029509694,
+      "name": "V9",
+      "shap_value": 0.038569107977786406,
       "value": 0.0
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
-      "name": "V2",
-      "shap_value": -1184673.0187451157,
-      "value": 0.0
-    },
-    {
-      "direction": "increases_anomaly_score",
-      "explanation": "",
-      "name": "V1",
-      "shap_value": 1184673.0187451157,
+      "name": "V10",
+      "shap_value": -0.038569107977786406,
       "value": 0.0
     }
   ],

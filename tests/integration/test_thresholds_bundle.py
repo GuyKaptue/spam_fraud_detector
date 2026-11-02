@@ -21,4 +21,4 @@ def test_thresholds_bundle(tmp_path):
     assert thr_path.exists()
     thr = json.loads(thr_path.read_text())
     meta = json.loads((store.staging / "models" / "spam_detection" / "all" / "M__scaled.meta.json").read_text())
-    assert meta["threshold"] == thr["threshold_star"]
+    assert meta["threshold"] == thr["threshold"]

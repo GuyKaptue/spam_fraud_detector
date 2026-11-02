@@ -10,7 +10,7 @@
     "V17": -0.21,
     "V4": 0.22
   },
-  "narrative": "A hypothetical customer like Priya Nakamura (high-amount cross-border night transaction) would be scored 0.000. The top drivers are V5 (-0.01), V6 (+0.01), V28 (-0.00). This hypothetical case would not be flagged at threshold 1.00.",
+  "narrative": "A hypothetical customer like Priya Nakamura (high-amount cross-border night transaction) would be scored 0.000. The top drivers are V5 (-0.01), V6 (+0.01), V22 (-0.00). This hypothetical case would not be flagged at threshold 1.00.",
   "persona": "fraud",
   "provenance": {
     "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
@@ -18,7 +18,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "unscaled",
     "model": "LightGBM",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:04:12.176455+00:00",
     "split": "val"
   },
   "recommendation": {
@@ -27,7 +27,7 @@
     "estimated_cost_if_missed": "n/a — hypothetical customer, not a real one",
     "priority": "medium",
     "reason": "Hypothetical scenario 'High-amount cross-border night transaction' scored 0.000. Verify the model behaves as expected for this feature combination.",
-    "reviewer_notes_template": "Case H-FRAUD-001 — Priya Nakamura. Score 0.000 (threshold 1.00). Top features: V5 (-0.01), V6 (+0.01), V28 (-0.00). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case H-FRAUD-001 — Priya Nakamura. Score 0.000 (threshold 1.00). Top features: V5 (-0.01), V6 (+0.01), V22 (-0.00). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
       "Confirm with the analytics team that 'High-amount cross-border night transaction' is representative of real fraud patterns.",
       "If it matches a known novel pattern, add it as a labeled training example.",
@@ -60,35 +60,35 @@
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V5",
-      "shap_value": -0.009065291818911343,
+      "shap_value": -0.008607411792723826,
       "value": 0.0
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V6",
-      "shap_value": 0.009065291818911315,
-      "value": 0.0
-    },
-    {
-      "direction": "decreases_fraud_risk",
-      "explanation": "",
-      "name": "V28",
-      "shap_value": -0.002242930911033113,
-      "value": 0.0
-    },
-    {
-      "direction": "increases_fraud_risk",
-      "explanation": "",
-      "name": "V27",
-      "shap_value": 0.0022429309110331124,
+      "shap_value": 0.008607411792723802,
       "value": 0.0
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V22",
-      "shap_value": -0.0019663213363121435,
+      "shap_value": -0.0024610106207191536,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V21",
+      "shap_value": 0.0024610106207191484,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V2",
+      "shap_value": -0.002390432838243111,
       "value": 0.0
     }
   ],

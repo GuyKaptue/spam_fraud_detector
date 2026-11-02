@@ -296,7 +296,7 @@ class ResultStore:
             fn_at_star = star_row["fn"]
             tn_at_star = star_row["tn"]
 
-            thresholds_block = {
+        thresholds_block = {
             "schema_version": SCHEMA_VERSION,
             "domain": domain,
             "group": group,

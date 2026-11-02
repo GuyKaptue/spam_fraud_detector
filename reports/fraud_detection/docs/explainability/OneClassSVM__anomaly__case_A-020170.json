@@ -10,7 +10,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "anomaly",
     "model": "OneClassSVM",
-    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "recorded_at": "2026-11-02T10:21:16.404890+00:00",
     "row_id": 20170,
     "split": "val"
   },
@@ -53,35 +53,35 @@
       "direction": "decreases_anomaly_score",
       "explanation": "",
       "name": "V1",
-      "shap_value": -0.17682680905338233,
+      "shap_value": -0.17678209344991175,
       "value": -5.34462834420239
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
       "name": "V2",
-      "shap_value": 0.17682680905338233,
+      "shap_value": 0.17678209344991175,
       "value": 3.64080641219077
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
       "name": "V16",
-      "shap_value": 0.07239482256258328,
+      "shap_value": 0.07244376689816329,
       "value": 0.966940288131082
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
       "name": "V15",
-      "shap_value": -0.07239482256258328,
+      "shap_value": -0.07244376689816329,
       "value": 0.463919830489029
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
       "name": "V3",
-      "shap_value": 0.06286193385594317,
+      "shap_value": 0.06301990315304351,
       "value": -4.46252031910737
     }
   ],

@@ -9,7 +9,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "scaled",
     "model": "KNN",
-    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "recorded_at": "2026-11-02T10:28:14.918723+00:00",
     "row_id": 22389,
     "split": "val"
   },
@@ -19,10 +19,10 @@
     "estimated_cost_if_missed": "€0 (legitimate transaction) but reputational cost of blocking a real customer",
     "priority": "low",
     "reason": "Flagged at 0.800 but ground truth is legitimate — analyze why the model false-positived.",
-    "reviewer_notes_template": "Case F-022389 — Marcus Chen. Score 0.800 (threshold 0.41). Top features: V27 (-0.23), V28 (+0.23), V24 (+0.15). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "reviewer_notes_template": "Case F-022389 — Marcus Chen. Score 0.800 (threshold 0.41). Top features: V27 (-0.23), V28 (+0.23), V24 (+0.16). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
     "suggested_next_steps": [
       "Confirm Marcus Chen's transaction is legitimate.",
-      "Identify whether V27 (-0.23), V28 (+0.23), V24 (+0.15) are false-positive-prone features.",
+      "Identify whether V27 (-0.23), V28 (+0.23), V24 (+0.16) are false-positive-prone features.",
       "Consider adding this row to the training set as a labeled legitimate example."
     ]
   },
@@ -48,36 +48,36 @@
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V27",
-      "shap_value": -0.22958719651725779,
+      "shap_value": -0.23173386371649116,
       "value": 0.633793498623559
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V28",
-      "shap_value": 0.22958719651725762,
+      "shap_value": 0.2317338637164907,
       "value": 0.38343383113188
     },
     {
       "direction": "increases_fraud_risk",
       "explanation": "",
       "name": "V24",
-      "shap_value": 0.1481970620773987,
+      "shap_value": 0.16157677458352052,
       "value": -0.300648496485992
     },
     {
       "direction": "decreases_fraud_risk",
       "explanation": "",
       "name": "V23",
-      "shap_value": -0.14819706207739866,
+      "shap_value": -0.16157677458352038,
       "value": -0.672181004177837
     },
     {
-      "direction": "increases_fraud_risk",
+      "direction": "decreases_fraud_risk",
       "explanation": "",
-      "name": "V20",
-      "shap_value": 0.0892655515004883,
-      "value": 0.615176529536263
+      "name": "V19",
+      "shap_value": -0.09549163511506005,
+      "value": 0.925627777176293
     }
   ],
   "y_pred": 1,

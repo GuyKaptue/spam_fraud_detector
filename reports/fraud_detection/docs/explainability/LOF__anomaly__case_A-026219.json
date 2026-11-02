@@ -10,7 +10,7 @@
     "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
     "group": "anomaly",
     "model": "LOF",
-    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "recorded_at": "2026-11-02T10:33:48.537059+00:00",
     "row_id": 26219,
     "split": "val"
   },
@@ -21,7 +21,7 @@
     "estimated_cost_if_missed": "€0.00 + up to €15000 (typical follow-up) + reputational risk (supervised model missed it)",
     "priority": "high",
     "reason": "Anomaly score 1.000 is high but supervised model scored 0.000 (below threshold). This is a novel anomaly — the supervised model missed it; a human must review.",
-    "reviewer_notes_template": "Case A-026219 — Rosa Petrov. Anomaly 1.000 but supervised 0.000. Novel anomaly. Top features: V1 (+5393417.74), V2 (-5393417.74), Amount (-4164220.68). Action: escalate. Reviewed by: [NAME] on [DATE].",
+    "reviewer_notes_template": "Case A-026219 — Rosa Petrov. Anomaly 1.000 but supervised 0.000. Novel anomaly. Top features: V6 (+3215875.14), V5 (-3215875.14), Amount (-3017888.50). Action: escalate. Reviewed by: [NAME] on [DATE].",
     "suggested_next_steps": [
       "Escalate to the fraud analyst team with a 'novel anomaly' tag.",
       "Contact Rosa Petrov via registered phone to confirm the €0.00 transaction.",
@@ -52,37 +52,37 @@
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V1",
-      "shap_value": 5393417.741203232,
-      "value": 2.03682292791828
-    },
-    {
-      "direction": "decreases_anomaly_score",
-      "explanation": "",
-      "name": "V2",
-      "shap_value": -5393417.741203232,
-      "value": -0.166346784578946
-    },
-    {
-      "direction": "decreases_anomaly_score",
-      "explanation": "",
-      "name": "Amount",
-      "shap_value": -4164220.6847893354,
-      "value": 9.99
+      "name": "V6",
+      "shap_value": 3215875.14249716,
+      "value": -0.622443982272405
     },
     {
       "direction": "decreases_anomaly_score",
       "explanation": "",
       "name": "V5",
-      "shap_value": -4047373.5828537424,
+      "shap_value": -3215875.14249716,
       "value": 0.105174349060257
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "Amount",
+      "shap_value": -3017888.4998317994,
+      "value": 9.99
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V2",
+      "shap_value": -2328751.7708996534,
+      "value": -0.166346784578946
     },
     {
       "direction": "increases_anomaly_score",
       "explanation": "",
-      "name": "V6",
-      "shap_value": 4047373.5828537424,
-      "value": -0.622443982272405
+      "name": "V1",
+      "shap_value": 2328751.7708996534,
+      "value": 2.03682292791828
     }
   ],
   "y_pred": 1,
