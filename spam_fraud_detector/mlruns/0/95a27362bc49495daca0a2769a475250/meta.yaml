@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/95a27362bc49495daca0a2769a475250/artifacts
+end_time: 1760466846824
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 95a27362bc49495daca0a2769a475250
+run_name: SGD_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760466846813
+status: 3
+tags: []
+user_id: guykaptue

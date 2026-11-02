@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_negative",
+  "narrative": "Hattie Kowalski's transaction was scored 0.679 (threshold 0.73).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "MLPClassifier",
+    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "row_id": 8137,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "high",
+    "estimated_cost_if_missed": "€0.00 + risk of model deploying similar misses in production",
+    "priority": "high",
+    "reason": "Score 0.679 is BELOW threshold 0.73, but ground truth is fraud — the model missed it.",
+    "reviewer_notes_template": "Case F-008137 — Hattie Kowalski. Score 0.679 (threshold 0.73). Top features: V28 (+0.29), V27 (-0.29), V19 (-0.28). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Investigate why V28 (+0.29), V27 (-0.29), V19 (-0.28) did not trigger the model.",
+      "Add this row to the training set with the fraud label.",
+      "Consider lowering the threshold or adjusting the feature engineering for V28."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.678683204102826,
+  "subject": {
+    "account_last4": "9497",
+    "account_last4_full": "····9497",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 30,
+    "full_name": "Hattie Kowalski",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "F-008137",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.73,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.29472745176271586,
+      "value": 0.293425836896259
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.2947274517627158,
+      "value": 0.571426303828437
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.2772672547303247,
+      "value": -0.23930965408033
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V20",
+      "shap_value": 0.2772672547303247,
+      "value": 0.253464129147281
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V13",
+      "shap_value": -0.06482964699631343,
+      "value": -1.53923191944683
+    }
+  ],
+  "y_pred": 0,
+  "y_true": 1
+}

@@ -1,0 +1,90 @@
+{
+  "anomaly_score": 0.9996199899432068,
+  "case_type": "empirical",
+  "disagreement_type": "novel",
+  "narrative": "Ibrahim Haddad's transaction was scored anomaly 1.000 vs supervised 0.000 (novel).",
+  "persona": "anomaly",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "anomaly",
+    "model": "OneClassSVM",
+    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "row_id": 20170,
+    "split": "val"
+  },
+  "raw_score": 13.920582378969186,
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0.00 + up to €15000 (typical follow-up) + reputational risk (supervised model missed it)",
+    "priority": "high",
+    "reason": "Anomaly score 1.000 is high but supervised model scored 0.000 (below threshold). This is a novel anomaly — the supervised model missed it; a human must review.",
+    "reviewer_notes_template": "Case A-020170 — Ibrahim Haddad. Anomaly 1.000 but supervised 0.000. Novel anomaly. Top features: V1 (-0.18), V2 (+0.18), V16 (+0.07). Action: escalate. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Escalate to the fraud analyst team with a 'novel anomaly' tag.",
+      "Contact Ibrahim Haddad via registered phone to confirm the €0.00 transaction.",
+      "If unrecognized: block card ···4351, reverse, open 'novel fraud pattern' ticket.",
+      "If confirmed: add customer-specific allowlist, mark as 'legitimate high-value' for anomaly detector retraining."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.9996199899432068,
+  "subject": {
+    "account_last4": "4351",
+    "account_last4_full": "····4351",
+    "amount_eur": 0.0,
+    "amount_zscore": -3.32,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "cross_border": false,
+    "full_name": "Ibrahim Haddad",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "minutes_since_previous_txn": 107,
+    "night_transaction": true,
+    "subject_id": "A-020170"
+  },
+  "supervised_score": 0.00021003066013105019,
+  "threshold": 1.0,
+  "top_features": [
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V1",
+      "shap_value": -0.17682680905338233,
+      "value": -5.34462834420239
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V2",
+      "shap_value": 0.17682680905338233,
+      "value": 3.64080641219077
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V16",
+      "shap_value": 0.07239482256258328,
+      "value": 0.966940288131082
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V15",
+      "shap_value": -0.07239482256258328,
+      "value": 0.463919830489029
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V3",
+      "shap_value": 0.06286193385594317,
+      "value": -4.46252031910737
+    }
+  ],
+  "y_pred": 0,
+  "y_true": null
+}

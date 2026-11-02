@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/12688ea338f946f4bd7c46db77028645/artifacts
+end_time: 1760466668915
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 12688ea338f946f4bd7c46db77028645
+run_name: KNeighbors_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760466668894
+status: 3
+tags: []
+user_id: guykaptue

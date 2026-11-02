@@ -1,0 +1,285 @@
+Metadata-Version: 2.4
+Name: spam-fraud-detector
+Version: 0.1.0
+Summary: Modular benchmarking framework for binary classification tasks (spam, fraud, etc.)
+Home-page: https://github.com/GuyKaptue/spam-fraud-detector
+Author: Guy Kaptue
+Author-email: "Guy M. Kaptue T." <guykaptue24@gmail.com>
+License: MIT
+Keywords: spam,fraud,detection,classification,benchmarking,machine-learning
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: matplotlib
+Requires-Dist: seaborn
+Requires-Dist: xgboost
+Requires-Dist: lightgbm
+Requires-Dist: mlflow
+Requires-Dist: kagglehub
+Requires-Dist: openpyxl
+Requires-Dist: dash
+Requires-Dist: plotly
+Requires-Dist: jinja2
+Requires-Dist: streamlit
+Provides-Extra: viz
+Requires-Dist: matplotlib; extra == "viz"
+Requires-Dist: seaborn; extra == "viz"
+Provides-Extra: ml
+Requires-Dist: xgboost; extra == "ml"
+Requires-Dist: lightgbm; extra == "ml"
+Provides-Extra: tracking
+Requires-Dist: mlflow; extra == "tracking"
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: tox; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+Dynamic: author
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-python
+
+# Binary Classification Benchmarking Framework
+### Reproducible Model Comparison for Spam & Credit-Card Fraud Detection
+
+[![CI](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/GuyKaptue/spam-fraud-detector/branch/main/graph/badge.svg)](https://codecov.io/gh/GuyKaptue/spam-fraud-detector)
+[![PyPI](https://img.shields.io/pypi/v/spam-fraud-detector)](https://pypi.org/project/spam-fraud-detector/)
+[![Python](https://img.shields.io/pypi/pyversions/spam-fraud-detector)](https://pypi.org/project/spam-fraud-detector/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+
+**Author:** Guy M. Kaptue T. — [GitHub](https://github.com/GuyKaptue) — guykaptue24@gmail.com
+**License:** MIT · **Version:** 0.1.0 · **Python:** ≥3.9
+
+<p align="center">
+  <img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_demo.gif" alt="Spam detection benchmark — animated" width="46%"/>
+  <img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_demo.gif" alt="Fraud detection benchmark — animated" width="46%"/>
+</p>
+<p align="center"><em>Animated walkthrough of generated reports (ROC · PR · F1 · confusion matrices · group comparison).</em></p>
+
+---
+
+## 1. What This Project Is
+
+A **modular, dataset-agnostic benchmarking framework** for binary classification, applied to two
+real-world, high-imbalance domains:
+
+| Sub-project | Dataset | Positive class | Imbalance | Primary metric |
+|---|---|---|---|---|
+| **Spam Detection** | Kaggle Spam Mails (5,172 emails) | Spam | ~29% spam | F1 / PR-AUC |
+| **Fraud Detection** | Kaggle Credit Card Fraud (284,807 txns) | Fraud | 0.172% fraud | **AUPRC** |
+
+It trains, evaluates, visualizes, and reports on **multiple classifiers in scaled and unscaled
+regimes**, tracks every run with **MLflow**, and emits **publication-ready figures and PDF/Excel
+reports** per dataset.
+
+---
+
+## 2. Why It Matters
+
+Binary classifiers behave very differently under class imbalance and feature scaling. This framework
+makes the trade-offs **measurable, visual, and reproducible**:
+
+- **Spam**: false positives (legitimate mail blocked) vs. false negatives (spam delivered)
+- **Fraud**: false positives (declined customers) vs. false negatives (missed fraud — costly)
+
+Both are framed against **anomaly detection**, since rare-positive problems are fundamentally
+anomaly problems (see the two domain reports).
+
+---
+
+## 3. How It Works
+
+```
+KaggleDataLoader ──▶ ClassifierGroupComparer ──▶ ModelVisualizer ──▶ reports/
+                          │                                            ├── figures/*.png
+                          ├── MLflow tracking (mlruns/)                └── docs/*.pdf, *.xlsx
+                          └── scaled vs. unscaled model groups
+```
+
+| Module | Responsibility |
+|---|---|
+| `core/data_loader.py` — `KaggleDataLoader` | Download, cache, prepare Kaggle datasets |
+| `core/comparer.py` — `ClassifierGroupComparer` | Split, train scaled & unscaled groups, collect metrics |
+| `core/visualizer.py` — `ModelVisualizer` | Confusion matrices, F1 bars, group comparison, ROC & PR curves, Excel/PDF |
+| `core/utils.py` | Shared helpers (paths, seeds, error handling) |
+| `main.py` | End-to-end driver per dataset + report name |
+| `mlruns/` | Auto-generated MLflow experiment store |
+
+Metrics per model: Accuracy, Precision, Recall, F1, Confusion Matrix, ROC-AUC, PR-AUC.
+Models that cannot run (e.g., MultinomialNB on negative inputs) are **skipped and reported**.
+
+---
+
+## 4. Results at a Glance (with visuals)
+
+### 4.1 Spam Detection (moderate imbalance)
+
+- **Best scaled:** LogisticRegression, MLPClassifier
+- **Best unscaled:** LightGBM, XGBoost
+- **Trade-offs:** SVC → cautious (high precision, low recall) · KNN → aggressive (high recall, low precision)
+
+<p align="center">
+  <img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_f1_scores.png" alt="Spam F1 scores" width="48%"/>
+  <img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_precision_recall_curves.png" alt="Spam PR curves" width="48%"/>
+</p>
+<p align="center">
+  <img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_group_comparison.png" alt="Spam group comparison" width="48%"/>
+  <img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_confusion_matrices.png" alt="Spam confusion matrices" width="48%"/>
+</p>
+<p align="center"><img src="spam_fraud_detector/reports/spam_detection/figures/spam_detection_roc_curves.png" alt="Spam ROC curves" width="70%"/></p>
+
+Full report → [`spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md`](spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md)
+
+### 4.2 Fraud Detection (severe imbalance)
+
+- **Best scaled:** KNN, MLPClassifier
+- **Best unscaled:** RandomForest, XGBoost
+- **Trade-offs:** SVC avoids false alarms but misses fraud · GradientBoosting struggles with recall
+
+<p align="center">
+  <img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_f1_scores.png" alt="Fraud F1 scores" width="48%"/>
+  <img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_precision_recall_curves.png" alt="Fraud PR curves" width="48%"/>
+</p>
+<p align="center">
+  <img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_group_comparison.png" alt="Fraud group comparison" width="48%"/>
+  <img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_confusion_matrices.png" alt="Fraud confusion matrices" width="48%"/>
+</p>
+<p align="center"><img src="spam_fraud_detector/reports/fraud_detection/figures/fraud_detection_roc_curves.png" alt="Fraud ROC curves" width="70%"/></p>
+
+> ⚠️ Accuracy is misleading on fraud data (a constant "legitimate" predictor scores **99.828%**).
+> Use **AUPRC + recall at fixed precision** and the confusion matrix.
+> Full report → [`spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md`](spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md)
+
+---
+## 5. Documentation Index
+
+| Document | Contents |
+|---|---|
+| **[spam_fraud_detector/reports/spam_detection/docs/FRAMEWORK.md](spam_fraud_detector/reports/spam_detection/docs/FRAMEWORK.md)** | Methodology, architecture, metrics, reproducibility & validity |
+| **[spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md](spam_fraud_detector/reports/spam_detection/docs/SPAM_DETECTION.md)** | Full spam study + **anomaly-detection** analysis |
+| **[spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md](spam_fraud_detector/reports/fraud_detection/docs/FRAUD_DETECTION.md)** | Full fraud study + cost & **anomaly-detection** analysis |
+
+---
+
+## 6. Quick Start
+
+```bash
+git clone https://github.com/GuyKaptue/spam-fraud-detector.git
+cd classifier-bench
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+```python
+from spam_fraud_detector.core.comparer import ClassifierGroupComparer
+from spam_fraud_detector.core.visualizer import ModelVisualizer
+
+comparer = ClassifierGroupComparer(
+    data_path="data/creditcard.csv", target_col="Class", drop_cols=["Time"]
+)
+comparer.load_data()
+comparer.prepare_data()
+results = comparer.compare_groups()
+
+viz = ModelVisualizer(results, report_name="fraud_detection",
+                      yticklabels=["Legitimate", "Fraud"])
+viz.save_f1_scores()
+viz.save_group_comparison()
+viz.save_confusion_matrices()
+viz.save_roc_curves()
+viz.save_precision_recall_curves()
+viz.export_metrics_to_excel()
+viz.export_plots_to_pdf()
+```
+
+Inspect runs:
+
+```bash
+mlflow ui --backend-store-uri ./spam_fraud_detector/mlruns
+```
+
+Regenerate the animated GIFs:
+
+```bash
+python scripts/make_gifs.py
+```
+
+---
+
+## 7. Repository Structure
+
+```bash
+classifier-bench/
+├── README.md
+├── LICENSE
+├── CITATION.cff
+├── requirements.txt
+├── pyproject.toml / setup.py / setup.cfg / MANIFEST.in
+├── docs/
+│   ├── FRAMEWORK.md
+│   ├── SPAM_DETECTION.md
+│   ├── FRAUD_DETECTION.md
+│   └── figures/
+│       ├── README.md
+│       ├── spam_detection_demo.gif
+│       └── fraud_detection_demo.gif
+├── scripts/
+│   └── make_gifs.py
+└── spam_fraud_detector/
+    ├── main.py
+    ├── test.py
+    ├── core/{comparer,data_loader,visualizer,utils}.py
+    ├── mlruns/
+    └── reports/{spam_detection,fraud_detection}/{figures,docs}/
+```
+
+---
+
+## 8. Roadmap
+
+- [ ] Cost-sensitive thresholds (expected-cost curves) per domain
+- [ ] Native anomaly detectors (IsolationForest, LOF, One-Class SVM) as a baseline group
+- [ ] Cross-validation + confidence intervals on all metrics
+- [ ] Calibration curves & Brier scores
+- [ ] CI workflow to regenerate reports on push
+
+## 9. Citation
+
+See [`CITATION.cff`](CITATION.cff). BibTeX:
+
+```bibtex
+@software{kaptue_binary_bench,
+  author  = {Kaptue T., Guy M.},
+  title   = {Binary Classification Benchmarking Framework for Spam and Fraud Detection},
+  url     = {https://github.com/GuyKaptue/spam-fraud-detector},
+  email   = {guykaptue24@gmail.com},
+  year    = {2025}
+}
+```
+
+## Documentation layout
+
+- `core/README.md` is a hand-authored narrative (one README for the whole `core/`
+  package). Its structure and voice follow `spam_fraud_detector/reports/docs/CORE_README_STYLE.md`.
+- Run `make docs-check-core` after any edit to `core/README.md` or to any
+  `spam_fraud_detector/core/*.py`. The pre-commit hook runs the same check.
+- Editing `core/README.md`? Run `make docs-check-core` or the pre-commit hook
+  will fail.
+
+## 10. License
+
+MIT © Guy M. Kaptue T. See [LICENSE](LICENSE).

@@ -1,0 +1,3 @@
+[console_scripts]
+bench = spam_fraud_detector.main:cli
+run-detector = spam_fraud_detector.main:main

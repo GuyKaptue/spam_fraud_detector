@@ -1,0 +1,92 @@
+{
+  "case_hypothesis": "would_be_flagged",
+  "case_type": "hypothetical",
+  "fabricated_tokens": {
+    "click": 5,
+    "free": 1,
+    "prize": 2,
+    "win": 1
+  },
+  "narrative": "A hypothetical customer like Hattie Kowalski (aggressive promotional message) would be scored 1.000. The top drivers are ena (-0.09), now (+0.09), whole (-0.05). This hypothetical case would be flagged at threshold 0.81.",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "scaled",
+    "model": "KNN",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "high",
+    "estimated_cost_if_missed": "n/a — hypothetical message",
+    "priority": "medium",
+    "reason": "Hypothetical message 'Aggressive promotional message' scored 1.000. Verify the spam filter's sensitivity to this token pattern.",
+    "reviewer_notes_template": "Hypothetical case H-SPAM-001 — Hattie Kowalski. Score 1.000. Top tokens: ena (×0, -0.09), now (×0, +0.09), whole (×0, -0.05). Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Search training set for messages with the pattern ena (×0, -0.09), now (×0, +0.09), whole (×0, -0.05); if < 20 exist, add examples.",
+      "Test variations to ensure score degrades gracefully.",
+      "Add to the spam filter regression suite."
+    ]
+  },
+  "scenario_description": "Aggressive promotional message",
+  "scenario_id": "H-SPAM-001",
+  "scenario_note": "Expects very high spam score.",
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "6300",
+    "account_last4_full": "····6300",
+    "city": "Trieste",
+    "full_name": "Hattie Kowalski",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 700,
+    "prior_messages_from_sender": 4,
+    "sender_display": "Weekly Deals",
+    "sender_email": "offers@promo.example",
+    "subject_id": "H-SPAM-001",
+    "subject_line": "Congratulations — claim your prize"
+  },
+  "threshold": 0.81,
+  "top_tokens": [
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -0.08932526719046205,
+      "token": "ena"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 0.08932526719046201,
+      "token": "now"
+    },
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -0.05376269607528809,
+      "token": "whole"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 0.05376269607528795,
+      "token": "major"
+    },
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -0.0506971863573481,
+      "token": "hope"
+    }
+  ],
+  "y_pred": 1,
+  "y_true": null
+}

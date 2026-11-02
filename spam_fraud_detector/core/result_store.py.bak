@@ -1,0 +1,133 @@
+"""Single-writer persistence: bundles + dashboard tables in one atomic transaction."""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import shutil
+import uuid
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import joblib
+import numpy as np
+import pandas as pd
+import pyarrow  # noqa: F401
+
+from .exceptions import ContractViolation
+from .utils import atomic_write_json, atomic_write_text, hash_file, get_git_commit, get_package_versions
+
+SCHEMA_VERSION = "1.0.0"
+KNOWN_METRICS = [
+    "accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc",
+    "recall_at_prec_0.90", "balanced_accuracy", "mcc", "brier", "log_loss",
+]
+COUNT_KEYS = {"tp", "fp", "tn", "fn", "n", "n_positive"}
+CURVE_MAX_POINTS = 2001
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _downsample(xs, ys, max_points=CURVE_MAX_POINTS):
+    xs = list(xs); ys = list(ys)
+    if len(xs) <= max_points:
+        return xs, ys
+    idx = np.linspace(0, len(xs) - 1, max_points, dtype=int)
+    return [xs[i] for i in idx], [ys[i] for i in idx]
+
+
+@dataclass
+class RunContext:
+    domain: str
+    git_commit: str = ""
+    dataset_hash: str = ""
+    seed: int = 42
+    python_version: str = ""
+    package_versions: dict = field(default_factory=dict)
+    framework_version: str = "0.3.0"
+    schema_version: str = SCHEMA_VERSION
+
+    def __post_init__(self):
+        if not self.git_commit:
+            self.git_commit = get_git_commit()
+        if not self.python_version:
+            import sys
+            self.python_version = sys.version.split()[0]
+        if not self.package_versions:
+            self.package_versions = get_package_versions()
+
+
+class ResultStore:
+    def __init__(self, out_root, ctx: RunContext) -> None:
+        self.out_root = Path(out_root) if not isinstance(out_root, Path) else out_root
+        self.ctx = ctx
+        self.staging = self.out_root.parent / ("outputs.staging." + uuid.uuid4().hex)
+        self.staging.mkdir(parents=True, exist_ok=True)
+        self.created_at = _utc_now()
+        self._metrics = []
+        self._confusion = []
+        self._thresholds = []
+        self._curves = []
+        self._manifest = []
+        self._skipped = []
+        self._selection = None
+        self._stats = None
+        self._stats_summary_md = ""
+        (self.staging / "models" / ctx.domain / "all").mkdir(parents=True, exist_ok=True)
+        (self.staging / "models" / ctx.domain / "top3").mkdir(parents=True, exist_ok=True)
+        (self.staging / "predictions" / ctx.domain / "all").mkdir(parents=True, exist_ok=True)
+        (self.staging / "predictions" / ctx.domain / "top3").mkdir(parents=True, exist_ok=True)
+        (self.staging / "stats" / ctx.domain).mkdir(parents=True, exist_ok=True)
+        (self.staging / "dashboard" / "fact_predictions").mkdir(parents=True, exist_ok=True)
+        (self.staging / "runs").mkdir(parents=True, exist_ok=True)
+
+    def _bundle_dir(self):
+        return self.staging / "models" / self.ctx.domain / "all"
+
+    def _base(self):
+        return {"schema_version": self.ctx.schema_version, "git_commit": self.ctx.git_commit,
+                "dataset_hash": self.ctx.dataset_hash, "created_at": self.created_at}
+
+    def _threshold_sweep(self, y_true, y_score):
+        y_true = np.asarray(y_true).astype(int)
+        y_score = np.asarray(y_score, dtype=float)
+        rows = []
+        for i in range(101):
+            t = i / 100.0
+            pred = (y_score >= t).astype(int)
+            tp = int(((pred == 1) & (y_true == 1)).sum())
+            fp = int(((pred == 1) & (y_true == 0)).sum())
+            tn = int(((pred == 0) & (y_true == 0)).sum())
+            fn = int(((pred == 0) & (y_true == 1)).sum())
+            prec = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+            rec = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+            f1 = 2 * prec * rec / (prec + rec) if (prec + rec) > 0 else 0.0
+            tpr = rec
+            fpr = fp / (fp + tn) if (fp + tn) > 0 else 0.0
+            rows.append({"threshold": round(t, 2), "precision": float(prec), "recall": float(rec),
+                         "f1": float(f1), "tpr": float(tpr), "fpr": float(fpr),
+                         "tp": tp, "fp": fp, "tn": tn, "fn": fn,
+                         "expected_cost_cfn_10_cfp_1": int(10 * fn + 1 * fp)})
+        return rows
+
+    def _compute_curves(self, y_true, y_score):
+        from sklearn.metrics import roc_curve, precision_recall_curve, calibration_curve
+        y_true = np.asarray(y_true).astype(int)
+        y_score = np.asarray(y_score, dtype=float)
+        fpr, tpr, _ = roc_curve(y_true, y_score)
+        prec, rec, _ = precision_recall_curve(y_true, y_score)
+        try:
+            prob_true, prob_pred = calibration_curve(y_true, y_score, n_bins=10, strategy="quantile")
+            cal = {"prob_pred": [float(x) for x in prob_pred],
+                   "prob_true": [float(x) for x in prob_true]}
+        except Exception:
+            cal = {"prob_pred": [], "prob_true": []}
+        fpr_d, tpr_d = _downsample(fpr, tpr)
+        prec_d, rec_d = _downsample(prec, rec)
+        return {"roc": {"fpr": [float(x) for x in fpr_d], "tpr": [float(x) for x in tpr_d]},
+                "pr": {"precision": [float(x) for x in prec_d], "recall": [float(x) for x in rec_d]},
+                "calibration": cal}

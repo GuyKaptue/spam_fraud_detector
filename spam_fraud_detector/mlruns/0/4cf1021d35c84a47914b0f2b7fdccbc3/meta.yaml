@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/4cf1021d35c84a47914b0f2b7fdccbc3/artifacts
+end_time: 1760546360393
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4cf1021d35c84a47914b0f2b7fdccbc3
+run_name: LogisticRegression_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760546360381
+status: 3
+tags: []
+user_id: guykaptue

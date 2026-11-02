@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_positive",
+  "narrative": "Lena Schmidt's transaction was scored 0.988 (threshold 0.73).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "MLPClassifier",
+    "recorded_at": "2026-11-02T07:42:01.167473+00:00",
+    "row_id": 18276,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0 (legitimate transaction) but reputational cost of blocking a real customer",
+    "priority": "low",
+    "reason": "Flagged at 0.988 but ground truth is legitimate — analyze why the model false-positived.",
+    "reviewer_notes_template": "Case F018276 — Lena Schmidt. Score 0.988 (threshold 0.73). Top features: V28 (+0.22), V27 (-0.22), V19 (-0.18). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Confirm Lena Schmidt's transaction is legitimate.",
+      "Identify whether V28 (+0.22), V27 (-0.22), V19 (-0.18) are false-positive-prone features.",
+      "Consider adding this row to the training set as a labeled legitimate example."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.9875431643667396,
+  "subject": {
+    "account_last4": "1578",
+    "account_last4_full": "····1578",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 9,
+    "full_name": "Lena Schmidt",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "F018276",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.73,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.2174960536129311,
+      "value": 0.102965353404564
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.21749605361293103,
+      "value": 0.338204061733453
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.17554828136613643,
+      "value": 2.17800538060389
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V20",
+      "shap_value": 0.1755482813661364,
+      "value": 0.378818552233875
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V8",
+      "shap_value": 0.0995784075915413,
+      "value": 1.01788415824429
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 0
+}

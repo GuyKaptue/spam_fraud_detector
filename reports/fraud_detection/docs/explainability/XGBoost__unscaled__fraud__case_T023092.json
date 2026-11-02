@@ -1,0 +1,86 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Mateo Alvarez's transaction was scored 1.000 (threshold 0.34). ",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "unscaled",
+    "model": "XGBoost",
+    "recorded_at": "2026-10-31T18:55:38.548554+00:00",
+    "row_id": 23092,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "high",
+    "estimated_cost_if_missed": "€0.00 (this transaction) + up to €5000 (typical follow-up fraud on the same card after a test transaction)",
+    "priority": "high",
+    "reason": "Score 1.000 is 2.9× the threshold, and V23 matches a known fraud pattern.",
+    "reviewer_notes_template": "Case T023092 — Mateo Alvarez. Score 1.000 (threshold 0.34). Top features: V23 (-0.32), V24 (+0.32), V22 (+0.23). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Contact Mateo Alvarez via phone (not SMS/email) to confirm the €0.00 transaction.",
+      "If unrecognized: block card ···8163, reverse the charge, open investigation ticket.",
+      "If confirmed: add customer-specific allowlist rule for V23 (-0.32), V24 (+0.32), V22 (+0.23).",
+      "Check for related transactions from Unknown Merchant in last 72h."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "8163",
+    "account_last4_full": "····8163",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 84,
+    "full_name": "Mateo Alvarez",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "T023092",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.34,
+  "top_features": [
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V23",
+      "shap_value": -0.32359968487581153,
+      "value": -0.578007459600926
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V24",
+      "shap_value": 0.3235996848281504,
+      "value": -0.0590448081819941
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V22",
+      "shap_value": 0.23360364267313333,
+      "value": 1.56794700869044
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V21",
+      "shap_value": -0.23360364233784456,
+      "value": 1.62059124560534
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.15224367971558797,
+      "value": -0.599847542493268
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

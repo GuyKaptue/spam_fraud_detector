@@ -1,0 +1,90 @@
+{
+  "anomaly_score": 1.0,
+  "case_type": "empirical",
+  "disagreement_type": "novel",
+  "narrative": "Yuki Tanaka's transaction was scored anomaly 1.000 vs supervised 0.000 (novel).",
+  "persona": "anomaly",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "anomaly",
+    "model": "LOF",
+    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "row_id": 7087,
+    "split": "val"
+  },
+  "raw_score": 0.5681955775085857,
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0.00 + up to €15000 (typical follow-up) + reputational risk (supervised model missed it)",
+    "priority": "high",
+    "reason": "Anomaly score 1.000 is high but supervised model scored 0.000 (below threshold). This is a novel anomaly — the supervised model missed it; a human must review.",
+    "reviewer_notes_template": "Case A-007087 — Yuki Tanaka. Anomaly 1.000 but supervised 0.000. Novel anomaly. Top features: V1 (+0.50), V2 (-0.50), V11 (-0.12). Action: escalate. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Escalate to the fraud analyst team with a 'novel anomaly' tag.",
+      "Contact Yuki Tanaka via registered phone to confirm the €0.00 transaction.",
+      "If unrecognized: block card ···3227, reverse, open 'novel fraud pattern' ticket.",
+      "If confirmed: add customer-specific allowlist, mark as 'legitimate high-value' for anomaly detector retraining."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "3227",
+    "account_last4_full": "····3227",
+    "amount_eur": 0.0,
+    "amount_zscore": -0.01,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "cross_border": false,
+    "full_name": "Yuki Tanaka",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "minutes_since_previous_txn": 399,
+    "night_transaction": true,
+    "subject_id": "A-007087"
+  },
+  "supervised_score": 0.00021003066013105019,
+  "threshold": 0.75,
+  "top_features": [
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V1",
+      "shap_value": 0.5015909139691479,
+      "value": 1.00085015521857
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V2",
+      "shap_value": -0.5015909139691479,
+      "value": -0.136715430630484
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V11",
+      "shap_value": -0.1187488338731828,
+      "value": 1.58202015100269
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V12",
+      "shap_value": 0.1187488338731828,
+      "value": 0.802482604175853
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V14",
+      "shap_value": 0.060516684097191395,
+      "value": 0.294892345415153
+    }
+  ],
+  "y_pred": 1,
+  "y_true": null
+}

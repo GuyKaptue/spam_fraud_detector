@@ -1,0 +1,55 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  full-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev,explain]"
+
+      - name: Cache Kaggle data
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw
+            data/processed
+          key: kaggle-data-${{ matrix.python-version }}-${{ hashFiles('spam_fraud_detector/core/data_loader.py') }}
+
+      - name: Download data
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: make data
+
+      - name: Full pipeline
+        run: |
+          make data
+          make train
+          make select-top3
+          make stats
+          make explain-spam
+          make explain-fraud
+          make explain-anomaly
+          make verify-explainability
+          make verify-bundles
+          make verify-dashboard
+          make verify-contract
+          make verify-thresholds
+          make deterministic-parquet-check
+          make reproduce
+          make audit
+          make pipeline

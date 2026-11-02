@@ -1,0 +1,83 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Freya Andersen's message was scored 1.000 (threshold 0.81).",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "scaled",
+    "model": "KNN",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "row_id": 768,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "monitor",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "very low",
+    "priority": "low",
+    "reason": "Score 1.000 is near threshold 0.81; monitor but do not block.",
+    "reviewer_notes_template": "Case T000768 — Freya Andersen received '' from unknown@example.com. Score 1.000 near threshold 0.81. Action: monitor. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Add sender to watchlist for 14 days.",
+      "Review if 2+ more messages from same sender are flagged."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "8844",
+    "account_last4_full": "····8844",
+    "city": "Unknown",
+    "full_name": "Freya Andersen",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 780,
+    "prior_messages_from_sender": 4,
+    "sender_display": "Unknown Sender",
+    "sender_email": "unknown@example.com",
+    "subject_id": "T000768",
+    "subject_line": ""
+  },
+  "threshold": 0.81,
+  "top_features": [
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "armstrong",
+      "shap_value": -0.11812278988467755,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "driscoll",
+      "shap_value": 0.11812278988467745,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "cec",
+      "shap_value": -0.03967222023131742,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "entered",
+      "shap_value": 0.03967222023131737,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "e",
+      "shap_value": -0.03919507883075046,
+      "value": 40.0
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

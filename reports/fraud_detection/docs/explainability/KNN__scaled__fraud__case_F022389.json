@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_positive",
+  "narrative": "Aisha Rahman's transaction was scored 0.800 (threshold 0.41).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "KNN",
+    "recorded_at": "2026-11-01T22:09:24.822994+00:00",
+    "row_id": 22389,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0 (legitimate transaction) but reputational cost of blocking a real customer",
+    "priority": "low",
+    "reason": "Flagged at 0.800 but ground truth is legitimate — analyze why the model false-positived.",
+    "reviewer_notes_template": "Case F022389 — Aisha Rahman. Score 0.800 (threshold 0.41). Top features: V28 (+0.25), V27 (-0.25), V24 (+0.17). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Confirm Aisha Rahman's transaction is legitimate.",
+      "Identify whether V28 (+0.25), V27 (-0.25), V24 (+0.17) are false-positive-prone features.",
+      "Consider adding this row to the training set as a labeled legitimate example."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.8,
+  "subject": {
+    "account_last4": "1053",
+    "account_last4_full": "····1053",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 45,
+    "full_name": "Aisha Rahman",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 1,
+    "subject_id": "F022389",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.41,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.253009834308215,
+      "value": 0.38343383113188
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.2530098343082148,
+      "value": 0.633793498623559
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V24",
+      "shap_value": 0.1653760586152154,
+      "value": -0.300648496485992
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V23",
+      "shap_value": -0.16537605861521526,
+      "value": -0.672181004177837
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.08170774714012807,
+      "value": 0.925627777176293
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 0
+}

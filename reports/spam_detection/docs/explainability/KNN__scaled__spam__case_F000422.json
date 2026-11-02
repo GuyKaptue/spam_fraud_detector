@@ -1,0 +1,83 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_negative",
+  "narrative": "Lars Müller's message was scored 0.800 (threshold 0.81).",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "scaled",
+    "model": "KNN",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "row_id": 422,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "monitor",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "very low",
+    "priority": "low",
+    "reason": "Score 0.800 is near threshold 0.81; monitor but do not block.",
+    "reviewer_notes_template": "Case F000422 — Lars Müller received '' from unknown@example.com. Score 0.800 near threshold 0.81. Action: monitor. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Add sender to watchlist for 14 days.",
+      "Review if 2+ more messages from same sender are flagged."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.8,
+  "subject": {
+    "account_last4": "0145",
+    "account_last4_full": "····0145",
+    "city": "Unknown",
+    "full_name": "Lars Müller",
+    "has_unsubscribe_header": true,
+    "inbox_age_days": 147,
+    "prior_messages_from_sender": 2,
+    "sender_display": "Unknown Sender",
+    "sender_email": "unknown@example.com",
+    "subject_id": "F000422",
+    "subject_line": ""
+  },
+  "threshold": 0.81,
+  "top_features": [
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "williams",
+      "shap_value": 0.04445290044997459,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "photoshop",
+      "shap_value": -0.044452900449974575,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "paid",
+      "shap_value": -0.043336159030113175,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "while",
+      "shap_value": 0.043336159030113175,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "now",
+      "shap_value": 0.03591220359368508,
+      "value": 1.0
+    }
+  ],
+  "y_pred": 0,
+  "y_true": 1
+}

@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_negative",
+  "narrative": "Mateo Alvarez's transaction was scored 0.520 (threshold 0.56).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "unscaled",
+    "model": "RandomForest",
+    "recorded_at": "2026-11-01T18:19:04.649531+00:00",
+    "row_id": 30438,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "high",
+    "estimated_cost_if_missed": "€0.00 + risk of model deploying similar misses in production",
+    "priority": "high",
+    "reason": "Score 0.520 is BELOW threshold 0.56, but ground truth is fraud — the model missed it.",
+    "reviewer_notes_template": "Case F030438 — Mateo Alvarez. Score 0.520 (threshold 0.56). Top features: V27 (-0.17), V28 (+0.17), V7 (-0.10). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Investigate why V27 (-0.17), V28 (+0.17), V7 (-0.10) did not trigger the model.",
+      "Add this row to the training set with the fraud label.",
+      "Consider lowering the threshold or adjusting the feature engineering for V27."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.52,
+  "subject": {
+    "account_last4": "5296",
+    "account_last4_full": "····5296",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 88,
+    "full_name": "Mateo Alvarez",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 0,
+    "subject_id": "F030438",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.56,
+  "top_features": [
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.17045302619730926,
+      "value": 0.668496565754242
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.17045302619730912,
+      "value": 0.595609828713858
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V7",
+      "shap_value": -0.10338317178367576,
+      "value": -1.79988483348006
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V8",
+      "shap_value": 0.10338317178367544,
+      "value": -2.62778128431688
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.07707044210238705,
+      "value": 0.994829500437418
+    }
+  ],
+  "y_pred": 0,
+  "y_true": 1
+}

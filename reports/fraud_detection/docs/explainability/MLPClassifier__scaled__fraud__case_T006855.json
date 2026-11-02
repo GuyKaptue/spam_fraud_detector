@@ -1,0 +1,86 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Gustav Weber's transaction was scored 1.000 (threshold 0.37).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "MLPClassifier",
+    "recorded_at": "2026-11-01T18:19:04.649531+00:00",
+    "row_id": 6855,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "high",
+    "estimated_cost_if_missed": "€0.00 (this transaction) + up to €5000 (typical follow-up fraud on the same card after a test transaction)",
+    "priority": "high",
+    "reason": "Score 1.000 is 2.7× the threshold, and V27 matches a known fraud pattern.",
+    "reviewer_notes_template": "Case T006855 — Gustav Weber. Score 1.000 (threshold 0.37). Top features: V27 (-0.48), V28 (+0.48), V24 (+0.18). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Contact Gustav Weber via phone (not SMS/email) to confirm the €0.00 transaction.",
+      "If unrecognized: block card ···4897, reverse the charge, open investigation ticket.",
+      "If confirmed: add customer-specific allowlist rule for V27 (-0.48), V28 (+0.48), V24 (+0.18).",
+      "Check for related transactions from Unknown Merchant in last 72h."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 0.9999987262280792,
+  "subject": {
+    "account_last4": "4897",
+    "account_last4_full": "····4897",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 61,
+    "full_name": "Gustav Weber",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 3,
+    "subject_id": "T006855",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.37,
+  "top_features": [
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.4756041570131215,
+      "value": 0.456022723280535
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.47560415701312136,
+      "value": -0.405682084802192
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V24",
+      "shap_value": 0.18329739169759027,
+      "value": -0.290539415419797
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V23",
+      "shap_value": -0.1832973916975902,
+      "value": 0.976347942245667
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V7",
+      "shap_value": -0.1495882441172059,
+      "value": -0.184709664717417
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "fraud": [
+    {
+      "scenario_id": "H-FRAUD-001",
+      "description": "High-amount cross-border night transaction",
+      "subject_hint": {
+        "name": "Priya Nakamura",
+        "city": "Porto",
+        "card_product": "Visa Credit",
+        "merchant": "Tidewater Books",
+        "merchant_category": "Online"
+      },
+      "features": {
+        "Amount": 7200.0,
+        "Time": 8030,
+        "V14": -3.10,
+        "V12": -0.98,
+        "V10": -0.51,
+        "V4": 0.22,
+        "V17": -0.21
+      },
+      "note": "Fabricated features drawn from the mean of the positive class; expects high fraud score.",
+      "expected_score_range": [0.70, 1.00]
+    },
+    {
+      "scenario_id": "H-FRAUD-002",
+      "description": "Small-amount daytime domestic transaction",
+      "subject_hint": {
+        "name": "Mateo Alvarez",
+        "city": "Lyon",
+        "card_product": "Visa Debit",
+        "merchant": "Northline Groceries",
+        "merchant_category": "Grocery"
+      },
+      "features": {
+        "Amount": 12.50,
+        "Time": 43200,
+        "V14": 0.10,
+        "V12": 0.30,
+        "V10": 0.05,
+        "V4": -0.20,
+        "V17": 0.15
+      },
+      "note": "Fabricated features drawn from the mean of the negative class; expects low fraud score.",
+      "expected_score_range": [0.00, 0.15]
+    },
+    {
+      "scenario_id": "H-FRAUD-003",
+      "description": "Ambiguous middle-of-the-road transaction",
+      "subject_hint": {
+        "name": "Talia Lindgren",
+        "city": "Malmö",
+        "card_product": "Mastercard Debit",
+        "merchant": "Café Lumière",
+        "merchant_category": "Dining"
+      },
+      "features": {
+        "Amount": 340.0,
+        "Time": 20000,
+        "V14": -1.0,
+        "V12": 0.0,
+        "V10": 0.0,
+        "V4": 0.0,
+        "V17": 0.0
+      },
+      "note": "Features between classes; expects score near threshold.",
+      "expected_score_range": [0.20, 0.60]
+    }
+  ],
+  "spam": [
+    {
+      "scenario_id": "H-SPAM-001",
+      "description": "Aggressive promotional message",
+      "subject_hint": {
+        "name": "Hattie Kowalski",
+        "city": "Trieste",
+        "sender_email": "offers@promo.example",
+        "sender_display": "Weekly Deals",
+        "subject_line": "Congratulations — claim your prize"
+      },
+      "tokens": {
+        "click": 5,
+        "prize": 2,
+        "free": 1,
+        "win": 1
+      },
+      "note": "Expects very high spam score.",
+      "expected_score_range": [0.90, 1.00]
+    },
+    {
+      "scenario_id": "H-SPAM-002",
+      "description": "Business message with one promotional token",
+      "subject_hint": {
+        "name": "Ibrahim Haddad",
+        "city": "Graz",
+        "sender_email": "hr@company.example",
+        "sender_display": "People Operations",
+        "subject_line": "Meeting notes from Tuesday"
+      },
+      "tokens": {
+        "meeting": 2,
+        "report": 1,
+        "click": 1
+      },
+      "note": "Expects low spam score; single 'click' is not enough to trigger.",
+      "expected_score_range": [0.00, 0.20]
+    },
+    {
+      "scenario_id": "H-SPAM-003",
+      "description": "Message with subscription language",
+      "subject_hint": {
+        "name": "Noor Singh",
+        "city": "Bilbao",
+        "sender_email": "press@newsletter.example",
+        "sender_display": "Press Digest",
+        "subject_line": "Weekly digest — unsubscribe anytime"
+      },
+      "tokens": {
+        "unsubscribe": 1,
+        "click": 1,
+        "weekly": 1
+      },
+      "note": "Expects moderate spam score.",
+      "expected_score_range": [0.30, 0.70]
+    }
+  ],
+  "anomaly": [
+    {
+      "scenario_id": "H-ANOM-001",
+      "description": "Large cross-border night transaction, dissimilar to historical fraud",
+      "subject_hint": {
+        "name": "Gustav Weber",
+        "city": "Tromsø",
+        "card_product": "Visa Credit",
+        "merchant": "Hôtel Bellevue",
+        "merchant_category": "Travel"
+      },
+      "features": {
+        "Amount": 7200.0,
+        "Time": 8030,
+        "V14": -3.10,
+        "V12": -0.98,
+        "V10": -0.51
+      },
+      "note": "Expects high anomaly score, low supervised score — a novel case.",
+      "expected_disagreement": "novel"
+    },
+    {
+      "scenario_id": "H-ANOM-002",
+      "description": "Small daytime domestic transaction",
+      "subject_hint": {
+        "name": "Rosa Petrov",
+        "city": "Vilnius",
+        "card_product": "Mastercard Debit",
+        "merchant": "Kiosk 47",
+        "merchant_category": "Retail"
+      },
+      "features": {
+        "Amount": 15.0,
+        "Time": 50000,
+        "V14": 0.0,
+        "V12": 0.0,
+        "V10": 0.0
+      },
+      "note": "Expects low anomaly score; matches legitimate distribution.",
+      "expected_disagreement": "agree_low"
+    }
+  ]
+}

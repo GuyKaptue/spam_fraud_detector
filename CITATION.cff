@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this framework, please cite it as below."
+title: "Binary Classification Benchmarking Framework for Spam and Fraud Detection"
+authors:
+  - family-names: "Kaptue T."
+    given-names: "Guy M."
+    email: "guykaptue24@gmail.com"
+    website: "https://github.com/GuyKaptue"
+year: 2025
+license: MIT
+repository-code: "https://github.com/GuyKaptue/classifier-bench"
+keywords:
+  - binary classification
+  - spam detection
+  - fraud detection
+  - anomaly detection
+  - class imbalance
+  - benchmarking
+  - mlflow

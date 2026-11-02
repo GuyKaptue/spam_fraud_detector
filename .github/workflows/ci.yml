@@ -1,0 +1,161 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  lint-and-type:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Ruff
+        run: make lint
+      - name: MyPy
+        run: make typecheck
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Unit tests with coverage
+        run: pytest -q tests/unit --cov=spam_fraud_detector.core --cov-report=term-missing --cov-fail-under=80
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Docs core
+        run: make docs-check-core
+      - name: Docs paths
+        run: make docs-check-paths
+
+  contract-and-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Verify contract
+        run: make verify-contract
+      - name: Verify dashboard
+        run: make verify-dashboard
+      - name: Verify casefiles
+        run: python scripts/verify_casefiles.py
+
+  explain-read-only:
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[dev,explain]"
+      - name: Read-only explain test
+        run: pytest -q tests/regression/test_explain_is_read_only.py
+
+  full-pipeline:
+    runs-on: ubuntu-latest
+    needs: [lint-and-type, unit-tests, docs]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install (with explain extras)
+        run: pip install -e ".[dev,explain]"
+
+      - name: Cache Kaggle data
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/raw
+            data/processed
+          key: kaggle-data-${{ hashFiles('spam_fraud_detector/core/data_loader.py', 'spam_fraud_detector/config/**', 'pyproject.toml') }}
+
+      - name: Download data (idempotent)
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          if [ -z "${KAGGLE_USERNAME}" ]; then
+            echo "KAGGLE_USERNAME not set; skipping data download."
+            exit 0
+          fi
+          make data
+
+      - name: Verify splits
+        run: make data-verify-splits
+      - name: Verify quality
+        run: make data-verify-quality
+      - name: Verify features
+        run: make data-verify-features
+
+      - name: Train (both domains)
+        run: make retrain
+      - name: Verify bundles
+        run: make verify-bundles
+      - name: Top-3 selection
+        run: make select-top3
+      - name: Statistics
+        run: make stats
+      - name: A/B testing stats-tournament
+        run: make stats-tournament
+
+      - name: Explain spam
+        run: make explain-spam
+      - name: Explain fraud
+        run: make explain-fraud
+      - name: Explain anomaly
+        run: make explain-anomaly
+      - name: Guard — anomaly explain must have zero failures
+        run: python scripts/ci_guard_explain_anomaly.py
+      - name: Verify explainability
+        run: make verify-explainability
+      - name: MLflow UI
+        run: make mlflow-ui
+      - name: MLflow stats
+        run: make mlflow-stats DOMAIN=fraud
+        env:
+          DOMAIN: fraud
+      - name: Verify casefiles (no placeholder names)
+        run: python scripts/verify_casefiles.py --strict
+      - name: Verify thresholds
+        run: make verify-thresholds
+
+      - name: Deterministic parquet check
+        run: make deterministic-parquet-check
+      - name: Audit (all 8 + threshold tests)
+        run: make audit

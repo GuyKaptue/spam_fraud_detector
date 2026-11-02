@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_positive",
+  "narrative": "Mateo Alvarez's transaction was scored 166.666 (threshold 0.00).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "SGDClassifier",
+    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "row_id": 1577,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0 (legitimate transaction) but reputational cost of blocking a real customer",
+    "priority": "low",
+    "reason": "Flagged at 166.666 but ground truth is legitimate — analyze why the model false-positived.",
+    "reviewer_notes_template": "Case F-001577 — Mateo Alvarez. Score 166.666 (threshold 0.00). Top features: V14 (+139.02), V10 (+50.13), V12 (+48.20). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Confirm Mateo Alvarez's transaction is legitimate.",
+      "Identify whether V14 (+139.02), V10 (+50.13), V12 (+48.20) are false-positive-prone features.",
+      "Consider adding this row to the training set as a labeled legitimate example."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 166.66587983214873,
+  "subject": {
+    "account_last4": "2169",
+    "account_last4_full": "····2169",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 22,
+    "full_name": "Mateo Alvarez",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "F-001577",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.0,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V14",
+      "shap_value": 139.01519814102653,
+      "value": -13.7803774903028
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V10",
+      "shap_value": 50.12583324460083,
+      "value": -11.208722820105
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V12",
+      "shap_value": 48.20321616574796,
+      "value": -15.1449882216973
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V11",
+      "shap_value": 29.018141818938265,
+      "value": 10.0021902173471
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V4",
+      "shap_value": 25.049814954039405,
+      "value": 5.56523954204705
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 0
+}

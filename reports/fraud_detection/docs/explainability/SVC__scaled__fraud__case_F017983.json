@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "false_positive",
+  "narrative": "Hattie Kowalski's transaction was scored 1.010 (threshold 0.00). ",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "SVC",
+    "recorded_at": "2026-10-31T18:55:38.548554+00:00",
+    "row_id": 17983,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0 (legitimate transaction) but reputational cost of blocking a real customer",
+    "priority": "low",
+    "reason": "Flagged at 1.010 but ground truth is legitimate — analyze why the model false-positived.",
+    "reviewer_notes_template": "Case F017983 — Hattie Kowalski. Score 1.010 (threshold 0.00). Top features: V14 (+0.36), V17 (+0.31), V16 (+0.27). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Confirm Hattie Kowalski's transaction is legitimate.",
+      "Identify whether V14 (+0.36), V17 (+0.31), V16 (+0.27) are false-positive-prone features.",
+      "Consider adding this row to the training set as a labeled legitimate example."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0103070274087131,
+  "subject": {
+    "account_last4": "9441",
+    "account_last4_full": "····9441",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 10,
+    "full_name": "Hattie Kowalski",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "F017983",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.0,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V14",
+      "shap_value": 0.3572365613479917,
+      "value": -7.10963819536638
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V17",
+      "shap_value": 0.30552321587797704,
+      "value": -12.1292714110065
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V16",
+      "shap_value": 0.26823227989809584,
+      "value": -7.26705439123808
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V10",
+      "shap_value": 0.26602385537578993,
+      "value": -5.62201171242542
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V12",
+      "shap_value": 0.221228976200301,
+      "value": -7.10450164574621
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 0
+}

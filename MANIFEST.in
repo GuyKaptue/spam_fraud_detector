@@ -1,0 +1,32 @@
+# Include the README and license
+include README.md
+include LICENSE
+
+# Include requirements and setup files
+include setup.py
+include requirements.txt
+include setup.cfg
+include pyproject.toml
+
+# Include all Python source files
+recursive-include spam_fraud_detector *.py
+
+# Include core assets like reports and datasets (optional for source dist)
+recursive-include spam_fraud_detector/reports *
+recursive-include spam_fraud_detector/datasets *
+
+# Include MLflow tracking data if needed
+recursive-include spam_fraud_detector/mlruns *
+
+# Include Jupyter notebooks or documentation if added later
+recursive-include docs *
+recursive-include notebooks *
+
+# Exclude build artifacts and caches
+exclude *.pyc
+exclude __pycache__/
+prune build/
+prune dist/
+prune *.egg-info/
+prune .pytest_cache/
+prune .cache/

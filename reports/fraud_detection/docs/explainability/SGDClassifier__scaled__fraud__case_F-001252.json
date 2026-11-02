@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Diego Costa's transaction was scored 276.422 (threshold 0.00).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "SGDClassifier",
+    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "row_id": 1252,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0.00 + follow-up risk",
+    "priority": "medium",
+    "reason": "Score 276.422 exceeds threshold 0.00 (0.0×); standard manual review.",
+    "reviewer_notes_template": "Case F-001252 — Diego Costa. Score 276.422 (threshold 0.00). Top features: V14 (+193.80), V10 (+57.37), V12 (+56.63). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Review Diego Costa's transaction history for related activity.",
+      "Cross-check Unknown Merchant against the known-merchant allowlist.",
+      "Confirm via the customer's registered contact method."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 276.4220953733065,
+  "subject": {
+    "account_last4": "0160",
+    "account_last4_full": "····0160",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 82,
+    "full_name": "Diego Costa",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 2,
+    "subject_id": "F-001252",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.0,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V14",
+      "shap_value": 193.7990846724514,
+      "value": -19.2143254902614
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V10",
+      "shap_value": 57.37161834665998,
+      "value": -12.8409338181318
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V12",
+      "shap_value": 56.6254242386424,
+      "value": -17.7691434633638
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V4",
+      "shap_value": 41.047645872421306,
+      "value": 9.00714687170235
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V11",
+      "shap_value": 34.82134426337977,
+      "value": 12.0189131816199
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

@@ -1,0 +1,83 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Yuki Tanaka's message was scored 1.000 (threshold 0.76).",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "scaled",
+    "model": "LogisticRegression",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "row_id": 773,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "monitor",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "very low",
+    "priority": "low",
+    "reason": "Score 1.000 is near threshold 0.76; monitor but do not block.",
+    "reviewer_notes_template": "Case T000773 — Yuki Tanaka received '' from unknown@example.com. Score 1.000 near threshold 0.76. Action: monitor. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Add sender to watchlist for 14 days.",
+      "Review if 2+ more messages from same sender are flagged."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "7704",
+    "account_last4_full": "····7704",
+    "city": "Unknown",
+    "full_name": "Yuki Tanaka",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 419,
+    "prior_messages_from_sender": 5,
+    "sender_display": "Unknown Sender",
+    "sender_email": "unknown@example.com",
+    "subject_id": "T000773",
+    "subject_line": ""
+  },
+  "threshold": 0.76,
+  "top_features": [
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "aggressive",
+      "shap_value": 0.11669109468217552,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "medium",
+      "shap_value": -0.11669109468217537,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "gb",
+      "shap_value": -0.07623536643199037,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "board",
+      "shap_value": 0.07623536643199033,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "earthlink",
+      "shap_value": 0.05151591629645886,
+      "value": 0.0
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

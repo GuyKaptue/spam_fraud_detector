@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Diego Costa's message was scored 1.000 (threshold 0.46).",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "unscaled",
+    "model": "RandomForest",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "row_id": 570,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "block",
+    "confidence": "high",
+    "estimated_cost_if_missed": "low — annoyance, but repeated spam increases user churn",
+    "priority": "high",
+    "reason": "Score 1.000 is 2.2× the threshold; multiple strong spam tokens present.",
+    "reviewer_notes_template": "Case T000570 — Diego Costa received '' from unknown@example.com. Score 1.000. Top tokens: . Action: block. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Quarantine the message from Diego Costa's inbox.",
+      "Check sender domain unknown@example.com — if it matches 10+ messages in last 7d, add to blocklist.",
+      "Do not bounce the message (confirms address validity to spammers).",
+      "Downgrade to 'review' if user reports as legitimate within 7 days."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "4253",
+    "account_last4_full": "····4253",
+    "city": "Unknown",
+    "full_name": "Diego Costa",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 902,
+    "prior_messages_from_sender": 2,
+    "sender_display": "Unknown Sender",
+    "sender_email": "unknown@example.com",
+    "subject_id": "T000570",
+    "subject_line": ""
+  },
+  "threshold": 0.46,
+  "top_features": [
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "effective",
+      "shap_value": 0.09657610900192871,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "w",
+      "shap_value": -0.0965761090019287,
+      "value": 9.0
+    },
+    {
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "name": "changing",
+      "shap_value": -0.07295782983137664,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "built",
+      "shap_value": 0.07295782983137652,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "name": "steps",
+      "shap_value": 0.07159416519564238,
+      "value": 0.0
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

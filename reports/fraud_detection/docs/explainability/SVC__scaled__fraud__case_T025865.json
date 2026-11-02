@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Talia Lindgren's transaction was scored 1.876 (threshold 0.00). ",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "scaled",
+    "model": "SVC",
+    "recorded_at": "2026-10-31T18:55:38.548554+00:00",
+    "row_id": 25865,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0.00 + follow-up risk",
+    "priority": "medium",
+    "reason": "Score 1.876 exceeds threshold 0.00 (0.0×); standard manual review.",
+    "reviewer_notes_template": "Case T025865 — Talia Lindgren. Score 1.876 (threshold 0.00). Top features: V14 (+0.80), V10 (+0.40), V12 (+0.36). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Review Talia Lindgren's transaction history for related activity.",
+      "Cross-check Unknown Merchant against the known-merchant allowlist.",
+      "Confirm via the customer's registered contact method."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.875803138233855,
+  "subject": {
+    "account_last4": "2415",
+    "account_last4_full": "····2415",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 43,
+    "full_name": "Talia Lindgren",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 0,
+    "subject_id": "T025865",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.0,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V14",
+      "shap_value": 0.8035796256251667,
+      "value": -7.63696288811138
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V10",
+      "shap_value": 0.39920019728902806,
+      "value": -4.82077941422469
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V12",
+      "shap_value": 0.3640346097091036,
+      "value": -4.61900987976999
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V17",
+      "shap_value": 0.3282130788235253,
+      "value": -7.60471483249934
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V16",
+      "shap_value": 0.283516928769045,
+      "value": -4.14039566725884
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

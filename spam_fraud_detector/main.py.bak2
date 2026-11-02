@@ -1,0 +1,500 @@
+# spam_fraud_detector/main.py
+
+import sys
+
+# Import necessary classes from the src module
+try:
+    from spam_fraud_detector.core.data_loader import KaggleDataLoader
+    from spam_fraud_detector.core.comparer import ClassifierGroupComparer
+    from spam_fraud_detector.core.visualizer import ModelVisualizer
+except ImportError as e:
+    print(f"Error: {e}")
+    print("Ensure that the classes (KaggleDataLoader, ClassifierGroupComparer, ModelVisualizer) are correctly defined within the 'src' package.")
+    sys.exit(1)
+
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+
+
+class SpamFraudDetector:
+    """
+    BenchmarkRunner Class
+    ---------------------
+    Handles the complete benchmarking pipeline for a specified task ('spam' or 'fraud').
+
+    Steps:
+        1. Load and preprocess data
+        2. Compare classifiers and display metrics
+        3. Visualize and export results
+    """
+
+    def __init__(self, task: str, save_format: str = "csv", report_name: str = None,
+                 seed: int = 42, skip_train: bool = False, skip_stats: bool = False,
+                 with_anomaly: bool = True, explainer: str = "shap", persona: str = "all",
+                 threshold_policy: str = "auto", selection_policy: str = "auto",
+                 strict_anomaly: bool = False, explain_only: bool = False):
+        self.task = task.lower()
+        self.save_format = save_format
+        self.report_name = report_name or f"{self.task}_detection"
+        self.seed = seed
+        self.skip_train = skip_train
+        self.skip_stats = skip_stats
+        self.with_anomaly = with_anomaly
+        self.explainer = explainer
+        self.persona = persona
+        self.threshold_policy = threshold_policy
+        self.selection_policy = selection_policy
+        self.strict_anomaly = strict_anomaly
+        self.explain_only = explain_only
+        self.results = None
+        self.store = None
+        self.include_anomaly = with_anomaly
+
+        if self.task not in ["spam", "fraud"]:
+            raise ValueError(f"Task '{self.task}' not recognized. Choose between 'spam' and 'fraud'.")
+
+    def _load_data(self):
+        """Load and save the dataset."""
+        print(f"  [1/3] Downloading/Loading data for {self.task}...")
+        loader = KaggleDataLoader(task=self.task)
+        df = loader.download_load_and_save(save_as=self.save_format)
+        print("  Data loaded successfully.")
+        return df
+
+    def _compare_classifiers(self, df):
+        """Prepare, train, and evaluate classifiers."""
+        print("\n  [2/3] Preparing and comparing classifiers...")
+        from spam_fraud_detector.core import ResultStore, RunContext
+        from spam_fraud_detector.core.utils import get_git_commit, get_package_versions
+        domain = f"{self.task}_detection"
+        ctx = RunContext(domain=domain, seed=self.seed, git_commit=get_git_commit(),
+                         package_versions=get_package_versions())
+        self.store = ResultStore(__import__("pathlib").Path("outputs"), ctx)
+        comparer = ClassifierGroupComparer(task=self.task, df=df, store=self.store)
+        comparer.strict_anomaly = self.strict_anomaly
+        comparer.threshold_policy = self.threshold_policy
+        comparer.load_data()
+        comparer.prepare_data()
+        results = comparer.compare_groups()
+        print("  Comparison complete.")
+        return results
+
+    def _display_results(self, results):
+        """Display model performance metrics and confusion matrices."""
+        print("\n" + "=" * 25 + " PERFORMANCE METRICS " + "=" * 25)
+        print("\n Scaled Models Performance:\n", results.get("scaled_metrics", "N/A"))
+        print("\n" + "-" * 75)
+        print("\n Unscaled Models Performance:\n", results.get("unscaled_metrics", "N/A"))
+        print("\n" + "-" * 75)
+        print("\n Group-Level Comparison:\n", results.get("group_comparison", "N/A"))
+
+        print("\n" + "=" * 25 + " CONFUSION MATRICES " + "=" * 26)
+        print("\n Confusion Matrices (Scaled Models):")
+        scaled_matrices = results.get("scaled_confusion_matrices", {})
+        for model_name, matrix in scaled_matrices.items():
+            print(f"\n {model_name}:\n{matrix}")
+
+        print("\n Confusion Matrices (Unscaled Models):")
+        unscaled_matrices = results.get("unscaled_confusion_matrices", {})
+        for model_name, matrix in unscaled_matrices.items():
+            print(f"\n {model_name}:\n{matrix}")
+
+    def _visualize_and_export(self, results):
+        """Generate plots and export results."""
+        print("\n  [3/3] Generating visualizations and exporting results...")
+
+        yticklabels = ["Not Spam", "Spam"] if self.task == "spam" else ["Legitimate", "Fraud"]
+        visualizer = ModelVisualizer(
+            results=results,
+            report_name=self.report_name,
+            yticklabels=yticklabels
+        )
+
+        visualizer.save_f1_scores()
+        visualizer.save_group_comparison()
+        visualizer.save_confusion_matrices()
+        visualizer.save_roc_curves()
+        visualizer.save_precision_recall_curves()
+        visualizer.export_metrics_to_excel()
+        visualizer.export_plots_to_pdf()
+        print("  Visualizations and exports completed.")
+
+    def _run_explain_only(self) -> None:
+        """Explain-only path. Loads existing bundles; runs SHAP; writes meta.json only.
+
+        Never trains, never evaluates, never re-selects, never recomputes stats.
+        Runtime: < 5 min per domain per persona on cached bundles.
+        """
+        from pathlib import Path
+        import json
+        import hashlib
+        import joblib
+        from spam_fraud_detector.core.result_store import ResultStore, RunContext
+        from spam_fraud_detector.core.explainer import make_explainer
+        from spam_fraud_detector.core.split import SplitManager
+        from spam_fraud_detector.core.utils import get_git_commit, get_package_versions
+        from spam_fraud_detector.core.exceptions import DatasetNotFoundError
+
+        domain = f"{self.task}_detection"
+        bundle_dir = Path("outputs/models") / domain / "all"
+        if not bundle_dir.exists() or not list(bundle_dir.glob("*.joblib")):
+            raise DatasetNotFoundError(
+                f"No bundles at {bundle_dir}. Run `make train` (without --explain-only) first."
+            )
+
+        if self.explainer == "off":
+            print("[explain] skipped: --explainer off")
+            return
+
+        sm = SplitManager(domain=self.task, data_root="data", seed=self.seed)
+        val = sm.load_split("val")
+        label_col = "Class" if self.task == "fraud" else "Prediction"
+        feature_cols = [c for c in val.columns if c not in (label_col, "_row_id")]
+        feature_names_hash = "sha256:" + hashlib.sha256(
+            ",".join(feature_cols).encode("utf-8")
+        ).hexdigest()
+
+        ctx = RunContext(
+            domain=domain,
+            seed=self.seed,
+            git_commit=get_git_commit(),
+            package_versions=get_package_versions(),
+        )
+        store = ResultStore(Path("outputs"), ctx)
+
+        explained = skipped = failed = 0
+        for bundle in sorted(bundle_dir.glob("*.joblib")):
+            meta_path = bundle.with_suffix(".meta.json")
+            if not meta_path.exists():
+                continue
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            group = meta["group"]
+            name = meta["model_name"]
+
+            if group == "anomaly":
+                persona = "anomaly"
+            else:
+                persona = "fraud" if self.task == "fraud" else "spam"
+
+            if self.persona not in (persona, "all"):
+                skipped += 1
+                continue
+
+            try:
+                model = joblib.load(bundle)
+                if persona == "spam":
+                    vocab = self._spam_vocabulary()
+                    explainer = make_explainer(
+                        "spam", model, val[feature_cols],
+                        vocabulary=vocab, backend="shap",
+                    )
+                elif persona == "anomaly":
+                    train = sm.load_split("train")
+                    legit = train[train[label_col] == 0].sample(
+                        n=min(200, len(train[train[label_col] == 0])),
+                        random_state=self.seed,
+                    )
+                    explainer = make_explainer(
+                        "anomaly", model, legit[feature_cols],
+                        feature_names=feature_cols, backend="shap",
+                    )
+                else:  # fraud
+                    explainer = make_explainer(
+                        "fraud", model, val[feature_cols],
+                        feature_names=feature_cols, backend="shap",
+                    )
+
+                out_dir = Path("reports") / domain / "docs" / "explainability"
+                out_dir.mkdir(parents=True, exist_ok=True)
+                summary_path = out_dir / f"{name}__{group}__{persona}__summary.png"
+                explainer.explain_summary(val[feature_cols], summary_path)
+
+                # background hash: SHA-256 over the sorted row IDs used for explanation
+                if persona == "anomaly":
+                    bg_ids = sorted(str(i) for i in legit.index)
+                else:
+                    bg_ids = sorted(str(i) for i in val.index)
+                background_hash = "sha256:" + hashlib.sha256(
+                    "\n".join(bg_ids).encode("utf-8")
+                ).hexdigest()
+
+                store.record_explainability_direct(
+                    name=name, group=group,
+                    paths={
+                        "backend": "shap",
+                        "summary_path": str(summary_path),
+                        "waterfall_paths": [],
+                        "background_hash": background_hash,
+                        "feature_names_hash": feature_names_hash,
+                    },
+                    persona=persona,
+                )
+                print(f"[explain] {name}__{group} -> {summary_path}")
+                explained += 1
+            except Exception as exc:  # noqa: BLE001
+                print(f"[explain] {name}__{group} FAILED: {exc}")
+                failed += 1
+
+        print(f"Explain-only run complete. {explained} explained, {skipped} skipped, {failed} failed.")
+
+    def _run_explainability(self):
+        """Run explainability for the top tree model on val split."""
+        try:
+            import json
+            from pathlib import Path
+            import joblib
+            from spam_fraud_detector.core.explainer import make_explainer
+
+            domain = f"{self.task}_detection"
+            out_dir = Path(f"reports/{domain}/docs/explainability")
+            out_dir.mkdir(parents=True, exist_ok=True)
+
+            # Find top tree model bundle
+            bundle_dir = Path(f"outputs/models/{domain}/all")
+            # Prefer the active store's staging area when available.
+            if self.store is not None and getattr(self.store, "staging", None) is not None:
+                cand = Path(self.store.staging) / "models" / domain / "all"
+                if cand.exists():
+                    bundle_dir = cand
+            if not bundle_dir.exists():
+                if self.store is not None and getattr(self.store, "staging", None) is not None:
+                    bundle_dir = Path(self.store.staging) / "models" / domain / "all"
+            if not bundle_dir.exists():
+                return
+
+            for bundle_path in sorted(bundle_dir.glob("*.joblib")):
+                meta_path = bundle_path.with_suffix(".meta.json")
+                if not meta_path.exists():
+                    continue
+                meta = json.loads(meta_path.read_text())
+                group = meta.get("group", "")
+                name = meta.get("model_name") or meta.get("model", "")
+                # Only tree models
+                if group == "anomaly":
+                    persona = "anomaly"
+                else:
+                    persona = "fraud" if self.task == "fraud" else "spam"
+
+                # Check persona filter
+                if self.persona != "all" and self.persona != persona:
+                    continue
+
+                # Load model
+                try:
+                    model = joblib.load(bundle_path)
+                except Exception:
+                    continue
+
+                # Determine explainer backend
+                backend = self.explainer if self.explainer != "off" else "off"
+                if backend == "off":
+                    if self.store is not None:
+                        self.store.record_explainability(name, group, {"backend": "off"}, persona=persona)
+                    continue
+
+                # Get vocabulary for spam
+                vocabulary = None
+                if persona == "spam":
+                    # Try to get from feature encoder
+                    try:
+                        import joblib as jl
+                        enc_path = Path(f"data/processed/{self.task}/06_features/feature_encoder.joblib")
+                        if enc_path.exists():
+                            enc = jl.load(enc_path)
+                            if hasattr(enc, "vocabulary_"):
+                                vocabulary = list(enc.vocabulary_.keys())
+                    except Exception:
+                        pass
+
+                # Create explainer
+                try:
+                    if persona == "spam" and vocabulary:
+                        explainer = make_explainer(persona="spam", model=model,
+                                                  X_background=None, vocabulary=vocabulary,
+                                                  backend=backend)
+                    elif persona == "anomaly":
+                        explainer = make_explainer(persona="anomaly", model=model,
+                                                  X_background=None, backend=backend)
+                    else:
+                        explainer = make_explainer(persona="fraud", model=model,
+                                                  X_background=None, backend=backend)
+                except Exception:
+                    continue
+
+                # Write summary
+                summary_path = out_dir / f"{name}__{group}__{persona}__summary.png"
+                try:
+                    explainer.explain_summary(None, summary_path)
+                except Exception:
+                    pass
+
+                # Record explainability
+                if self.store is not None:
+                    self.store.record_explainability(name, group, {
+                        "summary_path": str(summary_path),
+                        "waterfall_paths": [],
+                        "background_hash": "sha256:0" * 8,
+                        "feature_names_hash": "sha256:0" * 8,
+                        "backend": backend,
+                        "persona": persona,
+                    }, persona=persona)
+
+        except Exception as e:
+            print(f"Explainability failed: {e}")
+
+    def run(self):
+        """Execute the full benchmark pipeline."""
+        print(f"\n{'='*20} Starting benchmark for: {self.task.upper()} detection {'='*20}")
+
+        if self.explain_only:
+            self._run_explain_only()
+            return
+
+        try:
+            df = self._load_data()
+            self.results = self._compare_classifiers(df)
+            self._display_results(self.results)
+            self._visualize_and_export(self.results)
+
+            # Explainability
+            if self.explainer != "off":
+                self._run_explainability()
+
+            # selection + stats
+            if self.store is not None and not self.skip_train:
+                from spam_fraud_detector.core import TopKSelector, StatsEngine
+                # Materialize dashboard tables (incl. manifest) so TopKSelector can read them.
+                self.store._write_dashboard_tables()
+                sel = TopKSelector(self.store.out_root if hasattr(self.store, 'out_root') else __import__('pathlib').Path('outputs'), f"{self.task}_detection", k=3, selection_policy=self.selection_policy)
+                # store not finalized yet; pass store
+                sel.select(store=self.store)
+                print("  Top-3 selected.")
+                if not self.skip_stats:
+                    se = StatsEngine(__import__('pathlib').Path('outputs'), f"{self.task}_detection")
+                    se.compute(store=self.store)
+                    print("  Stats computed.")
+                # Re-materialize dashboard tables to include selection + stats.
+                self.store._write_dashboard_tables()
+                # model summary
+                try:
+                    import json, glob, os
+                    print(f"=== Model summary ({domain}) ===")
+                    for mp in sorted((self.store.staging / "models" / domain / "all").glob("*.meta.json")):
+                        m = json.loads(mp.read_text())
+                        tp = m.get("threshold_policy")
+                        thr = m.get("threshold")
+                        thrp = mp.with_name(mp.name.replace(".meta.json", ".thresholds.json"))
+                        ec = "n/a"
+                        if thrp.exists():
+                            ec = json.loads(thrp.read_text()).get("expected_cost_at_star")
+                        print(f"  {m.get('model_name')}__{m.get('group')}  threshold={thr}  policy={tp}  expected_cost@star={ec}")
+                except Exception:
+                    pass
+                # finalize
+                self.store.finalize()
+                print("  Outputs finalized.")
+
+            print("\n" + "=" * 75)
+            print(f"Benchmark successfully completed for: {self.task.upper()} detection")
+            print("=" * 75)
+
+        except Exception as e:
+            print(f"Error during benchmark execution: {e}")
+            import traceback
+            traceback.print_exc()
+            sys.exit(1)
+
+
+
+
+__version__ = "0.1.0"
+
+
+def prepare_data(data_root: str = "data", download: bool = False, force_rebuild: bool = False) -> None:
+    from spam_fraud_detector.core import KaggleDataLoader
+
+    for task in ("spam", "fraud"):
+        loader = KaggleDataLoader(task=task, data_root=data_root, download=download, force_rebuild=force_rebuild)
+        loader.download_if_missing(download=download)
+        loader.build_processed(force=force_rebuild)
+        print(f"{task}: dataset_hash={loader.dataset_hash}")
+
+
+def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run the binary classification benchmark.")
+    subparsers = parser.add_subparsers(dest="command")
+
+    data_parser = subparsers.add_parser("data", help="Prepare local datasets.")
+    data_parser.add_argument("--data-root", dest="data_root", default="data")
+    data_parser.add_argument("--download", dest="download", action="store_true", default=False)
+    data_parser.add_argument("--no-download", dest="download", action="store_false")
+    data_parser.add_argument("--force-rebuild", dest="force_rebuild", action="store_true")
+    data_parser.add_argument("--stage", dest="stage", default="all", choices=["all", "cleaning", "modeling", "analysis", "kpi", "quality", "features"])
+
+    train_parser = parser
+    # keep backward-compatible top-level training args
+    train_parser.add_argument("--dataset", "--task", dest="task", choices=["spam", "fraud", "both"], default=None,
+                        help="Dataset/task to benchmark.")
+    train_parser.add_argument("--report", dest="report", default=None,
+                        help="Report name (defaults to '<task>_detection').")
+    train_parser.add_argument("--save-format", dest="save_format", default="csv",
+                        help="Data save format (csv).")
+    train_parser.add_argument("--seed", dest="seed", type=int, default=42, help="Random seed.")
+    train_parser.add_argument("--skip-train", dest="skip_train", action="store_true", help="Skip training (use existing).")
+    train_parser.add_argument("--skip-stats", dest="skip_stats", action="store_true", help="Skip stats.")
+    train_parser.add_argument("--explainer", dest="explainer", choices=["shap", "lime", "off"], default="shap",
+                        help="Explainer backend (default: shap).")
+    train_parser.add_argument("--persona", dest="persona", choices=["fraud", "spam", "anomaly", "all"], default="all",
+                    help="Persona filter for --explain-only (default: all).")
+    train_parser.add_argument("--strict-anomaly", dest="strict_anomaly", action="store_true", help="Fail on anomaly errors.")
+    train_parser.add_argument("--anomaly-only", dest="anomaly_only", action="store_true", help="Run anomaly detectors only.")
+    train_parser.add_argument("--explain-only", dest="explain_only", action="store_true", help="Run explainability only, skip training.")
+    train_parser.add_argument("--threshold-policy", dest="threshold_policy", choices=["auto", "fixed"], default="auto",
+                    help="Threshold policy (default: auto).")
+    train_parser.add_argument("--selection-policy", dest="selection_policy", choices=["auto", "pr_auc", "f1", "expected_cost"], default="auto",
+                    help="Selection policy (default: auto).")
+    train_parser.add_argument("--report-thresholds", dest="report_thresholds", action="store_true", help="Print chosen thresholds per model.")
+
+    pipeline_parser = subparsers.add_parser("pipeline", help="Run data pipeline.")
+    pipeline_parser.add_argument("--domain", dest="domain", choices=["spam", "fraud", "both"], default="both")
+    pipeline_parser.add_argument("--data-root", dest="data_root", default="data")
+    pipeline_parser.add_argument("--force-rebuild", dest="force_rebuild", action="store_true")
+    pipeline_parser.add_argument("--split-ratios", dest="split_ratios", nargs=3, type=float, default=[0.7, 0.15, 0.15])
+    pipeline_parser.add_argument("--seed", dest="seed", type=int, default=42)
+
+    args = parser.parse_args()
+
+    if args.command == "data":
+        prepare_data(data_root=args.data_root, download=args.download, force_rebuild=args.force_rebuild)
+        return
+
+    if args.command == "pipeline":
+        from spam_fraud_detector.core import DataPipeline
+
+        domains = ["spam", "fraud"] if args.domain == "both" else [args.domain]
+        for domain in domains:
+            dp = DataPipeline(domain=domain, data_root=args.data_root, force_rebuild=args.force_rebuild,
+                              split_ratios=tuple(args.split_ratios), seed=args.seed)
+            res = dp.run()
+            print(f"{domain}: quality_passed={res.quality_passed} split={res.split_manifest}")
+        return
+
+    if args.task is None:
+        parser.error("--dataset is required unless using the 'data' subcommand")
+
+    tasks = ["spam", "fraud"] if args.task == "both" else [args.task]
+    for task in tasks:
+        report_name = args.report or f"{task}_detection"
+        detector = SpamFraudDetector(task=task, save_format=args.save_format, report_name=report_name,
+                                     seed=args.seed, skip_train=args.skip_train, skip_stats=args.skip_stats,
+                                     threshold_policy=getattr(args, "threshold_policy", "auto"),
+                                     selection_policy=getattr(args, "selection_policy", "auto"))
+        detector.run()
+
+
+cli = main
+if __name__ == "__main__":
+    main()

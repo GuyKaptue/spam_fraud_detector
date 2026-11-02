@@ -1,0 +1,86 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Arjun Patel's transaction was scored 1.000 (threshold 0.31).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "unscaled",
+    "model": "GradientBoosting",
+    "recorded_at": "2026-11-01T22:09:24.822994+00:00",
+    "row_id": 34373,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "escalate",
+    "confidence": "high",
+    "estimated_cost_if_missed": "€0.00 (this transaction) + up to €5000 (typical follow-up fraud on the same card after a test transaction)",
+    "priority": "high",
+    "reason": "Score 1.000 is 3.2× the threshold, and V28 matches a known fraud pattern.",
+    "reviewer_notes_template": "Case T034373 — Arjun Patel. Score 1.000 (threshold 0.31). Top features: V28 (+0.80), V27 (-0.80), V20 (+0.09). Recommended action: escalate. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Contact Arjun Patel via phone (not SMS/email) to confirm the €0.00 transaction.",
+      "If unrecognized: block card ···0655, reverse the charge, open investigation ticket.",
+      "If confirmed: add customer-specific allowlist rule for V28 (+0.80), V27 (-0.80), V20 (+0.09).",
+      "Check for related transactions from Unknown Merchant in last 72h."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "0655",
+    "account_last4_full": "····0655",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 32,
+    "full_name": "Arjun Patel",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 1,
+    "subject_id": "T034373",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.31,
+  "top_features": [
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.7993549641854459,
+      "value": 0.262990466192685
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.7993549641854455,
+      "value": 0.566369687106408
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V20",
+      "shap_value": 0.08551369911273045,
+      "value": 0.519403972453402
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.08551369911273013,
+      "value": 0.242162496030838
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V23",
+      "shap_value": -0.0776595095409634,
+      "value": 0.00712804040849194
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

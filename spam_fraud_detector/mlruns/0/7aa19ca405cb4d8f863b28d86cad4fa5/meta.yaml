@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/7aa19ca405cb4d8f863b28d86cad4fa5/artifacts
+end_time: 1760466852312
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7aa19ca405cb4d8f863b28d86cad4fa5
+run_name: MultinomialNB_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760466852302
+status: 3
+tags: []
+user_id: guykaptue

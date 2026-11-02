@@ -1,0 +1,91 @@
+{
+  "case_hypothesis": "would_be_flagged",
+  "case_type": "hypothetical",
+  "fabricated_tokens": {
+    "click": 1,
+    "meeting": 2,
+    "report": 1
+  },
+  "narrative": "A hypothetical customer like Ibrahim Haddad (business message with one promotional token) would be scored 0.914. The top drivers are all (-0.10), has (+0.10), deals (+0.09). This hypothetical case would be flagged at threshold 0.46.",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "unscaled",
+    "model": "GradientBoosting",
+    "recorded_at": "2026-11-02T08:26:35.631558+00:00",
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "high",
+    "estimated_cost_if_missed": "n/a — hypothetical message",
+    "priority": "medium",
+    "reason": "Hypothetical message 'Business message with one promotional token' scored 0.914. Verify the spam filter's sensitivity to this token pattern.",
+    "reviewer_notes_template": "Hypothetical case H-SPAM-002 — Ibrahim Haddad. Score 0.914. Top tokens: all (×0, -0.10), has (×0, +0.10), deals (×0, +0.09). Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Search training set for messages with the pattern all (×0, -0.10), has (×0, +0.10), deals (×0, +0.09); if < 20 exist, add examples.",
+      "Test variations to ensure score degrades gracefully.",
+      "Add to the spam filter regression suite."
+    ]
+  },
+  "scenario_description": "Business message with one promotional token",
+  "scenario_id": "H-SPAM-002",
+  "scenario_note": "Expects low spam score; single 'click' is not enough to trigger.",
+  "schema_version": "1.0.0",
+  "score": 0.9143103605302674,
+  "subject": {
+    "account_last4": "0766",
+    "account_last4_full": "····0766",
+    "city": "Graz",
+    "full_name": "Ibrahim Haddad",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 722,
+    "prior_messages_from_sender": 9,
+    "sender_display": "People Operations",
+    "sender_email": "hr@company.example",
+    "subject_id": "H-SPAM-002",
+    "subject_line": "Meeting notes from Tuesday"
+  },
+  "threshold": 0.46,
+  "top_tokens": [
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -0.10269228079160761,
+      "token": "all"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 0.10269228079160753,
+      "token": "has"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 0.0914549116042836,
+      "token": "deals"
+    },
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -0.09145491160428348,
+      "token": "www"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 0.0793399774240999,
+      "token": "com"
+    }
+  ],
+  "y_pred": 1,
+  "y_true": null
+}

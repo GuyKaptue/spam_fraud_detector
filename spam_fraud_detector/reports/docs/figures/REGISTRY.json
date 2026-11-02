@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Registry of all dashboard figures. Each figure maps to a source artifact and the document section where it is referenced.",
+  "figures": [
+    {
+      "name": "readme_hero_results",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_readme_hero_results",
+      "doc": "README.md",
+      "section": "Results Summary",
+      "caption": "Best model per domain by PR-AUC. Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "readme_results_table",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_readme_results_table",
+      "doc": "README.md",
+      "section": "Results Summary",
+      "caption": "Model comparison table with PR-AUC, F1, threshold policy. Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "readme_personas_triptych",
+      "source": "reports/*/docs/explainability/*__case_*.png",
+      "render_fn": "render_readme_personas_triptych",
+      "doc": "README.md",
+      "section": "Explainability Framework",
+      "caption": "Three persona case file waterfalls (fraud, spam, anomaly). Source: reports/*/docs/explainability/"
+    },
+    {
+      "name": "framework_pipeline_diagram",
+      "source": "docs/EVIDENCE_INVENTORY.json#pipeline_layers",
+      "render_fn": "render_framework_pipeline_diagram",
+      "doc": "docs/FRAMEWORK.md",
+      "section": "System Overview",
+      "caption": "End-to-end pipeline from data ingestion to explainability. Source: docs/EVIDENCE_INVENTORY.json"
+    },
+    {
+      "name": "framework_layer_order",
+      "source": "docs/EVIDENCE_INVENTORY.json#pipeline_layers",
+      "render_fn": "render_framework_layer_order",
+      "doc": "docs/FRAMEWORK.md",
+      "section": "Data Pipeline",
+      "caption": "Data pipeline layers L1-L7 with artifact paths. Source: docs/EVIDENCE_INVENTORY.json"
+    },
+    {
+      "name": "framework_mcnemar_decision_tree",
+      "source": "scripts/verify_explainability_provenance.py",
+      "render_fn": "render_framework_mcnemar_decision_tree",
+      "doc": "docs/FRAMEWORK.md",
+      "section": "Statistical Validation",
+      "caption": "McNemar decision tree: n_discordant < 25 → exact; ≥ 25 → chi-square; then Holm correction. Source: scripts/verify_explainability_provenance.py"
+    },
+    {
+      "name": "framework_threshold_cost_curve",
+      "source": "outputs/models/fraud_detection/all/*.thresholds.json",
+      "render_fn": "render_framework_threshold_cost_curve",
+      "doc": "docs/FRAMEWORK.md",
+      "section": "Cost-Sensitive Thresholding",
+      "caption": "Expected cost vs threshold for best fraud model. Source: outputs/models/fraud_detection/all/*.thresholds.json"
+    },
+    {
+      "name": "spam_class_distribution",
+      "source": "data/processed/spam/01_split/*.parquet",
+      "render_fn": "render_spam_class_distribution",
+      "doc": "docs/SPAM_DETECTION.md",
+      "section": "Dataset Overview",
+      "caption": "Class distribution in train/val/test splits. Source: data/processed/spam/01_split/*.parquet"
+    },
+    {
+      "name": "spam_model_pr_auc",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_spam_model_pr_auc",
+      "doc": "docs/SPAM_DETECTION.md",
+      "section": "Model Candidates",
+      "caption": "PR-AUC per model for spam detection. Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "spam_holm_significance",
+      "source": "outputs/stats/spam_detection/ab_test.json",
+      "render_fn": "render_spam_holm_significance",
+      "doc": "docs/SPAM_DETECTION.md",
+      "section": "Statistical Validation",
+      "caption": "Pairwise McNemar p-values and Holm-adjusted p-values for spam models. Source: outputs/stats/spam_detection/ab_test.json"
+    },
+    {
+      "name": "spam_best_confusion_matrix",
+      "source": "outputs/models/spam_detection/all/*__scaled.confusion.json",
+      "render_fn": "render_spam_best_confusion_matrix",
+      "doc": "docs/SPAM_DETECTION.md",
+      "section": "Error Analysis",
+      "caption": "Confusion matrix for best spam model. Source: outputs/models/spam_detection/all/*.confusion.json"
+    },
+    {
+      "name": "spam_waterfall_example",
+      "source": "reports/spam_detection/docs/explainability/*__case_*.png",
+      "render_fn": "render_spam_waterfall_example",
+      "doc": "docs/SPAM_DETECTION.md",
+      "section": "Explainability Findings",
+      "caption": "Example SHAP waterfall for a spam case. Source: reports/spam_detection/docs/explainability/"
+    },
+    {
+      "name": "fraud_class_distribution",
+      "source": "data/processed/fraud/01_split/*.parquet",
+      "render_fn": "render_fraud_class_distribution",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Dataset Overview",
+      "caption": "Class distribution in train/val/test splits (log scale). Source: data/processed/fraud/01_split/*.parquet"
+    },
+    {
+      "name": "fraud_model_pr_auc",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_fraud_model_pr_auc",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Model Candidates",
+      "caption": "PR-AUC per model for fraud detection. Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "fraud_holm_significance",
+      "source": "outputs/stats/fraud_detection/ab_test.json",
+      "render_fn": "render_fraud_holm_significance",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Statistical Validation",
+      "caption": "Pairwise McNemar p-values and Holm-adjusted p-values for fraud models. Source: outputs/stats/fraud_detection/ab_test.json"
+    },
+    {
+      "name": "fraud_threshold_cost_best3",
+      "source": "outputs/models/fraud_detection/all/*.thresholds.json",
+      "render_fn": "render_fraud_threshold_cost_best3",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Cost-Sensitive Thresholding",
+      "caption": "Expected cost vs threshold for top-3 fraud models. Source: outputs/models/fraud_detection/all/*.thresholds.json"
+    },
+    {
+      "name": "fraud_recall_at_precision_90",
+      "source": "outputs/dashboard/fact_curves.parquet",
+      "render_fn": "render_fraud_recall_at_precision_90",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Recall at Fixed Precision",
+      "caption": "Precision-recall curve with precision=0.90 line. Source: outputs/dashboard/fact_curves.parquet"
+    },
+    {
+      "name": "fraud_threshold_sensitivity",
+      "source": "outputs/dashboard/fact_thresholds_at_star.parquet",
+      "render_fn": "render_fraud_threshold_sensitivity",
+      "doc": "docs/FRAUD_DETECTION.md",
+      "section": "Model Risk",
+      "caption": "Expected cost at threshold_star ± 0.05. Source: outputs/dashboard/fact_thresholds_at_star.parquet"
+    },
+    {
+      "name": "explainability_fraud_case_F-012453",
+      "source": "reports/fraud_detection/docs/explainability/XGBoost__unscaled__case_F-012453.png",
+      "render_fn": "render_explainability_fraud_case_F-012453",
+      "doc": "docs/EXPLAINABILITY.md",
+      "section": "Fraud Analyst Persona",
+      "caption": "Full SHAP waterfall for fraud case F-012453. Source: reports/fraud_detection/docs/explainability/XGBoost__unscaled__case_F-012453.png"
+    },
+    {
+      "name": "explainability_spam_case_S-000412",
+      "source": "reports/spam_detection/docs/explainability/*__case_S-*.png",
+      "render_fn": "render_explainability_spam_case_S-000412",
+      "doc": "docs/EXPLAINABILITY.md",
+      "section": "Trust & Safety Persona",
+      "caption": "Full SHAP waterfall for spam case S-000412. Source: reports/spam_detection/docs/explainability/*__case_S-*.png"
+    },
+    {
+      "name": "explainability_anomaly_case_A-013483",
+      "source": "reports/fraud_detection/docs/explainability/IsolationForest__anomaly__case_A-*.png",
+      "render_fn": "render_explainability_anomaly_case_A-013483",
+      "doc": "docs/EXPLAINABILITY.md",
+      "section": "Risk Engineer Persona",
+      "caption": "Full SHAP waterfall for anomaly case A-013483. Source: reports/fraud_detection/docs/explainability/IsolationForest__anomaly__case_A-*.png"
+    },
+    {
+      "name": "validation_quality_report",
+      "source": "data/processed/*/06_quality/quality_report.json",
+      "render_fn": "render_validation_quality_report",
+      "doc": "docs/MODEL_VALIDATION_REPORT.md",
+      "section": "Data Quality Assessment",
+      "caption": "Class distribution, null %, duplicate %, rows, cols per domain. Source: data/processed/*/06_quality/quality_report.json"
+    },
+    {
+      "name": "validation_pr_auc_by_model",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_validation_pr_auc_by_model",
+      "doc": "docs/MODEL_VALIDATION_REPORT.md",
+      "section": "Performance Validation",
+      "caption": "PR-AUC by model for both domains. Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "validation_significance_summary",
+      "source": "outputs/stats/*/ab_test.json",
+      "render_fn": "render_validation_significance_summary",
+      "doc": "docs/MODEL_VALIDATION_REPORT.md",
+      "section": "Statistical Validation",
+      "caption": "p-values, Holm-adjusted p-values, n_discordant, winner per comparison for both domains. Source: outputs/stats/*/ab_test.json"
+    },
+    {
+      "name": "validation_threshold_sensitivity",
+      "source": "outputs/dashboard/fact_thresholds_at_star.parquet",
+      "render_fn": "render_validation_threshold_sensitivity",
+      "doc": "docs/MODEL_VALIDATION_REPORT.md",
+      "section": "Model Risk Assessment",
+      "caption": "Expected cost at threshold_star ± 0.05 per model. Source: outputs/dashboard/fact_thresholds_at_star.parquet"
+    },
+    {
+      "name": "paper_pipeline_architecture",
+      "source": "docs/EVIDENCE_INVENTORY.json#pipeline_layers",
+      "render_fn": "render_paper_pipeline_architecture",
+      "doc": "docs/PAPER.md",
+      "section": "Methodology",
+      "caption": "Pipeline architecture diagram. Source: docs/EVIDENCE_INVENTORY.json"
+    },
+    {
+      "name": "paper_pr_auc_comparison",
+      "source": "outputs/dashboard/fact_metrics.parquet",
+      "render_fn": "render_paper_pr_auc_comparison",
+      "doc": "docs/PAPER.md",
+      "section": "Results — Metrics",
+      "caption": "PR-AUC by model for both domains (paper format). Source: outputs/dashboard/fact_metrics.parquet"
+    },
+    {
+      "name": "paper_significance_forest_plot",
+      "source": "outputs/stats/*/ab_test.json",
+      "render_fn": "render_paper_significance_forest_plot",
+      "doc": "docs/PAPER.md",
+      "section": "Results — Significance",
+      "caption": "Forest plot of effect sizes with confidence intervals. Source: outputs/stats/*/ab_test.json"
+    },
+    {
+      "name": "paper_threshold_star_comparison",
+      "source": "outputs/models/*/*.thresholds.json",
+      "render_fn": "render_paper_threshold_star_comparison",
+      "doc": "docs/PAPER.md",
+      "section": "Results — Thresholds",
+      "caption": "Small-multiples plot of expected cost vs threshold for top-3 models per domain. Source: outputs/models/*/*.thresholds.json"
+    },
+    {
+      "name": "paper_shap_summary_aggregate",
+      "source": "outputs/models/*/*.curve.json",
+      "render_fn": "render_paper_shap_summary_aggregate",
+      "doc": "docs/PAPER.md",
+      "section": "Explainability",
+      "caption": "SHAP summary bar chart (mean absolute SHAP by feature) aggregated across top-3 models per domain. Source: outputs/models/*/*.curve.json"
+    }
+  ]
+}

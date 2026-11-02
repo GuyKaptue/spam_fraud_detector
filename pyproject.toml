@@ -1,0 +1,50 @@
+[project]
+name = "spam-fraud-detector"
+version = "0.1.0"
+description = "Modular benchmarking framework for binary classification tasks (spam, fraud, etc.)"
+authors = [
+    { name = "Guy M. Kaptue T.", email = "guykaptue24@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+keywords = ["spam", "fraud", "detection", "classification", "benchmarking", "machine-learning"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "xgboost",
+    "lightgbm",
+    "mlflow",
+    "kagglehub",
+    "openpyxl",
+    "dash",
+    "plotly",
+    "jinja2",
+    "streamlit"
+]
+
+[project.optional-dependencies]
+viz = ["matplotlib", "seaborn"]
+ml = ["xgboost", "lightgbm"]
+tracking = ["mlflow"]
+dev = ["pytest", "pytest-cov", "ruff", "mypy", "tox", "black", "flake8"]
+
+[project.scripts]
+run-detector = "spam_fraud_detector.main:main"
+bench = "spam_fraud_detector.main:cli"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

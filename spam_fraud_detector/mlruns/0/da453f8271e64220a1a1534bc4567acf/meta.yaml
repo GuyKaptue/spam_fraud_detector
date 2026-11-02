@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/da453f8271e64220a1a1534bc4567acf/artifacts
+end_time: 1760466090645
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: da453f8271e64220a1a1534bc4567acf
+run_name: MLP_spam
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760466090636
+status: 3
+tags: []
+user_id: guykaptue

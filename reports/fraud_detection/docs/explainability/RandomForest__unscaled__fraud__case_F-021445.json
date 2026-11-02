@@ -1,0 +1,85 @@
+{
+  "case_type": "empirical",
+  "error_type": "true_positive",
+  "narrative": "Freya Andersen's transaction was scored 1.000 (threshold 0.56).",
+  "persona": "fraud",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "unscaled",
+    "model": "RandomForest",
+    "recorded_at": "2026-11-02T08:19:38.707116+00:00",
+    "row_id": 21445,
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "medium",
+    "estimated_cost_if_missed": "€0.00 + follow-up risk",
+    "priority": "medium",
+    "reason": "Score 1.000 exceeds threshold 0.56 (1.8×); standard manual review.",
+    "reviewer_notes_template": "Case F-021445 — Freya Andersen. Score 1.000 (threshold 0.56). Top features: V27 (-0.25), V28 (+0.25), V24 (+0.20). Recommended action: review. Reviewed by: [NAME] on [DATE]. Outcome: [PENDING / CONFIRMED / OTHER].",
+    "suggested_next_steps": [
+      "Review Freya Andersen's transaction history for related activity.",
+      "Cross-check Unknown Merchant against the known-merchant allowlist.",
+      "Confirm via the customer's registered contact method."
+    ]
+  },
+  "schema_version": "1.0.0",
+  "score": 1.0,
+  "subject": {
+    "account_last4": "0513",
+    "account_last4_full": "····0513",
+    "amount_eur": 0.0,
+    "card_product": "Visa Credit",
+    "city": "Unknown",
+    "customer_tenure_months": 79,
+    "full_name": "Freya Andersen",
+    "merchant": "Unknown Merchant",
+    "merchant_category": "Retail",
+    "prior_chargebacks": 0,
+    "subject_id": "F-021445",
+    "transaction_utc": "2026-03-14T09:22:00Z"
+  },
+  "threshold": 0.56,
+  "top_features": [
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V27",
+      "shap_value": -0.2543139920620615,
+      "value": 1.6499059092424
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V28",
+      "shap_value": 0.2543139920620613,
+      "value": -0.394905372194808
+    },
+    {
+      "direction": "increases_fraud_risk",
+      "explanation": "",
+      "name": "V24",
+      "shap_value": 0.1978788284268378,
+      "value": -0.339449869297565
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V23",
+      "shap_value": -0.1978788284268378,
+      "value": 0.127214424071711
+    },
+    {
+      "direction": "decreases_fraud_risk",
+      "explanation": "",
+      "name": "V19",
+      "shap_value": -0.12479837136863567,
+      "value": 0.897402406121681
+    }
+  ],
+  "y_pred": 1,
+  "y_true": 1
+}

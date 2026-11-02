@@ -1,0 +1,96 @@
+{
+  "case_hypothesis": "would_not_be_flagged",
+  "case_type": "hypothetical",
+  "disagreement_type": "agree_low",
+  "fabricated_features": {
+    "Amount": 7200.0,
+    "Time": 8030,
+    "V10": -0.51,
+    "V12": -0.98,
+    "V14": -3.1
+  },
+  "narrative": "A hypothetical customer like Gustav Weber (large cross-border night transaction, dissimilar to historical fraud) would be scored 0.093. The top drivers are V18 (+0.01), V17 (-0.01), V22 (+0.01). This hypothetical case would not be flagged at threshold 0.98.",
+  "persona": "anomaly",
+  "provenance": {
+    "background_hash": "sha256:41e06bdd995ff72433eb593e23b268caaaa7db85e833054436c576314fec89c6",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:a62e5f1043d0126a0eba3baf177b3cc5bc5bfbb4048d4376e1eee8d2f6e98cc7",
+    "group": "anomaly",
+    "model": "IsolationForest",
+    "recorded_at": "2026-11-02T08:23:42.456137+00:00",
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "high",
+    "estimated_cost_if_missed": "n/a — hypothetical",
+    "priority": "medium",
+    "reason": "Hypothetical scenario 'Large cross-border night transaction, dissimilar to historical fraud' — anomaly score 0.000, supervised score 0.000. Disagreement type: agree_low. Verify model behavior.",
+    "reviewer_notes_template": "Hypothetical case H-ANOM-001 — Gustav Weber. Anomaly 0.000, supervised 0.000. Disagreement: agree_low. Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Confirm this scenario matches a known novel-anomaly pattern.",
+      "If so, add to the training set as a labeled example.",
+      "Add to anomaly-detector regression suite."
+    ]
+  },
+  "scenario_description": "Large cross-border night transaction, dissimilar to historical fraud",
+  "scenario_id": "H-ANOM-001",
+  "scenario_note": "Expects high anomaly score, low supervised score — a novel case.",
+  "schema_version": "1.0.0",
+  "score": 0.09331295807771722,
+  "subject": {
+    "account_last4": "8691",
+    "account_last4_full": "····8691",
+    "amount_eur": 0.0,
+    "amount_zscore": 0.47,
+    "card_product": "Visa Credit",
+    "city": "Tromsø",
+    "cross_border": true,
+    "full_name": "Gustav Weber",
+    "merchant": "Hôtel Bellevue",
+    "merchant_category": "Travel",
+    "minutes_since_previous_txn": 436,
+    "night_transaction": true,
+    "subject_id": "H-ANOM-001"
+  },
+  "threshold": 0.98,
+  "top_features": [
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V18",
+      "shap_value": 0.005295530997168661,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V17",
+      "shap_value": -0.005295530997168661,
+      "value": 0.0
+    },
+    {
+      "direction": "increases_anomaly_score",
+      "explanation": "",
+      "name": "V22",
+      "shap_value": 0.005107018661983108,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V21",
+      "shap_value": -0.005107018661983108,
+      "value": 0.0
+    },
+    {
+      "direction": "decreases_anomaly_score",
+      "explanation": "",
+      "name": "V5",
+      "shap_value": -0.004006431599108482,
+      "value": 0.0
+    }
+  ],
+  "y_pred": 0,
+  "y_true": null
+}

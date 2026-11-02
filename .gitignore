@@ -1,0 +1,44 @@
+# Generated experiment outputs
+outputs/
+
+# MLflow tracking
+mlruns/
+
+# Model artifacts
+*.joblib
+
+# Generated reports
+reports/*/figures/
+reports/*/docs/generated/
+
+# Exception: documentation figures in docs/ are committed
+!spam_fraud_detector/reports/docs/figures/
+!spam_fraud_detector/reports/docs/figures/gifs/
+
+# Python
+__pycache__/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+# Legacy implementation prompt
+V3_IMPLEMENTATION_PROMPT.md
+
+# Staging dirs
+outputs.staging.*
+V3_IMPLEMENTATION_PROMPT.md
+
+# Large data files (exceed GitHub limits)
+data/raw/fraud/creditcard.csv
+data/processed/fraud/creditcard.csv
+data/processed/fraud/creditcard.parquet
+data/raw/spam/emails.csv
+data/processed/spam/emails.csv
+data/processed/spam/emails.parquet
+
+# All data files (too large for GitHub)
+data/raw/fraud/
+data/raw/spam/
+data/processed/fraud/
+data/processed/spam/

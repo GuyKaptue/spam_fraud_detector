@@ -1,0 +1,91 @@
+{
+  "case_hypothesis": "would_be_flagged",
+  "case_type": "hypothetical",
+  "fabricated_tokens": {
+    "click": 1,
+    "unsubscribe": 1,
+    "weekly": 1
+  },
+  "narrative": "A hypothetical customer like Noor Singh (message with subscription language) would be scored 14.448. The top drivers are mmbtu (-72.91), should (+72.91), would (-70.65). This hypothetical case would be flagged at threshold 0.00.",
+  "persona": "spam",
+  "provenance": {
+    "background_hash": "sha256:95df83063289bb00d8c9f6cefad42d4eb56294dc81303a660f359fba6297ec12",
+    "dataset_hash": "",
+    "feature_names_hash": "sha256:84bec56571ed619ec2e16f5d8732cf2cc3df38aa6584264a89e80b0fb6285b09",
+    "group": "scaled",
+    "model": "SGDClassifier",
+    "recorded_at": "2026-11-02T04:22:19.231586+00:00",
+    "split": "val"
+  },
+  "recommendation": {
+    "action": "review",
+    "confidence": "high",
+    "estimated_cost_if_missed": "n/a — hypothetical message",
+    "priority": "medium",
+    "reason": "Hypothetical message 'Message with subscription language' scored 14.448. Verify the spam filter's sensitivity to this token pattern.",
+    "reviewer_notes_template": "Hypothetical case H-SPAM-003 — Noor Singh. Score 14.448. Top tokens: mmbtu (×0, -72.91), should (×0, +72.91), would (×0, -70.65). Reviewed by: [NAME] on [DATE].",
+    "suggested_next_steps": [
+      "Search training set for messages with the pattern mmbtu (×0, -72.91), should (×0, +72.91), would (×0, -70.65); if < 20 exist, add examples.",
+      "Test variations to ensure score degrades gracefully.",
+      "Add to the spam filter regression suite."
+    ]
+  },
+  "scenario_description": "Message with subscription language",
+  "scenario_id": "H-SPAM-003",
+  "scenario_note": "Expects moderate spam score.",
+  "schema_version": "1.0.0",
+  "score": 14.447625379063766,
+  "subject": {
+    "account_last4": "1737",
+    "account_last4_full": "····1737",
+    "city": "Bilbao",
+    "full_name": "Noor Singh",
+    "has_unsubscribe_header": false,
+    "inbox_age_days": 572,
+    "prior_messages_from_sender": 1,
+    "sender_display": "Press Digest",
+    "sender_email": "press@newsletter.example",
+    "subject_id": "H-SPAM-003",
+    "subject_line": "Weekly digest — unsubscribe anytime"
+  },
+  "threshold": 0.0,
+  "top_tokens": [
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -72.91141704219105,
+      "token": "mmbtu"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 72.91141704219105,
+      "token": "should"
+    },
+    {
+      "count": 0,
+      "direction": "decreases_spam_probability",
+      "explanation": "",
+      "shap_value": -70.65379409667099,
+      "token": "would"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 70.65379409667099,
+      "token": "m"
+    },
+    {
+      "count": 0,
+      "direction": "increases_spam_probability",
+      "explanation": "",
+      "shap_value": 68.35496633266466,
+      "token": "in"
+    }
+  ],
+  "y_pred": 1,
+  "y_true": null
+}

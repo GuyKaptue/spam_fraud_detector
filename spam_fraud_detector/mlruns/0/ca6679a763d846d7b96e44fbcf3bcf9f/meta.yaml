@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/ca6679a763d846d7b96e44fbcf3bcf9f/artifacts
+end_time: 1760512341738
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ca6679a763d846d7b96e44fbcf3bcf9f
+run_name: GradientBoosting_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760512341725
+status: 3
+tags: []
+user_id: guykaptue

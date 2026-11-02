@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/bbc126ba39274f95bb8aeabcd93ac5bc/artifacts
+end_time: 1760512152814
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bbc126ba39274f95bb8aeabcd93ac5bc
+run_name: RandomForest_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760512152801
+status: 3
+tags: []
+user_id: guykaptue

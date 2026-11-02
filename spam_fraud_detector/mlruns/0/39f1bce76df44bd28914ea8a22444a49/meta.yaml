@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/guykaptue/my_work_spaces/machine%20learning/classifier-bench/mlruns/0/39f1bce76df44bd28914ea8a22444a49/artifacts
+end_time: 1760596781146
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 39f1bce76df44bd28914ea8a22444a49
+run_name: SGD_fraud
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760596781133
+status: 3
+tags: []
+user_id: guykaptue
