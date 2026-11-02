@@ -19,8 +19,8 @@ Before any model training, the canonical dataset is split **once** into
 evaluated model. Any computation reading test without producing a bundle raises
 `TestLeakError`.
 
-`make data` runs a six-stage preparation ladder (Datenbereinigung,
-Datenmodellierung, Datenanalyse, KPI-Analyse, Datenqualitaet, Feature
+`make data` runs a six-stage preparation ladder (cleaning, modeling,
+analysis, KPI analysis, quality gate, feature engineering)
 ## How to read this document
 
 Each module section follows the same four-part structure: **What it does**,
