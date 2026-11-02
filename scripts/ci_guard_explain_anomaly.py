@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Guard: verify anomaly explainability produced zero failures."""
-import json
 import sys
 import pathlib
 

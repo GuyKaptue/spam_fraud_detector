@@ -42,7 +42,6 @@ def tiny_store(tmp_path):
 
 def _load_meta(store_out, name, group):
     import joblib
-    from pathlib import Path
     meta = json.loads((store_out / "models" / "fraud_detection" / "all" / f"{name}__{group}.meta.json").read_text())
     m = joblib.load(store_out / "models" / "fraud_detection" / "all" / f"{name}__{group}.joblib")
     return meta, m
@@ -103,7 +102,7 @@ def test_hypothetical_case_file_with_recommendation(tmp_path, tiny_store):
     assert casefile["recommendation"]["estimated_cost_if_missed"].startswith("n/a")
 
     out = tmp_path / "hypo_waterfall.png"
-    render_hypothetical_case_waterfall(explainer := ModelExplainer(
+    render_hypothetical_case_waterfall(ModelExplainer(
         model, pd.DataFrame([[0.0] * len(feature_cols)], columns=feature_cols),
         feature_names=feature_cols, backend="shap"), row, casefile, out, top_k=3)
     assert out.exists() and out.stat().st_size > 5000

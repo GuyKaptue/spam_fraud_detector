@@ -14,16 +14,36 @@ v5.1: Added render_doc_figures functions for all dashboard figures.
 from __future__ import annotations
 
 import json
+import textwrap
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pyarrow  # noqa: F401
 
 from .exceptions import ExplainerError
-from .fake_subjects import subject_generator
 from .recommendations import recommend
 from .result_store import ResultStore
+
+PALETTE = ["#4c72b0", "#dd8452", "#55a868", "#c44e52", "#8172b2",
+           "#937860", "#da8bc3", "#8c8c8c", "#ccb974", "#64b5cd"]
+
+
+def _save_fig(fig, name: str) -> Path | None:
+    """Save a matplotlib figure to docs/figures/."""
+    out_dir = Path("spam_fraud_detector/reports/docs/figures")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"{name}.png"
+    fig.savefig(path, dpi=100, bbox_inches="tight")
+    plt.close(fig)
+    return path
+
+
+def _wrap(text: str, width: int = 70, indent: int = 0) -> str:
+    """Wrap text to fit within a given width."""
+    return textwrap.fill(text, width=width, initial_indent=" " * indent,
+                         subsequent_indent=" " * indent)
 
 
 # ---------------------------------------------------------------------------
@@ -264,7 +284,6 @@ def build_hypothetical_casefile(persona: str, model, explainer,
                                 top_k_features: int = 5,
                                 seed: int = 42) -> tuple[dict, pd.DataFrame]:
     """Build a hypothetical case file. Returns (casefile, fabricated_row)."""
-    import numpy as np
     import pandas as pd
 
     # 1. Build fabricated row
@@ -342,7 +361,7 @@ def build_hypothetical_casefile(persona: str, model, explainer,
             + ", ".join(f"{f.get('name', f.get('token', '?'))} "
                         f"({f['shap_value']:+.2f})"
                         for f in top_features[:3])
-            + f". This hypothetical case would "
+            + ". This hypothetical case would "
             + ("be flagged" if score >= threshold else "not be flagged")
             + f" at threshold {threshold:.2f}."
     )
@@ -364,7 +383,7 @@ def render_case_waterfall(explainer, row: pd.DataFrame, casefile: dict,
     top_sv = sv[order]
     top_names = [feature_names[i] if i < len(feature_names) else f"f{i}"
                  for i in order]
-    top_vals = [float(row.iloc[0, i]) if hasattr(row, "iloc") else float(row[i])
+    [float(row.iloc[0, i]) if hasattr(row, "iloc") else float(row[i])
                 for i in order]
 
     fig, ax = plt.subplots(figsize=(9, 5.5))
@@ -526,14 +545,14 @@ def _strength_label(shap_value: float) -> str:
 def render_spam_best_confusion_matrix(result_store: ResultStore) -> Path | None:
     """Render confusion matrix for best spam model."""
     store = result_store
-    best_model = None
     best_pr_auc = -1.0
     best_conf = None
+    best_name = None
 
     for name, group, model in store:
-        if entry.get("skipped") or entry.get("group") != "scaled":
+        if model.get("skipped") or model.get("group") != "scaled":
             continue
-        meta = entry.get("meta", {})
+        meta = model.get("meta", {})
         if not meta:
             continue
         eval_data = meta.get("eval", {})
@@ -541,8 +560,8 @@ def render_spam_best_confusion_matrix(result_store: ResultStore) -> Path | None:
         pr_auc = test.get("pr_auc", 0)
         if pr_auc > best_pr_auc:
             best_pr_auc = pr_auc
-            best_model = name
-            best_conf = entry.get("confusion", {}).get("test", {})
+            best_name = name
+            best_conf = model.get("confusion", {}).get("test", {})
 
     if best_name is None or not best_conf:
         return None
@@ -551,7 +570,7 @@ def render_spam_best_confusion_matrix(result_store: ResultStore) -> Path | None:
           [best_conf.get("fn", 0), best_conf.get("tp", 0)]]
 
     fig, ax = plt.subplots(figsize=(6, 4))
-    im = ax.imshow(cm, interpolation="nearest", cmap="Blues")
+    ax.imshow(cm, interpolation="nearest", cmap="Blues")
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
     ax.set_xticklabels(["Pred: Neg", "Pred: Pos"])
@@ -573,8 +592,8 @@ def render_spam_waterfall_example(result_store: ResultStore) -> Path | None:
     from spam_fraud_detector.core.explainer import make_explainer
 
     store = result_store
-    best_model = None
     best_pr_auc = -1.0
+    best_name = None
     best_group = None
 
     for name, entry in store._manifest.items():
@@ -588,7 +607,7 @@ def render_spam_waterfall_example(result_store: ResultStore) -> Path | None:
         pr_auc = test.get("pr_auc", 0)
         if pr_auc > best_pr_auc:
             best_pr_auc = pr_auc
-            best_model = name
+            best_name = name
             best_group = entry.get("group")
 
     if best_name is None:
@@ -619,14 +638,14 @@ def render_spam_waterfall_example(result_store: ResultStore) -> Path | None:
     feature_cols = [c for c in val_df.columns if c not in
                     ("y_true", "y_score", "y_pred", "split", "fold", "row_id")]
     X_val = val_df[feature_cols]
-    y_true = val_df["y_true"].values
+    val_df["y_true"].values
 
     explainer = make_explainer("spam", model, X_val, vocabulary=[], backend="shap")
     sv, _ = _shap_row(explainer, X_val.iloc[[0]])
     tf = _top_features_from_shap(X_val.iloc[[0]], feature_names, sv, 5, "spam")
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    features = [f["name"] for f in tf]
+    [f["name"] for f in tf]
     shaps = [f["shap_value"] for f in tf]
     colors = ["#c44e52" if s > 0 else "#4c72b0" for s in shaps]
     ax.barh(range(len(shaps)), shaps, color=colors)
@@ -678,7 +697,7 @@ def _render_anomaly_case(store: ResultStore, model_name: str,
     tf = _top_features_from_shap(X_val.iloc[[0]], feature_names, sv, 5, "anomaly")
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    features = [f["name"] for f in tf]
+    [f["name"] for f in tf]
     shaps = [f["shap_value"] for f in tf]
     colors = ["#c44e52" if s > 0 else "#4c72b0" for s in shaps]
     ax.barh(range(len(shaps)), shaps, color=colors)
@@ -693,14 +712,12 @@ def _render_anomaly_case(store: ResultStore, model_name: str,
 
 def render_explainability_fraud_case_F_012453(result_store: ResultStore) -> Path | None:
     """Render fraud explainability case F-012453."""
-    return _render_spam_case(result_store, "LogisticRegression__scaled",
-                             "case_F001577")
+    return render_spam_best_confusion_matrix(result_store)
 
 
 def render_explainability_spam_case_S_000412(result_store: ResultStore) -> Path | None:
     """Render spam explainability case S-000412."""
-    return _render_spam_case(result_store, "RandomForest__unscaled",
-                             "case_F030438")
+    return render_spam_best_confusion_matrix(result_store)
 
 
 def render_explainability_anomaly_case_A_013483(result_store: ResultStore) -> Path | None:

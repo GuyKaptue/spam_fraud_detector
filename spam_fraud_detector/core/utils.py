@@ -1,6 +1,13 @@
 # type: ignore
 # spam_fraud_detector/core/utils.py
+import hashlib
+import json
 import os
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
 import numpy as np  
 import pandas as pd  
 
@@ -84,12 +91,7 @@ def load_dataset(task: str="fraud") -> pd.DataFrame:
     df = pd.read_csv(file_path)
     print(f"{task.capitalize()} dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
     return df
-import json
-import hashlib
-import subprocess
-import sys
-from pathlib import Path
-from typing import Any
+
 
 def set_seed(seed: int = 42) -> np.random.Generator:
     """Set global seeds and return a numpy Generator."""

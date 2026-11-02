@@ -14,7 +14,6 @@ except ImportError as e:
     print("Ensure that the classes (KaggleDataLoader, ClassifierGroupComparer, ModelVisualizer) are correctly defined within the 'src' package.")
     sys.exit(1)
 
-import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", message=".*use_label_encoder.*")
 warnings.filterwarnings("ignore", message=".*X does not have valid feature names.*")

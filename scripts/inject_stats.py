@@ -32,7 +32,7 @@ def _fmt_p(p: float) -> str:
 def _build_summary_md(ab: dict) -> str:
     """Build the markdown block to inject."""
     comparisons = ab.get("comparisons", [])
-    config = ab.get("config", {})
+    ab.get("config", {})
 
     if not comparisons:
         return (

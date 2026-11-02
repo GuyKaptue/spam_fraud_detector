@@ -7,9 +7,7 @@ Covers:
 """
 from __future__ import annotations
 
-import numpy as np
 import pandas as pd
-import pytest
 
 from spam_fraud_detector.core.stats import cohen_h, risk_difference
 
@@ -41,15 +39,21 @@ class TestStatsEngineReproducibility:
         rows = []
         rid = 0
         for _ in range(both_correct):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
         for _ in range(a_right_b_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
         for _ in range(b_right_a_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
         for _ in range(both_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
 
         return pd.DataFrame(rows)
 
@@ -60,8 +64,7 @@ class TestStatsEngineReproducibility:
         pa = self._make_preds(80, 50, n_total=100)
         pb = self._make_preds(50, 80, n_total=100)
 
-        se = StatsEngine.__new__(StatsEngine)
-        out_domain = "spam_detection"
+        StatsEngine.__new__(StatsEngine)
 
         # Run twice
         results_1 = []

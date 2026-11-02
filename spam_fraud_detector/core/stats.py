@@ -15,14 +15,12 @@ Implements the v4.5 A/B test contract:
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import math
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import numpy as np
 import pandas as pd
 from scipy import stats as sp_stats
 
@@ -665,7 +663,7 @@ class StatsEngine:
             f"- Total models: {len(models)}"
         )
         summary_lines.append(
-            f"- Format: Sequential pairwise (champion-challenger), ALL supervised models included"
+            "- Format: Sequential pairwise (champion-challenger), ALL supervised models included"
         )
         summary_lines.append(
             f"- Method: McNemar test (chi-square corrected, exact fallback if n_discordant < {MIN_DISCORDANT_CHI2})"

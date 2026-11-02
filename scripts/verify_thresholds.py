@@ -28,7 +28,9 @@ def main() -> int:
                 errors.append(f"threshold mismatch {meta_path}")
             cm = thr.get("cost_matrix", {})
             cf, cp = cm.get("cost_fn"), cm.get("cost_fp")
-            tp_ = thr.get("tp_at_star"); fp_ = thr.get("fp_at_star"); fn_ = thr.get("fn_at_star")
+            tp_ = thr.get("tp_at_star")
+            fp_ = thr.get("fp_at_star")
+            fn_ = thr.get("fn_at_star")
             tn_ = thr.get("tn_at_star")
             n = (tp_ or 0) + (fp_ or 0) + (fn_ or 0) + (tn_ or 0)
             if n > 0:

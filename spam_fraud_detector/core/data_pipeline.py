@@ -103,7 +103,6 @@ class DataPipeline:
 
         # 05_kpis — write kpis.json with cost matrix
         if "05_kpis" in stages_to_run:
-            import json as _json
             from .utils import atomic_write_json, get_git_commit
             cost_matrix = {"cost_fn": 1, "cost_fp": 1} if self.domain == "spam" else {"cost_fn": 10, "cost_fp": 1}
             rationale = ("Symmetric cost: flagging a legitimate email is roughly as costly as missing spam."

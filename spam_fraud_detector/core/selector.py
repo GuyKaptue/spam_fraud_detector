@@ -77,7 +77,7 @@ class TopKSelector:
             if all_dir.exists():
                 for meta_path in all_dir.glob("*.meta.json"):
                     try:
-                        m = json.loads(meta_path.read_text())
+                        m = json.loads(meta_path.read_text())  # noqa: F823
                         if m.get("threshold_policy") == "expected_cost":
                             has_cost = True
                             break

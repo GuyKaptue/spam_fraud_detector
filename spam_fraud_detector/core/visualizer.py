@@ -178,7 +178,6 @@ class ModelVisualizer:
         ax.legend()
 
     def save_threshold_cost_curve(self, thresholds_json, path):
-        import json
         from pathlib import Path
         fig, ax = plt.subplots(figsize=(8, 5))
         self.plot_threshold_cost_curve(ax, thresholds_json)

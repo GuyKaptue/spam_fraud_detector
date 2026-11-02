@@ -24,7 +24,8 @@ def main():
     if "kpis.json" not in dp:
         msgs.append("data_pipeline: kpis.json not written")
     if msgs:
-        for m in msgs: print("FAIL", m)
+        for m in msgs:
+            print("FAIL", m)
         sys.exit(1)
     print("audit_cost_matrix: OK")
 

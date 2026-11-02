@@ -1,4 +1,3 @@
-import numpy as np
 from spam_fraud_detector.core import ClassifierGroupComparer
 
 
@@ -16,5 +15,5 @@ def test_anomaly_layer_runs(tmp_path):
     cmp.df = df
     cmp.X_train, cmp.X_test, cmp.y_train, cmp.y_test = None, None, None, None
     # minimal: just ensure compare_anomalies filters; but store None returns empty
-    res = cmp.compare_groups() if False else None
+    cmp.compare_groups() if False else None
     assert True

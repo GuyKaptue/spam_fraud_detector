@@ -15,7 +15,6 @@ The rules are persona-specific and documented in FRAMEWORK.md.
 """
 from __future__ import annotations
 
-from typing import Any
 
 
 def recommend_fraud(casefile: dict) -> dict:
@@ -27,7 +26,7 @@ def recommend_fraud(casefile: dict) -> dict:
     case_type = casefile.get("case_type", "empirical")
     subject = casefile.get("subject", {}) or {}
     amount = float(subject.get("amount_eur", 0.0) or 0.0)
-    city = subject.get("city", "?")
+    subject.get("city", "?")
     merchant = subject.get("merchant", "?")
     top = casefile.get("top_features", [])[:3]
     top_str = ", ".join(f"{f['name']} ({f['shap_value']:+.2f})" for f in top)

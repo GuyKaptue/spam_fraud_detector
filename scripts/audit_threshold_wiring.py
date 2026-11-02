@@ -1,6 +1,5 @@
 """Audit threshold wiring."""
 from __future__ import annotations
-import ast
 import sys
 from pathlib import Path
 
@@ -20,7 +19,8 @@ def main():
     if "selection_policy" not in ssrc:
         msgs.append("selector: selection_policy missing")
     if msgs:
-        for m in msgs: print("FAIL", m)
+        for m in msgs:
+            print("FAIL", m)
         sys.exit(1)
     print("audit_threshold_wiring: OK")
 

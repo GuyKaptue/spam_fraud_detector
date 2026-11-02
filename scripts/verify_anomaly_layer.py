@@ -1,6 +1,6 @@
 """Verify anomaly layer produced bundles."""
 from __future__ import annotations
-import argparse, json, sys
+import argparse
 from pathlib import Path
 
 def main():
@@ -30,7 +30,8 @@ def main():
     if fail_log.exists() and fail_log.read_text().strip():
         errors.append("anomaly_failures.log non-empty")
     if errors:
-        for e in errors: print("FAIL", e)
+        for e in errors:
+            print("FAIL", e)
         return 1 if args.strict else 0
     print("verify-anomaly-layer: OK")
     return 0

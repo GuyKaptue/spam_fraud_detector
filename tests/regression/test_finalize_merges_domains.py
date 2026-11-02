@@ -24,7 +24,7 @@ def test_finalize_merges_domains(tmp_path):
     out = tmp_path / "outputs"
     _write_one(out, "spam_detection")
     _write_one(out, "fraud_detection")
-    dim = pd.read_parquet(out / "dashboard" / "dim_explainability.parquet") if (out / "dashboard" / "dim_explainability.parquet").exists() else None
+    pd.read_parquet(out / "dashboard" / "dim_explainability.parquet") if (out / "dashboard" / "dim_explainability.parquet").exists() else None
     # manifest should contain rows for both domains
     manifest = pd.read_parquet(out / "dashboard" / "manifest.parquet")
     assert set(manifest["domain"].unique()) >= {"spam_detection", "fraud_detection"}

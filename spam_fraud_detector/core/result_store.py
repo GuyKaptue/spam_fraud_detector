@@ -1,7 +1,6 @@
 """Single-writer persistence: bundles + dashboard tables in one atomic transaction."""
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import shutil
@@ -33,7 +32,8 @@ def _utc_now() -> str:
 
 
 def _downsample(xs, ys, max_points=CURVE_MAX_POINTS):
-    xs = list(xs); ys = list(ys)
+    xs = list(xs)
+    ys = list(ys)
     if len(xs) <= max_points:
         return xs, ys
     idx = np.linspace(0, len(xs) - 1, max_points, dtype=int)
@@ -256,6 +256,7 @@ class ResultStore:
             curves = {}
             if y_true_val is not None and y_score_val is not None:
                 curves["validation"] = self._compute_curves(y_true_val, y_score_val)
+            thresholds_block = None
             if y_true_test is not None and y_score_test is not None:
                 curves["test"] = self._compute_curves(y_true_test, y_score_test)
         curve_block = {
@@ -279,8 +280,10 @@ class ResultStore:
             sweep_rows = rows
             star_row = min(rows, key=lambda r: r["expected_cost"])
             expected_cost_at_star = star_row["expected_cost"]
-            tp_at_star = star_row["tp"]; fp_at_star = star_row["fp"]
-            fn_at_star = star_row["fn"]; tn_at_star = star_row["tn"]
+            tp_at_star = star_row["tp"]
+            fp_at_star = star_row["fp"]
+            fn_at_star = star_row["fn"]
+            tn_at_star = star_row["tn"]
         elif y_true_test is not None and y_score_test is not None:
             rows, star = self._threshold_sweep(y_true_test, y_score_test,
                                                cost_fn=cost_fn, cost_fp=cost_fp)
@@ -288,10 +291,12 @@ class ResultStore:
             sweep_rows = rows
             star_row = min(rows, key=lambda r: r["expected_cost"])
             expected_cost_at_star = star_row["expected_cost"]
-            tp_at_star = star_row["tp"]; fp_at_star = star_row["fp"]
-            fn_at_star = star_row["fn"]; tn_at_star = star_row["tn"]
+            tp_at_star = star_row["tp"]
+            fp_at_star = star_row["fp"]
+            fn_at_star = star_row["fn"]
+            tn_at_star = star_row["tn"]
 
-        thresholds_block = {
+            thresholds_block = {
             "schema_version": SCHEMA_VERSION,
             "domain": domain,
             "group": group,
@@ -323,7 +328,7 @@ class ResultStore:
         atomic_write_json(model_path.with_suffix(".eval.json"), eval_block)
         atomic_write_json(model_path.with_suffix(".curve.json"), curve_block)
         atomic_write_json(model_path.with_suffix(".confusion.json"), conf_block)
-        atomic_write_json(model_path.with_suffix(".thresholds.json"), thresholds_block)
+        atomic_write_json(model_path.with_suffix(".thresholds.json"), thresholds_block or {})
 
         # --- accumulate dashboard rows ---
         self._metrics.extend(self._metrics_rows(name, group, eval_val, eval_test, threshold))
@@ -767,7 +772,6 @@ class ResultStore:
         stats_rows_summary = []
         if self._stats is not None:
             comparisons = self._stats.get("comparisons", [])
-            config = self._stats.get("config", {})
             for i, c in enumerate(comparisons):
                 stats_rows.append({
                     "schema_version": SCHEMA_VERSION,

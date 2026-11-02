@@ -1,7 +1,6 @@
 """Tests for hypothetical case-file building (v4.4.6)."""
 import numpy as np
 import pandas as pd
-import pytest
 
 from spam_fraud_detector.core.explainer import (
     ModelExplainer, build_hypothetical_casefile, render_hypothetical_case_waterfall,

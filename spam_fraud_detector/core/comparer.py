@@ -344,7 +344,6 @@ class ClassifierGroupComparer:
             logger = logging.getLogger(__name__)
             from spam_fraud_detector.core.anomaly import AnomalyComparer
             # Filter to legitimate class only (caller responsibility)
-            import numpy as np
             mask_train_neg = (self.y_train == 0)
             X_train_neg = self.X_train[mask_train_neg] if hasattr(self.X_train, "__getitem__") else self.X_train
             y_train_neg = self.y_train[mask_train_neg]
@@ -374,11 +373,13 @@ class ClassifierGroupComparer:
                 )
                 anomaly_results[name] = r["metrics_test"]
         except Exception as e:
-            import logging, traceback
+            import logging
+            import traceback
             logging.getLogger(__name__).error("Anomaly comparison failed: %s", e, exc_info=True)
             # record failure
             try:
-                import json, os
+                import json
+                import os
                 from datetime import datetime, timezone
                 os.makedirs("outputs/logs", exist_ok=True)
                 with open("outputs/logs/anomaly_failures.log", "a") as f:

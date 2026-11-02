@@ -9,14 +9,12 @@ Uses matplotlib with Agg backend, fixed font sizes, fixed color palette.
 from __future__ import annotations
 
 import json
-import math
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 # ---------------------------------------------------------------------------
 # Global style settings for deterministic output
@@ -114,7 +112,7 @@ def render_readme_hero_results(inventory: dict) -> Path:
         return None
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    bars = ax.bar(names, values, color=colors[:len(names)])
+    ax.bar(names, values, color=colors[:len(names)])
     ax.set_ylabel("PR-AUC")
     ax.set_title("Best Model per Domain by PR-AUC")
     ax.set_ylim(0, 1)
@@ -199,7 +197,7 @@ def render_framework_pipeline_diagram(inventory: dict) -> Path:
     stages = ["Data Ingestion", "Split", "Features", "Train Models",
               "Evaluate Metrics", "Threshold Sweep", "Explainability", "Dashboard"]
     x = np.arange(len(stages))
-    y = np.zeros(len(stages))
+    np.zeros(len(stages))
 
     for i, (name, x_val) in enumerate(zip(stages, x)):
         ax.text(x_val, 0, name, ha="center", va="center",
@@ -220,7 +218,7 @@ def render_framework_layer_order(inventory: dict) -> Path:
     """Data pipeline L1-L7 timeline."""
     layers = ["01_split", "02_clean", "03_model", "04_compare",
               "05_kpis", "06_features", "07_explain"]
-    x = np.arange(len(layers))
+    np.arange(len(layers))
 
     fig, ax = plt.subplots(figsize=(10, 3))
     ax.barh(range(len(layers)), [1] * len(layers), color=PALETTE[:len(layers)])

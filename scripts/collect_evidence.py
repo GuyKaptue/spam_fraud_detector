@@ -56,9 +56,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 from pathlib import Path
-from typing import Any, Dict, List
 
 
 def _hash_file(path: Path) -> str:
@@ -236,7 +234,7 @@ def collect_mlflow() -> dict:
 def collect_all() -> dict:
     """Collect all evidence into a single inventory."""
     outputs_root = Path("outputs")
-    reports_root = Path("reports")
+    Path("reports")
 
     inventory = {
         "schema_version": "1.0.0",

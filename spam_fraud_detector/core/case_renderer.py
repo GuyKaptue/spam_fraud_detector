@@ -49,7 +49,6 @@ Uses textwrap and Unicode box-drawing characters.
 from __future__ import annotations
 
 import textwrap
-from typing import Any
 
 
 BOX_DOUBLE = "═"

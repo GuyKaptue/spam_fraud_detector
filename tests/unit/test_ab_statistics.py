@@ -8,10 +8,10 @@ Covers:
 """
 from __future__ import annotations
 
-import numpy as np
-import pytest
 
-from spam_fraud_detector.core.stats import StatsEngine, cohen_h, risk_difference
+import pandas as pd
+
+from spam_fraud_detector.core.stats import cohen_h, risk_difference
 
 
 class TestCohenH:
@@ -83,15 +83,21 @@ class TestStatsEngineCompute:
         rows = []
         rid = 0
         for _ in range(both_correct):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
         for _ in range(a_right_b_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
         for _ in range(b_right_a_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 1, "y_score": 0.9, "split": "test"})
+            rid += 1
         for _ in range(both_wrong):
-            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"}); rid += 1
+            rows.append({"row_id": rid, "y_true": 1, "y_pred": 0, "y_score": 0.4, "split": "test"})
+            rid += 1
 
         return pd.DataFrame(rows)
 

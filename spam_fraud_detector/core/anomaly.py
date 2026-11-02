@@ -16,7 +16,7 @@ class AnomalyComparer:
     def __init__(self, X_train, y_train, X_val, y_val, X_test, y_test,
                  random_state=42, **kwargs):
         y_train = np.asarray(y_train).ravel()
-        n_pos = int(np.sum(y_train))
+        int(np.sum(y_train))
         if np.any(y_train == 1):
             raise DataSchemaError(
                 "AnomalyComparer requires X_train to contain only the "

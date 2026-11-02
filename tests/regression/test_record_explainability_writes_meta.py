@@ -1,6 +1,5 @@
 import json
 import numpy as np
-from pathlib import Path
 
 from spam_fraud_detector.core import ResultStore, RunContext
 from spam_fraud_detector.core.utils import get_git_commit, get_package_versions
