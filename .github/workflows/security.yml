@@ -1,0 +1,54 @@
+name: Security
+
+on:
+  schedule:
+    - cron: "0 3 * * 0"  # Weekly on Sunday at 3 AM UTC
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e "[dev]"
+
+      - name: Run Safety Check
+        run: safety check --full
+
+      - name: Run Bandit Security Scan
+        run: bandit -r spam_fraud_detector --exclude tests/
+
+      - name: Scan for Vulnerable Dependencies
+        uses: anchore/scan-action@v2
+        with:
+          name: spam-fraud-detector security scan
+          path: spam_fraud_detector
+
+      - name: Check for Secret Leaks
+        uses: github/codeql-action/analyze@v2
+
+      - name: Generate Security Report
+        run: |
+          echo "Security scan completed for Python ${{ matrix.python-version }}"
+          echo "----------------------------------------"
+          echo "Safety vulnerabilities: $(safety check 2>&1 | grep -c 'Warning' || echo 0)"
+          echo "Bandit issues: $(bandit -r spam_fraud_detector --exclude tests/ -f json 2>/dev/null | jq length || echo 0)"
+          echo "Dependency vulnerabilities scanned"
+
+      - name: Upload Security Report
+        uses: actions/upload-artifacts@v4
+        with:
+          name: security-report-${{ matrix.python-version }}
+          path: .
