@@ -1,13 +1,15 @@
 # spam_fraud_detector/main.py
 
-import sys
+from __future__ import annotations
+
 import logging
+import sys
 import warnings
 
 # Import necessary classes from the src module
 try:
-    from spam_fraud_detector.core.data_loader import KaggleDataLoader
     from spam_fraud_detector.core.comparer import ClassifierGroupComparer
+    from spam_fraud_detector.core.data_loader import KaggleDataLoader
     from spam_fraud_detector.core.visualizer import ModelVisualizer
 except ImportError as e:
     print(f"Error: {e}")
@@ -47,7 +49,7 @@ class SpamFraudDetector:
         self,
         task: str,
         save_format: str = "csv",
-        report_name: str = None,
+        report_name: str | None = None,
         seed: int = 42,
         skip_train: bool = False,
         skip_stats: bool = False,
@@ -104,6 +106,7 @@ class SpamFraudDetector:
         mapped back to tokens. Used by the spam persona.
         """
         from pathlib import Path
+
         import joblib
 
         for cand in ("07_features", "06_features"):
@@ -126,9 +129,10 @@ class SpamFraudDetector:
         print("\n  [2/3] Preparing and comparing classifiers...")
 
         # Build a ResultStore so bundles + dashboards are written atomically.
+        from pathlib import Path
+
         from spam_fraud_detector.core.result_store import ResultStore, RunContext
         from spam_fraud_detector.core.utils import get_git_commit, get_package_versions
-        from pathlib import Path
 
         domain = f"{self.task}_detection"
         ctx = RunContext(
@@ -208,24 +212,36 @@ class SpamFraudDetector:
                        * novel transactions (anomaly high, supervised low),
                        * sophisticated fraud (supervised high, anomaly low).
         """
-        from pathlib import Path
-        import json
         import hashlib
+        import json
+        from datetime import datetime, timezone
+        from pathlib import Path
+
         import joblib
         import numpy as np
-        from datetime import datetime, timezone
 
-        from spam_fraud_detector.core.result_store import ResultStore, RunContext
-        from spam_fraud_detector.core.explainer import (
-            make_explainer, build_casefile, build_hypothetical_casefile,
-            render_case_waterfall, render_hypothetical_case_waterfall,
-            _shap_row, _top_features_from_shap,
-        )
-        from spam_fraud_detector.core.fake_subjects import load_scenarios, subject_generator
-        from spam_fraud_detector.core.recommendations import recommend
         from spam_fraud_detector.core.case_renderer import render_case_summary
-        from spam_fraud_detector.core.utils import get_git_commit, get_package_versions, atomic_write_json
         from spam_fraud_detector.core.exceptions import DatasetNotFoundError
+        from spam_fraud_detector.core.explainer import (
+            _shap_row,
+            _top_features_from_shap,
+            build_casefile,
+            build_hypothetical_casefile,
+            make_explainer,
+            render_case_waterfall,
+            render_hypothetical_case_waterfall,
+        )
+        from spam_fraud_detector.core.fake_subjects import (
+            load_scenarios,
+            subject_generator,
+        )
+        from spam_fraud_detector.core.recommendations import recommend
+        from spam_fraud_detector.core.result_store import ResultStore, RunContext
+        from spam_fraud_detector.core.utils import (
+            atomic_write_json,
+            get_git_commit,
+            get_package_versions,
+        )
 
         # sklearn emits "X does not have valid feature names ..." whenever an
         # estimator fitted on a DataFrame is called with an array (or vice
@@ -294,7 +310,7 @@ class SpamFraudDetector:
                     else:
                         continue
                     supervised_scores_by_model[meta["model_name"]] = probs
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     logging.getLogger(__name__).warning(
                         "supervised pre-computation skipped %s: %s",
                         meta.get("model_name", "?"), exc,
@@ -470,7 +486,7 @@ class SpamFraudDetector:
                             casefile = build_casefile(
                                 persona, model, row, y_true, y_pred, score,
                                 threshold, group, subject.to_dict(), tf,
-                                provenance, lambda cf: recommend(persona, cf))
+                                provenance, lambda cf: recommend(persona, cf))  # noqa: B023
                             png_path = out_dir / f"{name}__{group}__{persona}__case_{subject.subject_id}.png"
                             json_path = out_dir / f"{name}__{group}__{persona}__case_{subject.subject_id}.json"
                             render_case_waterfall(explainer, row, casefile, png_path, top_k=10)
@@ -505,7 +521,7 @@ class SpamFraudDetector:
                             dict(provenance_base),
                             lambda sid, seed=42, persona=None: subject_generator(
                                 sid, seed=seed, persona=persona),
-                            lambda cf: recommend(persona, cf),
+                            lambda cf: recommend(persona, cf),  # noqa: B023
                             threshold,
                             top_k_features=5,
                         )
@@ -535,7 +551,7 @@ class SpamFraudDetector:
                             "raw_score": h_casefile.get("raw_score"),
                             "disagreement_type": h_casefile.get("disagreement_type"),
                         })
-                    except Exception as exc:
+                    except Exception as exc:  # noqa: BLE001
                         print(f"[explain] {name}__{group} hypo {scenario['scenario_id']} FAILED: {exc}")
                         failed += 1
 
@@ -560,13 +576,13 @@ class SpamFraudDetector:
                 for cf in casefiles:
                     try:
                         print(render_case_summary(cf))
-                    except Exception as render_exc:
+                    except Exception as render_exc:  # noqa: BLE001
                         import traceback as _tb
                         print(f"[RENDER FAIL] {cf.get('subject_id', '?')}: {render_exc}")
                         _tb.print_exc()
                     print()
 
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 print(f"[explain] {name}__{group} FAILED: {exc}")
                 failed += 1
 
@@ -580,6 +596,7 @@ class SpamFraudDetector:
         and injects the summary into the domain doc.
         """
         from pathlib import Path
+
         from spam_fraud_detector.core.stats import StatsEngine
 
         domain = f"{self.task}_detection"
@@ -622,6 +639,7 @@ class SpamFraudDetector:
         outputs/stats/<domain>/ and injects the summary into the domain doc.
         """
         from pathlib import Path
+
         from spam_fraud_detector.core.stats import StatsEngine
 
         domain = f"{self.task}_detection"
@@ -673,7 +691,7 @@ class SpamFraudDetector:
         if self.explain_only:
             try:
                 self._run_explain_only()
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"Error during explain-only execution: {e}")
                 import traceback
                 traceback.print_exc()
@@ -686,7 +704,7 @@ class SpamFraudDetector:
         if self.stats_only:
             try:
                 self._run_stats_only()
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"Error during stats-only execution: {e}")
                 import traceback
                 traceback.print_exc()
@@ -699,7 +717,7 @@ class SpamFraudDetector:
         if self.stats_tournament:
             try:
                 self._run_stats_tournament()
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 print(f"Error during stats-tournament execution: {e}")
                 import traceback
                 traceback.print_exc()
@@ -719,21 +737,21 @@ class SpamFraudDetector:
             if self.store is not None and self.explainer != "off":
                 try:
                     self._run_explainability()
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     print(f"Warning: _run_explainability() failed: {e}")
 
             # Finalize the ResultStore (writes dashboard + bundles atomically).
             if self.store is not None:
                 try:
                     self.store.finalize()
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     print(f"Warning: store.finalize() failed: {e}")
 
             print("\n" + "=" * 75)
             print(f"Benchmark successfully completed for: {self.task.upper()} detection")
             print("=" * 75)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Error during benchmark execution: {e}")
             import traceback
             traceback.print_exc()
@@ -744,7 +762,9 @@ class SpamFraudDetector:
         try:
             import json
             from pathlib import Path
+
             import joblib
+
             from spam_fraud_detector.core.explainer import make_explainer
 
             domain = f"{self.task}_detection"
@@ -800,7 +820,7 @@ class SpamFraudDetector:
                 # Load model
                 try:
                     model = joblib.load(bundle_path)
-                except Exception:
+                except Exception:  # noqa: BLE001, S112
                     continue
 
                 # Determine explainer backend
@@ -819,7 +839,7 @@ class SpamFraudDetector:
                             enc = joblib.load(enc_path)
                             if hasattr(enc, "vocabulary_"):
                                 vocabulary = list(enc.vocabulary_.keys())
-                    except Exception:
+                    except Exception:  # noqa: BLE001, S110
                         pass
 
                 # Create explainer
@@ -838,14 +858,14 @@ class SpamFraudDetector:
                                                    X_background=None,
                                                    feature_names=fitted_cols or [],
                                                    backend=backend)
-                except Exception:
+                except Exception:  # noqa: BLE001, S112
                     continue
 
                 # Write summary
                 summary_path = out_dir / f"{name}__{group}__{persona}__summary.png"
                 try:
                     explainer.explain_summary(X_val, summary_path)
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     logging.getLogger(__name__).debug("explain_summary failed: %s", exc)
 
                 # Record explainability
@@ -859,7 +879,7 @@ class SpamFraudDetector:
                         "persona": persona,
                     }, persona=persona)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Explainability failed: {e}")
 
 

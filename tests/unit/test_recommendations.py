@@ -1,7 +1,12 @@
 """Tests for the recommendations engine (v4.4.6)."""
 import pytest
 
-from spam_fraud_detector.core.recommendations import recommend, recommend_fraud, recommend_spam, recommend_anomaly
+from spam_fraud_detector.core.recommendations import (
+    recommend,
+    recommend_anomaly,
+    recommend_fraud,
+    recommend_spam,
+)
 
 VALID_ACTIONS = {"block", "escalate", "review", "monitor", "clear"}
 VALID_PRIORITIES = {"high", "medium", "low"}

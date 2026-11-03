@@ -17,7 +17,7 @@ def main() -> int:
             r = requests.head(u, timeout=10, allow_redirects=True)
             if r.status_code >= 400:
                 bad.append((u, r.status_code))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             bad.append((u, str(e)))
     if bad:
         for u, s in bad[:20]:

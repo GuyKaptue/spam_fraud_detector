@@ -3,22 +3,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-import pandas as pd
-from typing import Any, Dict
+from typing import Any
 
+import pandas as pd
 
 from .data_loader import KaggleDataLoader
-from .split import SplitManager
-from .quality import QualityGate
 from .features import FeatureEngineer
+from .quality import QualityGate
+from .split import SplitManager
 from .utils import deterministic_parquet
 
 
 @dataclass
 class PipelineResult:
     domain: str
-    hashes: Dict[str, str] = field(default_factory=dict)
-    stage_hashes: Dict[str, str] = field(default_factory=dict)
+    hashes: dict[str, str] = field(default_factory=dict)
+    stage_hashes: dict[str, str] = field(default_factory=dict)
     split_manifest_hash: str = ""
     quality_passed: bool = True
     split_manifest: str = ""

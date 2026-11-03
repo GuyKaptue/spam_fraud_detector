@@ -3,7 +3,9 @@ import numpy as np
 import pandas as pd
 
 from spam_fraud_detector.core.explainer import (
-    ModelExplainer, build_hypothetical_casefile, render_hypothetical_case_waterfall,
+    ModelExplainer,
+    build_hypothetical_casefile,
+    render_hypothetical_case_waterfall,
 )
 from spam_fraud_detector.core.fake_subjects import load_scenarios, subject_generator
 from spam_fraud_detector.core.recommendations import recommend
@@ -83,7 +85,7 @@ def test_hypothetical_spam_casefile_structure():
     provenance = {"model": "RF", "group": "unscaled", "dataset_hash": "sha256:x",
                   "background_hash": "sha256:y", "feature_names_hash": "sha256:z",
                   "split": "val", "recorded_at": "2026-01-01T00:00:00Z"}
-    casefile, row = build_hypothetical_casefile(
+    casefile, _row = build_hypothetical_casefile(
         "spam", model, explainer, scenario, feature_names, {}, None,
         provenance, lambda sid, seed=42, persona=None: subject_generator(sid, seed=seed, persona="spam"),
         lambda cf: recommend("spam", cf), threshold=0.5,
@@ -109,7 +111,7 @@ def test_hypothetical_anomaly_casefile_structure():
     provenance = {"model": "IF", "group": "anomaly", "dataset_hash": "sha256:x",
                   "background_hash": "sha256:y", "feature_names_hash": "sha256:z",
                   "split": "val", "recorded_at": "2026-01-01T00:00:00Z"}
-    casefile, row = build_hypothetical_casefile(
+    casefile, _row = build_hypothetical_casefile(
         "anomaly", model, explainer, scenario, feature_names, {}, None,
         provenance, lambda sid, seed=42, persona=None: subject_generator(sid, seed=seed, persona="anomaly"),
         lambda cf: recommend("anomaly", cf), threshold=0.5,

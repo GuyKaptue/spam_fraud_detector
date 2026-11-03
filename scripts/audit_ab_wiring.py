@@ -12,7 +12,6 @@ import ast
 import sys
 from pathlib import Path
 
-
 STATS_PY = Path("spam_fraud_detector/core/stats.py")
 
 
@@ -46,10 +45,8 @@ def audit() -> int:
             left_name = None
             if isinstance(left, ast.Attribute):
                 left_name = left.attr
-            elif isinstance(left, ast.Subscript):
-                if isinstance(left.value, ast.Name) and left.value.id == "pa":
-                    if isinstance(left.slice, ast.Constant):
-                        left_name = left.slice.value
+            elif isinstance(left, ast.Subscript) and isinstance(left.value, ast.Name) and left.value.id == "pa" and isinstance(left.slice, ast.Constant):
+                left_name = left.slice.value
             if (
                 left_name == "split"
                 and len(node.ops) == 1
@@ -102,17 +99,16 @@ def audit() -> int:
         if isinstance(node, ast.If):
             # Check for n_discordant == 0 condition
             test = node.test
-            if isinstance(test, ast.Compare):
-                if (
-                    isinstance(test.left, ast.Name)
-                    and test.left.id == "n_discordant"
-                    and len(test.ops) == 1
-                    and isinstance(test.ops[0], ast.Eq)
-                    and len(test.comparators) == 1
-                    and isinstance(test.comparators[0], ast.Constant)
-                    and test.comparators[0].value == 0
-                ):
-                    zero_discordant_found = True
+            if isinstance(test, ast.Compare) and (
+                isinstance(test.left, ast.Name)
+                and test.left.id == "n_discordant"
+                and len(test.ops) == 1
+                and isinstance(test.ops[0], ast.Eq)
+                and len(test.comparators) == 1
+                and isinstance(test.comparators[0], ast.Constant)
+                and test.comparators[0].value == 0
+            ):
+                zero_discordant_found = True
     if not zero_discordant_found:
         errors.append("stats.py: no zero-discordant skip with warning found")
 

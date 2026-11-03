@@ -1,16 +1,20 @@
 # spam_fraud_detector/core/visualizer.py
 # type: ignore
+from __future__ import annotations
+
 import os
-import pandas as pd
+
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-from sklearn.metrics import roc_curve, auc, precision_recall_curve
 from matplotlib.backends.backend_pdf import PdfPages
+from sklearn.metrics import auc, precision_recall_curve, roc_curve
 
 from spam_fraud_detector.core.utils import ensure_dir
 
+
 class ModelVisualizer:
-    def __init__(self, results: dict, report_name: str = "spam_detection", yticklabels: list = None):
+    def __init__(self, results: dict, report_name: str = "spam_detection", yticklabels: list | None = None):
         self.report_name = report_name
         self.figures_path = os.path.join("reports", report_name, "figures")
         self.docs_path = os.path.join("reports", report_name, "docs")
@@ -164,7 +168,7 @@ class ModelVisualizer:
 
     def plot_threshold_cost_curve(self, ax, thresholds_json):
         import json
-        data = json.load(open(thresholds_json)) if isinstance(thresholds_json, str) else thresholds_json
+        data = json.load(open(thresholds_json)) if isinstance(thresholds_json, str) else thresholds_json  # noqa: SIM115
         sweep = data.get("sweep", [])
         xs = [r["threshold"] for r in sweep]
         ys = [r["expected_cost"] for r in sweep]

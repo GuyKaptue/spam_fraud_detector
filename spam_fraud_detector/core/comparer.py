@@ -1,31 +1,44 @@
 # spam_fraud_detector/core/comparer.py
 # type: ignore
+from __future__ import annotations
+
 import os
+
 import pandas as pd
+
 try:
     import mlflow
-except Exception:  # pragma: no cover
+except Exception:  # pragma: no cover  # noqa: BLE001
     mlflow = None
-from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score, 
-    confusion_matrix, roc_curve, auc, precision_recall_curve
-)
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
+
+from lightgbm import LGBMClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+
 # Scaling Required
 from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import (
+    accuracy_score,
+    auc,
+    confusion_matrix,
+    f1_score,
+    precision_recall_curve,
+    precision_score,
+    recall_score,
+    roc_curve,
+)
 
 # Scaling Not Required
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
 
-from spam_fraud_detector.core.utils import format_metrics, safe_model_name
 from spam_fraud_detector.core.data_loader import KaggleDataLoader
+from spam_fraud_detector.core.utils import format_metrics, safe_model_name
+
 
 class ClassifierGroupComparer:
     def __init__(
@@ -33,8 +46,8 @@ class ClassifierGroupComparer:
         task: str,
         df: pd.DataFrame = None,
         data_path: str = "",
-        target_col: str = None,
-        drop_cols: list = None,
+        target_col: str | None = None,
+        drop_cols: list | None = None,
         test_size: float = 0.2,
         random_state: int = 42,
         store=None,
@@ -375,7 +388,7 @@ class ClassifierGroupComparer:
         except Exception as e:
             import logging
             import traceback
-            logging.getLogger(__name__).error("Anomaly comparison failed: %s", e, exc_info=True)
+            logging.getLogger(__name__).exception("Anomaly comparison failed")
             # record failure
             try:
                 import json
@@ -387,7 +400,7 @@ class ClassifierGroupComparer:
                                        "caller": "compare_anomalies",
                                        "timestamp": datetime.now(timezone.utc).isoformat(),
                                        "traceback": traceback.format_exc()}) + "\n")
-            except Exception:
+            except Exception as e:  # noqa: BLE001,S110
                 pass
             if getattr(self, "strict_anomaly", False):
                 raise

@@ -29,8 +29,9 @@ def test_background_legitimate_only():
 
 def test_direction_inversion():
     # Test that _as_score inverts decision_function
-    from spam_fraud_detector.core.anomaly import AnomalyComparer
     import numpy as np
+
+    from spam_fraud_detector.core.anomaly import AnomalyComparer
     X = np.array([[1, 2], [3, 4], [5, 6], [7, 8]], dtype=float)
     y = np.array([0, 0, 0, 0])
     ac = AnomalyComparer(X, y, X, y, X, y)

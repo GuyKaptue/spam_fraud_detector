@@ -1,4 +1,5 @@
 import json
+
 import numpy as np
 
 from spam_fraud_detector.core import ResultStore, RunContext

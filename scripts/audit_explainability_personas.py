@@ -56,9 +56,8 @@ def _function_contains_string(src: str, func_name: str, string: str) -> bool:
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef) and node.name == func_name:
             for child in ast.walk(node):
-                if isinstance(child, ast.Constant) and isinstance(child.value, str):
-                    if string in child.value:
-                        return True
+                if isinstance(child, ast.Constant) and isinstance(child.value, str) and string in child.value:
+                    return True
     return False
 
 
@@ -84,9 +83,8 @@ def audit() -> tuple[int, list[str]]:
                     # check for persona string constants
                     persona_strings = set()
                     for child in ast.walk(node):
-                        if isinstance(child, ast.Constant) and isinstance(child.value, str):
-                            if child.value in ("fraud", "spam", "anomaly"):
-                                persona_strings.add(child.value)
+                        if isinstance(child, ast.Constant) and isinstance(child.value, str) and child.value in ("fraud", "spam", "anomaly"):
+                            persona_strings.add(child.value)
                     if not {"fraud", "spam", "anomaly"}.issubset(persona_strings):
                         missing = {"fraud", "spam", "anomaly"} - persona_strings
                         msgs.append(f"explainer.py: make_explainer missing persona branches: {missing}")

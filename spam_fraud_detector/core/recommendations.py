@@ -16,7 +16,6 @@ The rules are persona-specific and documented in FRAMEWORK.md.
 from __future__ import annotations
 
 
-
 def recommend_fraud(casefile: dict) -> dict:
     """Recommendation for a fraud case file (empirical or hypothetical)."""
     score = float(casefile.get("score", 0.0))
@@ -41,10 +40,10 @@ def recommend_fraud(casefile: dict) -> dict:
             f"{top[0]['name'] if top else 'top features'} matches a known fraud pattern."
         )
         next_steps = [
-            f"Contact {subject.get('full_name', '?')} via phone (not SMS/email) "
-            f"to confirm the €{amount:.2f} transaction.",
-            f"If unrecognized: block card ···{subject.get('account_last4', '?')}, "
-            "reverse the charge, open investigation ticket.",
+            (f"Contact {subject.get('full_name', '?')} via phone (not SMS/email) "
+            f"to confirm the €{amount:.2f} transaction."),
+            (f"If unrecognized: block card ···{subject.get('account_last4', '?')}, "
+            "reverse the charge, open investigation ticket."),
             f"If confirmed: add customer-specific allowlist rule for {top_str}.",
             f"Check for related transactions from {merchant} in last 72h.",
         ]
@@ -95,8 +94,8 @@ def recommend_fraud(casefile: dict) -> dict:
             f"{score:.3f}. Verify the model behaves as expected for this feature combination."
         )
         next_steps = [
-            f"Confirm with the analytics team that '{casefile.get('scenario_description', '?')}' is representative "
-            "of real fraud patterns.",
+            (f"Confirm with the analytics team that '{casefile.get('scenario_description', '?')}' is representative "
+            "of real fraud patterns."),
             "If it matches a known novel pattern, add it as a labeled training example.",
             "Add a monitoring rule if this scenario is production-relevant.",
             "Re-run the scenario after any model change to verify stability.",
@@ -323,4 +322,4 @@ def recommend(persona: str, casefile: dict) -> dict:
     raise ValueError(f"unknown persona: {persona}")
 
 
-__all__ = ["recommend_fraud", "recommend_spam", "recommend_anomaly", "recommend"]
+__all__ = ["recommend", "recommend_anomaly", "recommend_fraud", "recommend_spam"]

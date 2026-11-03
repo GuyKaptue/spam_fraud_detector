@@ -21,7 +21,7 @@ def main() -> int:
     results = {}
     ok = True
     for name, cmd in CHECKERS:
-        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=Path.cwd())
+        proc = subprocess.run(cmd, capture_output=True, text=True, cwd=Path.cwd(), check=False)
         try:
             data = json.loads(proc.stdout)
         except (json.JSONDecodeError, ValueError):

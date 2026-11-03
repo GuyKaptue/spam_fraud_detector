@@ -7,7 +7,6 @@ import sys
 from pathlib import Path
 
 
-
 def _is_tree_model(name: str) -> bool:
     return any(t in name for t in ["XGB", "LGBM", "RandomForest", "GradientBoosting", "ExtraTrees"])
 
@@ -53,8 +52,7 @@ def check(domain: str = "both", strict: bool = False) -> tuple[int, list[str]]:
                     if explainability.get("feature_names_hash") and not explainability["feature_names_hash"].startswith("sha256:"):
                         msgs.append(f"{meta_path}: invalid feature_names_hash format")
 
-            if strict and explainability is not None and is_tree:
-                if not explainability.get("summary_path"):
+            if strict and is_tree and explainability is not None and not explainability.get("summary_path"):
                     msgs.append(f"{meta_path}: tree model missing summary_path")
 
     return (0 if not msgs else 1), msgs

@@ -1,7 +1,7 @@
 """Verify dashboard contract: schema, invariants, FK joins, parquet/csv parity."""
 import argparse
-import sys
 import json
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -28,7 +28,7 @@ def main() -> int:
             b = pd.read_csv(csv)
             if list(a.columns) != list(b.columns):
                 errors.append(f"column mismatch {pq.name}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             errors.append(f"read error {pq.name}: {e}")
     if args.dashboard:
         # check index.json
@@ -46,7 +46,7 @@ def main() -> int:
             actual = len(list(Path("spam_fraud_detector/core").glob("*.README.md")))
             if actual != expected:
                 errors.append(f"docs_policy mismatch: {actual} != {expected}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             errors.append(f"contract parse error: {e}")
     print("verify-contract: OK")
     return 0

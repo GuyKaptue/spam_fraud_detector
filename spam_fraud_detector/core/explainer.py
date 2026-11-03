@@ -40,7 +40,7 @@ def _save_png(fig, out_path: Path) -> None:
     (e.g., by PIL.Image.init()), re-import and re-initialize.
     """
     try:
-        import PIL.PngImagePlugin  # noqa: F401
+        import PIL.PngImagePlugin
     except ImportError:
         pass
     try:
@@ -48,7 +48,7 @@ def _save_png(fig, out_path: Path) -> None:
     except KeyError:
         import PIL.Image
         PIL.Image.init()
-        import PIL.PngImagePlugin  # noqa: F401
+        import PIL.PngImagePlugin
         fig.savefig(str(out_path), dpi=100, bbox_inches="tight")
 
 
@@ -90,13 +90,11 @@ def _shap_row(explainer, row: pd.DataFrame):
                     Xbg = row
                 try:
                     Xbg_t = transform(Xbg)
-                except Exception:
+                except Exception as e:  # noqa: BLE001
+                    print(f"{e}")
                     Xbg_t = Xbg
                 if not isinstance(Xbg_t, pd.DataFrame):
-                    try:
-                        Xbg_t = pd.DataFrame(Xbg_t, columns=explainer.feature_names)
-                    except Exception:
-                        pass
+                    Xbg_t = pd.DataFrame(Xbg_t)
                 explainer._explainer = shap.LinearExplainer(est, Xbg_t)
                 explainer._transform = transform
             else:
@@ -108,7 +106,8 @@ def _shap_row(explainer, row: pd.DataFrame):
                     _predict_proba_fn(explainer.model), bg,
                     n_jobs=1)
                 explainer._transform = (lambda x: x)
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             import shap as _shap
             bg = _shap.sample(explainer.X_background,
                               min(50, len(explainer.X_background))) if (explainer.X_background is not None and len(explainer.X_background) > 0) else row
@@ -121,7 +120,8 @@ def _shap_row(explainer, row: pd.DataFrame):
             _row_in = _t(row)
             if not isinstance(_row_in, pd.DataFrame):
                 _row_in = pd.DataFrame(_row_in, columns=explainer.feature_names)
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             _row_in = row
     sv = explainer._explainer.shap_values(_row_in)
     if hasattr(sv, "values"):
@@ -177,7 +177,7 @@ def explain_feature(name: str, value: float, shap_value: float,
                     persona: str, count: int | None = None) -> str:
     """Return a plain-language explanation sentence for one feature/token."""
     if persona == "spam":
-        c = count if count is not None else int(round(abs(value)))
+        c = count if count is not None else round(abs(value))
         if c >= 2:
             return (f"'{name}' appears {c} times; in the training data, "
                     f"messages with >={c} clicks are spam "
@@ -248,11 +248,12 @@ def _unwrap_pipeline(model):
             def transform(X):
                 try:
                     return prep.transform(X)
-                except Exception:
+                except Exception as e:  # noqa: BLE001
+                    print(f"{e}")
                     return X
             return est, transform
-        except Exception:
-            pass
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
     return model, (lambda X: X)
 
 
@@ -342,7 +343,7 @@ def build_hypothetical_casefile(persona: str, model, explainer,
         for f in top_features:
             top_tokens.append({
                 "token": f["name"],
-                "count": int(round(f["value"])),
+                "count": round(f["value"]),
                 "shap_value": f["shap_value"],
                 "direction": f["direction"],
                 "explanation": f["explanation"],
@@ -452,7 +453,7 @@ def render_hypothetical_case_waterfall(explainer, row: pd.DataFrame,
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    sv, expected_value = _shap_row(explainer, row)
+    sv, _expected_value = _shap_row(explainer, row)
     feature_names = explainer.feature_names or [f"f{i}" for i in range(len(sv))]
 
     order = np.argsort(np.abs(sv))[::-1][:top_k]
@@ -490,7 +491,7 @@ def render_hypothetical_case_waterfall(explainer, row: pd.DataFrame,
 def _fmt_value(value: float, persona: str) -> str:
     """Format a feature value for display."""
     if persona == "spam":
-        return f"×{int(round(abs(value)))}"
+        return f"×{round(abs(value))}"
     if abs(value) >= 1000:
         return f"{value:,.0f}"
     if abs(value) >= 100:
@@ -624,6 +625,7 @@ def render_spam_best_confusion_matrix(result_store: ResultStore) -> Path | None:
 def render_spam_waterfall_example(result_store: ResultStore) -> Path | None:
     """Render a SHAP waterfall for the best spam model."""
     import joblib
+
     from spam_fraud_detector.core.explainer import make_explainer
 
     store = result_store
@@ -673,8 +675,6 @@ def render_spam_waterfall_example(result_store: ResultStore) -> Path | None:
     feature_cols = [c for c in val_df.columns if c not in
                     ("y_true", "y_score", "y_pred", "split", "fold", "row_id")]
     X_val = val_df[feature_cols]
-    val_df["y_true"].values
-
     explainer = make_explainer("spam", model, X_val, vocabulary=[], backend="shap")
     sv, _ = _shap_row(explainer, X_val.iloc[[0]])
     tf = _top_features_from_shap(X_val.iloc[[0]], feature_names, sv, 5, "spam")
@@ -697,6 +697,7 @@ def _render_anomaly_case(store: ResultStore, model_name: str,
                          case_id: str) -> Path | None:
     """Render an anomaly case waterfall."""
     import joblib
+
     from spam_fraud_detector.core.explainer import make_explainer
 
     bundle_dir = store.staging / "models" / store.ctx.domain / "all"
@@ -766,8 +767,8 @@ def render_validation_quality_report(inventory: dict) -> Path:
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.text(0.5, 0.5, "Data Quality Report\n(Separate metrics file)",
             ha="center", va="center", fontsize=12,
-            bbox=dict(boxstyle="round,pad=0.5", facecolor="#e6f3ff",
-                      edgecolor="#1f77b4"))
+            bbox={"boxstyle": "round,pad=0.5", "facecolor": "#e6f3ff",
+                      "edgecolor": "#1f77b4"})
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
@@ -1089,7 +1090,8 @@ def _is_linear_model(model) -> bool:
     if hasattr(model, "steps") and getattr(model, "steps", None):
         try:
             est = model.steps[-1][1]
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             est = model
     name = type(est).__name__.lower()
     return any(t in name for t in ("logistic", "sgd", "linear", "ridge", "lasso", "svc"))
@@ -1101,7 +1103,8 @@ def _is_tree_model(model) -> bool:
     if hasattr(model, "steps") and getattr(model, "steps", None):
         try:
             est = model.steps[-1][1]
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             est = model
     tree_attrs = ("feature_importances_", "tree_", "estimators_")
     return any(hasattr(est, a) for a in tree_attrs)
@@ -1144,8 +1147,9 @@ class ModelExplainer:
         """Render a SHAP summary plot to ``path`` (capped internally)."""
         import matplotlib
         matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
         from pathlib import Path
+
+        import matplotlib.pyplot as plt
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -1156,7 +1160,8 @@ class ModelExplainer:
             cols = self.feature_names if self.feature_names else None
             try:
                 X_sample = pd.DataFrame(X_sample, columns=cols)
-            except Exception:
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
                 X_sample = pd.DataFrame(X_sample)
 
         if len(X_sample) == 0:
@@ -1175,11 +1180,12 @@ class ModelExplainer:
         Xt = transform(Xc)
         try:
             Xt = pd.DataFrame(Xt, columns=list(Xc.columns)[:Xt.shape[1]] if hasattr(Xt, "shape") else None)
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             try:
                 Xt = pd.DataFrame(Xt, columns=Xc.columns)
-            except Exception:
-                pass
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
 
         try:
             import shap
@@ -1197,7 +1203,8 @@ class ModelExplainer:
                 if not isinstance(bg, pd.DataFrame):
                     try:
                         bg = pd.DataFrame(bg, columns=Xc.columns)
-                    except Exception:
+                    except Exception as e:  # noqa: BLE001
+                        print(f"{e}")
                         bg = Xc.iloc[: min(50, len(Xc))]
                 def _pred_fn(X):
                     if hasattr(self.model, "predict_proba"):
@@ -1211,8 +1218,8 @@ class ModelExplainer:
                 Xt = transform(Xc)
                 try:
                     Xt = pd.DataFrame(Xt, columns=Xc.columns)
-                except Exception:
-                    pass
+                except Exception as e:  # noqa: BLE001
+                    print(f"{e}")
 
             if isinstance(sv, list):
                 sv = sv[1] if len(sv) > 1 else sv[0]
@@ -1224,7 +1231,8 @@ class ModelExplainer:
             plt.savefig(path, dpi=100, bbox_inches="tight")
             plt.close()
             return str(path)
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             # Fallback: write a minimal valid figure so the artifact exists.
             try:
                 fig, ax = plt.subplots()
@@ -1232,8 +1240,8 @@ class ModelExplainer:
                 ax.set_axis_off()
                 fig.savefig(path, dpi=100)
                 plt.close(fig)
-            except Exception:
-                pass
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
             return None
 
 
@@ -1265,8 +1273,9 @@ class AnomalyExplainer(ModelExplainer):
     def explain_summary(self, X_sample, path):
         import matplotlib
         matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
         from pathlib import Path
+
+        import matplotlib.pyplot as plt
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -1276,7 +1285,8 @@ class AnomalyExplainer(ModelExplainer):
             cols = self.feature_names if self.feature_names else None
             try:
                 X_sample = pd.DataFrame(X_sample, columns=cols)
-            except Exception:
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
                 X_sample = pd.DataFrame(X_sample)
         if len(X_sample) == 0:
             return None
@@ -1291,7 +1301,8 @@ class AnomalyExplainer(ModelExplainer):
                 return model.score_samples(X)
             try:
                 return model.predict(X)
-            except Exception:
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
                 return np.zeros(len(X))
 
         try:
@@ -1302,7 +1313,8 @@ class AnomalyExplainer(ModelExplainer):
             if not isinstance(bg, pd.DataFrame):
                 try:
                     bg = pd.DataFrame(bg, columns=Xc.columns)
-                except Exception:
+                except Exception as e:  # noqa: BLE001
+                    print(f"{e}")
                     bg = Xc
             bg = _cap_sample(bg, 200, 42)
             masker = shap.maskers.Independent(bg, max_samples=min(200, len(bg)))
@@ -1317,15 +1329,16 @@ class AnomalyExplainer(ModelExplainer):
             plt.savefig(path, dpi=100, bbox_inches="tight")
             plt.close()
             return str(path)
-        except Exception:
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
             try:
                 fig, ax = plt.subplots()
                 ax.text(0.5, 0.5, "SHAP unavailable", ha="center", va="center")
                 ax.set_axis_off()
                 fig.savefig(path, dpi=100)
                 plt.close(fig)
-            except Exception:
-                pass
+            except Exception as e:  # noqa: BLE001
+                print(f"{e}")
             return None
 
 
@@ -1369,7 +1382,7 @@ def render_all(store: ResultStore, out_dir: Path = Path("docs/figures")) -> dict
             path = render_fn(store)
             if path:
                 results[name] = str(path)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Warning: Failed to render {name}: {e}")
     return results
 

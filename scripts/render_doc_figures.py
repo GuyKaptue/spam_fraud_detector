@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -201,11 +202,11 @@ def render_framework_pipeline_diagram(inventory: dict) -> Path:
 
     for i, (name, x_val) in enumerate(zip(stages, x)):
         ax.text(x_val, 0, name, ha="center", va="center",
-                bbox=dict(boxstyle="round,pad=0.5", facecolor="#e6f3ff",
-                          edgecolor="#1f77b4"))
+                bbox={"boxstyle": "round,pad=0.5", "facecolor": "#e6f3ff",
+                          "edgecolor": "#1f77b4"})
         if i < len(stages) - 1:
             ax.annotate("", xy=(x_val + 0.5, 0), xytext=(x_val + 0.5, 0),
-                        arrowprops=dict(arrowstyle="->", color="#333333"))
+                        arrowprops={"arrowstyle": "->", "color": "#333333"})
 
     ax.set_xlim(-0.5, len(stages) - 0.5)
     ax.set_ylim(-1, 1)
@@ -238,33 +239,33 @@ def render_framework_mcnemar_decision_tree(inventory: dict) -> Path:
 
     ax.text(0.5, 0.9, "Threshold Sweep Results", ha="center", va="center",
             fontsize=12, fontweight="bold",
-            bbox=dict(boxstyle="round,pad=0.5", facecolor="#e6f3ff", edgecolor="#1f77b4"))
+            bbox={"boxstyle": "round,pad=0.5", "facecolor": "#e6f3ff", "edgecolor": "#1f77b4"})
 
     ax.text(0.25, 0.7, "n_discordant < 25?", ha="center", va="center",
             fontsize=10, fontweight="bold",
-            bbox=dict(boxstyle="round,pad=0.4", facecolor="#fff3cd", edgecolor="#ffc107"))
+            bbox={"boxstyle": "round,pad=0.4", "facecolor": "#fff3cd", "edgecolor": "#ffc107"})
 
     ax.text(0.1, 0.4, "McNemar Exact", ha="center", va="center",
-            fontsize=9, bbox=dict(boxstyle="round,pad=0.4", facecolor="#d4edda", edgecolor="#28a745"))
+            fontsize=9, bbox={"boxstyle": "round,pad=0.4", "facecolor": "#d4edda", "edgecolor": "#28a745"})
     ax.text(0.4, 0.4, "McNemar Chi-Squared", ha="center", va="center",
-            fontsize=9, bbox=dict(boxstyle="round,pad=0.4", facecolor="#d4edda", edgecolor="#28a745"))
+            fontsize=9, bbox={"boxstyle": "round,pad=0.4", "facecolor": "#d4edda", "edgecolor": "#28a745"})
 
     ax.text(0.75, 0.4, "Holm Correction", ha="center", va="center",
-            fontsize=9, bbox=dict(boxstyle="round,pad=0.4", facecolor="#d4edda", edgecolor="#28a745"))
+            fontsize=9, bbox={"boxstyle": "round,pad=0.4", "facecolor": "#d4edda", "edgecolor": "#28a745"})
 
     ax.text(0.75, 0.2, "Expected Cost Threshold", ha="center", va="center",
-            fontsize=9, bbox=dict(boxstyle="round,pad=0.4", facecolor="#d4edda", edgecolor="#28a745"))
+            fontsize=9, bbox={"boxstyle": "round,pad=0.4", "facecolor": "#d4edda", "edgecolor": "#28a745"})
 
     ax.annotate("", xy=(0.25, 0.65), xytext=(0.25, 0.7),
-                arrowprops=dict(arrowstyle="->", color="#333333"))
+                arrowprops={"arrowstyle": "->", "color": "#333333"})
     ax.annotate("", xy=(0.1, 0.45), xytext=(0.2, 0.65),
-                arrowprops=dict(arrowstyle="->", color="#333333"))
+                arrowprops={"arrowstyle": "->", "color": "#333333"})
     ax.annotate("", xy=(0.4, 0.45), xytext=(0.3, 0.65),
-                arrowprops=dict(arrowstyle="->", color="#333333"))
+                arrowprops={"arrowstyle": "->", "color": "#333333"})
     ax.annotate("", xy=(0.75, 0.45), xytext=(0.4, 0.65),
-                arrowprops=dict(arrowstyle="->", color="#333333"))
+                arrowprops={"arrowstyle": "->", "color": "#333333"})
     ax.annotate("", xy=(0.75, 0.35), xytext=(0.75, 0.45),
-                arrowprops=dict(arrowstyle="->", color="#333333"))
+                arrowprops={"arrowstyle": "->", "color": "#333333"})
 
     return _save_fig(fig, "framework_mcnemar_decision_tree")
 
@@ -321,7 +322,7 @@ def render_spam_class_distribution(inventory: dict) -> Path:
     """Class distribution for spam dataset."""
     models = inventory.get("models", {}).get("spam_detection", {})
     total_tn = total_fp = total_fn = total_tp = 0
-    for name, mdata in models.items():
+    for mdata in models.values():
         confusion = mdata.get("confusion", {})
         if confusion and "test" in confusion:
             cm = confusion["test"]
@@ -346,7 +347,7 @@ def render_fraud_class_distribution(inventory: dict) -> Path:
     """Class distribution for fraud dataset."""
     models = inventory.get("models", {}).get("fraud_detection", {})
     total_tn = total_fp = total_fn = total_tp = 0
-    for name, mdata in models.items():
+    for mdata in models.values():
         confusion = mdata.get("confusion", {})
         if confusion and "test" in confusion:
             cm = confusion["test"]
@@ -914,7 +915,7 @@ def render_all(inventory: dict, out_dir: Path = Path("docs/figures")) -> dict:
             path = render_fn(inventory)
             if path:
                 results[name] = str(path)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"Warning: Failed to render {name}: {e}")
     return results
 

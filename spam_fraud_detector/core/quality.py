@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 
@@ -19,13 +19,13 @@ class QualityGate:
         self.quality_dir.mkdir(parents=True, exist_ok=True)
         self.thresholds = thresholds or {"max_null_pct": 0.5, "max_dupe_pct": 0.5}
 
-    def evaluate(self, df: pd.DataFrame) -> Dict[str, Any]:
+    def evaluate(self, df: pd.DataFrame) -> dict[str, Any]:
         null_pct = float(df.isna().mean().mean()) if len(df) else 0.0
         dupe_pct = float(df.duplicated().mean()) if len(df) else 0.0
         report = {
             "null_pct": null_pct,
             "dupe_pct": dupe_pct,
-            "n_rows": int(len(df)),
+            "n_rows": len(df),
             "n_cols": int(df.shape[1]),
         }
         passed = null_pct <= self.thresholds["max_null_pct"] and dupe_pct <= self.thresholds["max_dupe_pct"]
@@ -37,5 +37,5 @@ class QualityGate:
             raise DataQualityError("quality gate failed")
         return {"report": report, "gate": gate}
 
-    def run(self, df: pd.DataFrame) -> Dict[str, Any]:
+    def run(self, df: pd.DataFrame) -> dict[str, Any]:
         return self.evaluate(df)

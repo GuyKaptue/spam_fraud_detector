@@ -225,8 +225,9 @@ def collect_mlflow() -> dict:
                 "params": meta.get("params", {}),
                 "metrics": meta.get("metrics", {}),
             })
-        except Exception:
-            continue
+        except Exception as e:  # noqa: BLE001
+            print(f"{e}")
+            print(f"Warning: {e}")
 
     return {"runs": runs}
 
@@ -257,8 +258,8 @@ def collect_all() -> dict:
             capture_output=True, text=True, check=True,
         )
         inventory["git_commit"] = result.stdout.strip()
-    except Exception:
-        pass
+    except Exception as e:  # noqa: BLE001
+        print(f"Warning: failed to read git commit: {e}")
 
     # Dataset hashes
     for domain in ["spam", "fraud"]:

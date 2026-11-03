@@ -24,7 +24,7 @@ def audit() -> tuple[int, list[str]]:
                 if pat in line:
                     # skip docstrings/comments
                     stripped = line.strip()
-                    if stripped.startswith("#") or stripped.startswith('"""') or stripped.startswith("'"):
+                    if stripped.startswith(("#", '"""', "'")):
                         continue
                     msgs.append(f"{py_file}:{lineno}: stale path reference '{pat}'")
 

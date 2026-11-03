@@ -5,7 +5,7 @@ import hashlib
 import json
 import random
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 FRAUD_NAMES = [
     "Priya Nakamura", "Mateo Alvarez", "Talia Lindgren", "Gustav Weber",
@@ -32,7 +32,7 @@ ANOMALY_NAMES = [
 ]
 
 
-def _normalize_row_id(row_id: Union[int, str]) -> int:
+def _normalize_row_id(row_id: int | str) -> int:
     """Normalize a row_id (int or str) to a stable integer seed.
 
     When given a string, hash it to a stable integer. This ensures that
@@ -88,7 +88,7 @@ class SyntheticSubject:
         return d
 
 
-def subject_generator(scenario_id: Union[int, str], seed: int = 42,
+def subject_generator(scenario_id: int | str, seed: int = 42,
                       persona: str = "fraud") -> SyntheticSubject:
     """Build a deterministic synthetic subject from a scenario hint.
 
@@ -112,7 +112,7 @@ def subject_generator(scenario_id: Union[int, str], seed: int = 42,
             hint = p.get("subject_hint", {}) or {}
             break
 
-    rng = random.Random(int(hashlib.sha256(f"{scenario_id}:{seed}".encode("utf-8")).hexdigest()[:8], 16))
+    rng = random.Random(int(hashlib.sha256(f"{scenario_id}:{seed}".encode()).hexdigest()[:8], 16))
 
     hint_name = hint.get("name")
     if hint_name:
@@ -174,4 +174,4 @@ def subject_generator(scenario_id: Union[int, str], seed: int = 42,
     )
 
 
-__all__ = ["load_scenarios", "SyntheticSubject", "subject_generator"]
+__all__ = ["SyntheticSubject", "load_scenarios", "subject_generator"]

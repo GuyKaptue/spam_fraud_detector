@@ -38,13 +38,13 @@ class ExplainerError(Exception):
 
 
 __all__ = [
-    "DataSchemaError",
     "ArtifactError",
-    "StatsError",
     "ContractViolation",
-    "DatasetNotFoundError",
-    "TestLeakError",
     "DataQualityError",
-    "SplitContractError",
+    "DataSchemaError",
+    "DatasetNotFoundError",
     "ExplainerError",
+    "SplitContractError",
+    "StatsError",
+    "TestLeakError",
 ]

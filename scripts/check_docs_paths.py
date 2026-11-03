@@ -42,7 +42,7 @@ def _tracked_files() -> list[Path]:
     try:
         out = subprocess.run(
             ["git", "ls-files"],
-            capture_output=True, text=True, cwd=ROOT,
+            capture_output=True, text=True, cwd=ROOT, check=False,
         )
         if out.returncode == 0 and out.stdout.strip():
             return [ROOT / p for p in out.stdout.strip().splitlines()]
@@ -61,7 +61,7 @@ def _tracked_files() -> list[Path]:
 def _is_excluded(path: Path) -> bool:
     s = str(path)
     for d in EXCLUDED_DIRS:
-        if s.startswith(d + "/") or s.startswith(d + "\\"):
+        if s.startswith((d + "/", d + "\\")):
             return True
     return False
 
@@ -93,8 +93,7 @@ def _check_file(path: Path, strict: bool) -> list[tuple[int, str]]:
             for m in pat.finditer(line):
                 ref = m.group(1) if m.lastindex else m.group(0)
                 # normalize: strip leading docs/
-                if ref.startswith("docs/"):
-                    ref = ref[5:]
+                ref = ref.removeprefix("docs/")
                 target = CANONICAL / ref
                 # check if root docs/ exists
                 root_target = FORBIDDEN_ROOT / ref

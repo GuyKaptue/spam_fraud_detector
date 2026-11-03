@@ -8,7 +8,6 @@ Covers:
 """
 from __future__ import annotations
 
-
 import pandas as pd
 
 from spam_fraud_detector.core.stats import cohen_h, risk_difference
@@ -65,11 +64,11 @@ class TestHolmAdjustment:
     def test_winner_consistency(self):
         """winner must be consistent with acc_a/acc_b."""
         # acc_a > acc_b → winner is model_a
-        assert "A" if 0.8 > 0.5 else "B" == "A"
+        assert "A" if 0.8 > 0.5 else "B" == "A"  # noqa: PLR0133
         # acc_b > acc_a → winner is model_b
-        assert "A" if 0.3 > 0.9 else "B" == "B"
+        assert "A" if 0.3 > 0.9 else "B" == "B"  # noqa: PLR0133
         # acc_a == acc_b → winner is tie
-        assert "A" if 0.5 > 0.5 else "B" if 0.5 < 0.5 else "tie" == "tie"
+        assert "A" if 0.5 > 0.5 else "B" if 0.5 < 0.5 else "tie" == "tie"  # noqa: PLR0133
 
 
 class TestStatsEngineCompute:

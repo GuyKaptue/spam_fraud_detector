@@ -4,7 +4,13 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from spam_fraud_detector.core.explainer import make_explainer, ExplainerError, ModelExplainer, TextExplainer, AnomalyExplainer
+from spam_fraud_detector.core.explainer import (
+    AnomalyExplainer,
+    ExplainerError,
+    ModelExplainer,
+    TextExplainer,
+    make_explainer,
+)
 
 
 def test_factory_routes_fraud():

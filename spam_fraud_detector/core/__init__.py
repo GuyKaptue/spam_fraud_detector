@@ -1,69 +1,83 @@
 # spam_fraud_detector/core/__init__.py
 #
+from .anomaly import AnomalyComparer
 from .comparer import ClassifierGroupComparer
-from .visualizer import ModelVisualizer
 from .data_loader import KaggleDataLoader
+from .data_pipeline import DataPipeline
 from .exceptions import (
-    DataSchemaError, ArtifactError, StatsError, ContractViolation, DatasetNotFoundError,
-    TestLeakError, DataQualityError, SplitContractError, ExplainerError,
+    ArtifactError,
+    ContractViolation,
+    DataQualityError,
+    DataSchemaError,
+    DatasetNotFoundError,
+    ExplainerError,
+    SplitContractError,
+    StatsError,
+    TestLeakError,
 )
+from .explainer import ModelExplainer
 from .result_store import ResultStore, RunContext
 from .selector import TopKSelector
-from .stats import StatsEngine, cohen_h, risk_difference
 from .split import SplitManager, authorize_test_access
-from .anomaly import AnomalyComparer
-from .explainer import ModelExplainer
-from .data_pipeline import DataPipeline
+from .stats import StatsEngine, cohen_h, risk_difference
 from .utils import (
-    ensure_dir,
-    format_metrics,
-    summarize_class_distribution,
-    safe_model_name,
-    save_dataframe,
-    get_dataset_config,
-    load_dataset,
     DATASETS,
-    set_seed,
-    get_git_commit,
-    get_package_versions,
-    hash_file,
     atomic_write_json,
     atomic_write_text,
     deterministic_parquet,
     deterministic_parquet_bytes,
+    ensure_dir,
+    format_metrics,
+    get_dataset_config,
+    get_git_commit,
+    get_package_versions,
+    hash_file,
+    load_dataset,
+    safe_model_name,
+    save_dataframe,
+    set_seed,
+    summarize_class_distribution,
 )
+from .visualizer import ModelVisualizer
 
 __all__ = [
+    "DATASETS",
+    "AnomalyComparer",
+    "ArtifactError",
     "ClassifierGroupComparer",
-    "ModelVisualizer",
+    "ContractViolation",
+    "DataPipeline",
+    "DataQualityError",
+    "DataSchemaError",
+    "DatasetNotFoundError",
+    "ExplainerError",
     "KaggleDataLoader",
+    "ModelExplainer",
+    "ModelVisualizer",
     "ResultStore",
     "RunContext",
-    "DataSchemaError", "ArtifactError", "StatsError", "ContractViolation",
+    "SplitContractError",
+    "SplitManager",
+    "StatsEngine",
+    "StatsError",
+    "TestLeakError",
+    "TopKSelector",
+    "atomic_write_json",
+    "atomic_write_text",
+    "authorize_test_access",
+    "cohen_h",
+    "deterministic_parquet",
+    "deterministic_parquet_bytes",
     "ensure_dir",
     "format_metrics",
-    "summarize_class_distribution",
-    "safe_model_name",
-    "save_dataframe",
     "get_dataset_config",
-    "load_dataset",
-    "DATASETS",
-    "set_seed",
     "get_git_commit",
     "get_package_versions",
     "hash_file",
-    "atomic_write_json",
-    "atomic_write_text",
-    "deterministic_parquet",
-    "deterministic_parquet_bytes",
-    "TopKSelector",
-    "StatsEngine",
-    "cohen_h",
+    "load_dataset",
     "risk_difference",
-    "DatasetNotFoundError",
-    "TestLeakError", "DataQualityError", "SplitContractError", "ExplainerError",
-    "AnomalyComparer",
-    "ModelExplainer",
-    "DataPipeline",
-    "SplitManager", "authorize_test_access",
+    "safe_model_name",
+    "save_dataframe",
+    "set_seed",
+    "summarize_class_distribution",
 ]

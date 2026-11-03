@@ -5,21 +5,22 @@ from __future__ import annotations
 import contextlib
 import hashlib
 import json
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from .exceptions import TestLeakError, SplitContractError
+from .exceptions import SplitContractError, TestLeakError
 from .utils import deterministic_parquet
 
 
 class _AuthState:
     allowed: bool = False
-    run_id: Optional[str] = None
-    caller: Optional[str] = None
-    authorized_by: Optional[str] = None
+    run_id: str | None = None
+    caller: str | None = None
+    authorized_by: str | None = None
 
 
 _AUTH = _AuthState()
@@ -49,7 +50,7 @@ def authorize_test_access(run_id: str = "", caller: str = "", authorized_by: str
 
 class SplitManager:
     def __init__(self, domain: str, data_root: Any = "data", seed: int = 42,
-                 split_ratios: Tuple[float, float, float] = (0.7, 0.15, 0.15), **kwargs: Any) -> None:
+                 split_ratios: tuple[float, float, float] = (0.7, 0.15, 0.15), **kwargs: Any) -> None:
         self.domain = domain
         self.data_root = Path(data_root)
         self.seed = seed
@@ -58,7 +59,7 @@ class SplitManager:
         self.split_dir = self.processed_dir / "01_split"
         self.split_dir.mkdir(parents=True, exist_ok=True)
         self.split_path = self.split_dir / "split.json"
-    def _stratified_split(self, df: pd.DataFrame) -> Dict[str, List[int]]:
+    def _stratified_split(self, df: pd.DataFrame) -> dict[str, list[int]]:
         label_col = None
         for c in ("target", "label", "Class", "Prediction", "y"):
             if c in df.columns:
@@ -69,21 +70,21 @@ class SplitManager:
         y = df[label_col].to_numpy()
         indices = np.arange(len(df))
         rng = np.random.default_rng(self.seed)
-        train_idx: List[int] = []
-        val_idx: List[int] = []
-        test_idx: List[int] = []
+        train_idx: list[int] = []
+        val_idx: list[int] = []
+        test_idx: list[int] = []
         for cls in np.unique(y):
             cls_idx = indices[y == cls]
             rng.shuffle(cls_idx)
             n = len(cls_idx)
-            n_train = int(round(n * self.split_ratios[0]))
-            n_val = int(round(n * self.split_ratios[1]))
+            n_train = round(n * self.split_ratios[0])
+            n_val = round(n * self.split_ratios[1])
             train_idx.extend(cls_idx[:n_train].tolist())
             val_idx.extend(cls_idx[n_train:n_train + n_val].tolist())
             test_idx.extend(cls_idx[n_train + n_val:].tolist())
         return {"train": sorted(train_idx), "val": sorted(val_idx), "test": sorted(test_idx)}
 
-    def split(self, df: pd.DataFrame) -> Dict[str, Any]:
+    def split(self, df: pd.DataFrame) -> dict[str, Any]:
         from datetime import datetime, timezone
 
         splits = self._stratified_split(df)
@@ -132,7 +133,7 @@ class SplitManager:
 
     create_split = split
 
-    def load_manifest(self) -> Dict[str, Any]:
+    def load_manifest(self) -> dict[str, Any]:
         if not self.split_path.exists():
             raise SplitContractError(f"missing split manifest: {self.split_path}")
         return json.loads(self.split_path.read_text())

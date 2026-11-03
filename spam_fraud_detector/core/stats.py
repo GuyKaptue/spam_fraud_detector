@@ -19,7 +19,7 @@ import json
 import math
 import warnings
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 from scipy import stats as sp_stats
@@ -83,7 +83,7 @@ def _mcnemar(n01: int, n10: int, n_both_right: int, n_both_wrong: int) -> tuple[
             res = mcnemar(table, exact=False, correction=True)
             method = "mcnemar_chi2_corrected"
         return float(res.statistic), float(res.pvalue), method
-    except Exception:
+    except Exception as e:  # noqa: BLE001, F841
         # Fallback chi-square
         stat = float((n01 - n10) ** 2 / n_discordant) if n_discordant > 0 else 0.0
         pval = float(sp_stats.chi2.sf(stat, 1)) if n_discordant > 0 else 1.0
@@ -94,7 +94,7 @@ def _mcnemar(n01: int, n10: int, n_both_right: int, n_both_wrong: int) -> tuple[
 # Holm correction (deterministic)
 # ---------------------------------------------------------------------------
 
-def _holm_adjust(p_values: List[float]) -> List[float]:
+def _holm_adjust(p_values: list[float]) -> list[float]:
     """Holm step-down adjustment.
 
     Deterministic tie-break: sort by (p_value, model_a, model_b).
@@ -163,7 +163,7 @@ class StatsEngine:
                             f"A/B test requires non-overlapping splits."
                         )
 
-    def compute(self, store: Optional[ResultStore] = None) -> Dict[str, Any]:
+    def compute(self, store: ResultStore | None = None) -> dict[str, Any]:
         st = self._staging()
         # determine top models from selection
         sel_path = st / "models" / self.domain / "top3" / "selection.json"
@@ -202,7 +202,7 @@ class StatsEngine:
                 n01 = int((a_wrong & ~b_wrong).sum())  # a wrong, b right
                 n10 = int((~a_wrong & b_wrong).sum())  # a right, b wrong
                 n_discordant = n01 + n10
-                n_total = int(len(ta))
+                n_total = len(ta)
 
                 # Zero-discordant skip
                 if n_discordant == 0:
@@ -329,9 +329,9 @@ class StatsEngine:
 
     def compute_tournament(
         self,
-        models: Optional[List[tuple[str, str]]] = None,
-        store: Optional[ResultStore] = None,
-    ) -> Dict[str, Any]:
+        models: list[tuple[str, str]] | None = None,
+        store: ResultStore | None = None,
+    ) -> dict[str, Any]:
         """Run sequential pairwise A/B testing (tournament/challenger format).
 
         The first two models compete head-to-head; the winner advances to face
@@ -388,7 +388,7 @@ class StatsEngine:
             # Discover all supervised model bundles from staging
             bundle_dir = st / "models" / self.domain / "all"
             anomaly_groups = {"anomaly"}
-            discovered: List[tuple[str, str]] = []
+            discovered: list[tuple[str, str]] = []
             if bundle_dir.exists():
                 for meta_path in sorted(bundle_dir.glob("*.meta.json")):
                     try:
@@ -399,7 +399,7 @@ class StatsEngine:
                             continue  # anomaly models excluded from supervised tournament
                         if name and (name, group) not in discovered:
                             discovered.append((name, group))
-                    except Exception:
+                    except Exception:  # noqa: BLE001, S112
                         continue
             models = discovered
 
@@ -415,7 +415,7 @@ class StatsEngine:
                     ftest = fm[(fm["domain"] == self.domain) & (fm["split"] == "test") & (fm["metric"] == "pr_auc")]
                     agg = ftest.groupby(["model", "group"], as_index=False)["value"].mean().sort_values("value", ascending=False)
                     models = list(zip(agg["model"].head(20), agg["group"].head(20)))
-                except Exception:
+                except Exception as e:  # noqa: BLE001, F841
                     models = []
 
         if len(models) < 2:
@@ -436,7 +436,7 @@ class StatsEngine:
               f"(alpha={ALPHA_FAMILY} / {n_comparisons} comparisons)")
         print(f"{'='*70}\n")
 
-        rounds: List[Dict[str, Any]] = []
+        rounds: list[dict[str, Any]] = []
         current_champion_name, current_champion_group = models[0]
 
         print(
@@ -540,7 +540,7 @@ class StatsEngine:
             n01 = int((a_wrong & ~b_wrong).sum())  # a wrong, b right
             n10 = int((~a_wrong & b_wrong).sum())  # a right, b wrong
             n_discordant = n01 + n10
-            n_total = int(len(ta))
+            n_total = len(ta)
 
             print(f"  [DATA] Test rows compared: {n_total}")
             print(f"  [DATA] Both correct: {n_both_right}, Both wrong: {n_both_wrong}")

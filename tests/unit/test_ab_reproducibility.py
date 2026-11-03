@@ -98,7 +98,7 @@ class TestStatsEngineReproducibility:
                     comparisons.append({
                         "model_a": "A", "model_b": "B",
                         "test": method, "statistic": round(stat, 6),
-                        "p_value": round(pval, 10), "n": int(len(pa)),
+                        "p_value": round(pval, 10), "n": len(pa),
                         "n_discordant": n_discordant, "n01": n01, "n10": n10,
                         "winner": winner, "acc_a": round(acc_a, 6),
                         "acc_b": round(acc_b, 6), "cohen_h": round(float(h), 6),

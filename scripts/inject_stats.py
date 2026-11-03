@@ -16,7 +16,6 @@ import json
 import sys
 from pathlib import Path
 
-
 DOMAIN_DOC_MAP = {
     "spam_detection": "docs/SPAM_DETECTION.md",
     "fraud_detection": "docs/FRAUD_DETECTION.md",
@@ -48,8 +47,8 @@ def _build_summary_md(ab: dict) -> str:
     lines = [
         "## Statistical Significance",
         "",
-        "Pairwise McNemar tests on test-split predictions, with Holm "
-        "family-wise error rate correction.",
+        ("Pairwise McNemar tests on test-split predictions, with Holm "
+        "family-wise error rate correction."),
         "",
         f"- Comparisons: {n_comp}",
         f"- Significant (Holm 0.05): {n_sig}",

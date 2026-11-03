@@ -24,6 +24,7 @@ def test_selector_uses_current_staging(tmp_path):
     stale = tmp_path / "outputs.staging.stale"
     (stale / "dashboard").mkdir(parents=True, exist_ok=True)
     import pandas as pd
+
     from spam_fraud_detector.core.utils import deterministic_parquet
     stale_manifest = pd.DataFrame([{"domain": "spam_detection", "model": "STALE",
                                     "group": "scaled", "skipped": False}])

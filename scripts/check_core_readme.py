@@ -23,9 +23,8 @@ def _public_symbols(module: str) -> list:
     tree = ast.parse(src)
     symbols = []
     for node in ast.iter_child_nodes(tree):
-        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
-            if not node.name.startswith("_"):
-                symbols.append(node.name)
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)) and not node.name.startswith("_"):
+            symbols.append(node.name)
     return symbols
 
 
@@ -158,7 +157,7 @@ def main() -> int:
     parser.add_argument("--module", help="Check a single module.")
     args = parser.parse_args()
 
-    code, errors, warnings = check_all(json_output=args.json, module_filter=args.module)
+    code, _errors, _warnings = check_all(json_output=args.json, module_filter=args.module)
     return code
 
 

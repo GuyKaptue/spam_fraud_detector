@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Guard: verify anomaly explainability produced zero failures."""
-import sys
 import pathlib
+import sys
 
 p = pathlib.Path("reports/fraud_detection/docs/explainability")
 if not p.exists():

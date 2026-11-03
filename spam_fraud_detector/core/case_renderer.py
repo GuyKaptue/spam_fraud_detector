@@ -50,7 +50,6 @@ from __future__ import annotations
 
 import textwrap
 
-
 BOX_DOUBLE = "═"
 BOX_SINGLE = "─"
 
@@ -96,7 +95,7 @@ def _fmt_value(value: float, persona: str) -> str:
     """Format a feature value for display."""
     if persona == "spam":
         # tokens show count
-        return f"×{int(round(value))}"
+        return f"×{round(value)}"
     if abs(value) >= 1000:
         return f"{value:,.0f}"
     if abs(value) >= 100:
@@ -215,8 +214,7 @@ def _recommendation_block(casefile: dict, width: int) -> list[str]:
     action_part = f"ACTION: {action.upper()}"
     priority_part = f"PRIORITY: {priority.upper()}"
     gap = width - len(action_part) - len(priority_part) - 6
-    if gap < 2:
-        gap = 2
+    gap = max(gap, 2)
     lines.append(f"  {action_part}{' ' * gap}{priority_part}")
     lines.append(f"  CONFIDENCE: {confidence.upper()}")
     lines.append("")

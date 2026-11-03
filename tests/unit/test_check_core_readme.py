@@ -19,7 +19,7 @@ def _run(tmp_path: Path) -> subprocess.CompletedProcess:
         [sys.executable, str(SCRIPT), "--json"],
         cwd=str(tmp_path),
         capture_output=True,
-        text=True,
+        text=True, check=False,
     )
 
 

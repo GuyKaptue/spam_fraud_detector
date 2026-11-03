@@ -14,7 +14,7 @@ def _run(cwd: Path, *args: str) -> subprocess.CompletedProcess:
         [sys.executable, str(SCRIPT), *args],
         cwd=str(cwd),
         capture_output=True,
-        text=True,
+        text=True, check=False,
     )
 
 

@@ -14,7 +14,6 @@ import re
 import sys
 from pathlib import Path
 
-
 INVENTORY_PATH = Path("spam_fraud_detector/reports/docs/EVIDENCE_INVENTORY.json")
 DOCS_DIR = Path("spam_fraud_detector/reports/docs")
 FIGURES_DIR = DOCS_DIR / "figures"
@@ -65,8 +64,8 @@ def verify_output_paths(inventory: dict) -> list[str]:
     inventory_paths = set()
 
     # Models
-    for domain, models in inventory.get("models", {}).items():
-        for model_name, model_data in models.items():
+    for models in inventory.get("models", {}).values():
+        for model_data in models.values():
             if model_data.get("bundle_path"):
                 inventory_paths.add(model_data["bundle_path"])
             if model_data.get("meta_path"):
@@ -75,21 +74,21 @@ def verify_output_paths(inventory: dict) -> list[str]:
                 inventory_paths.add(model_data["thresholds_path"])
 
     # Stats
-    for domain, data in inventory.get("stats", {}).items():
+    for data in inventory.get("stats", {}).values():
         if data.get("ab_test_path"):
             inventory_paths.add(data["ab_test_path"])
         if data.get("summary_md_path"):
             inventory_paths.add(data["summary_md_path"])
 
     # Dashboard
-    for table_name, table_data in inventory.get("dashboard", {}).items():
+    for table_data in inventory.get("dashboard", {}).values():
         if table_data.get("parquet"):
             inventory_paths.add(table_data["parquet"])
         if table_data.get("csv"):
             inventory_paths.add(table_data["csv"])
 
     # Explainability
-    for domain, data in inventory.get("explainability", {}).items():
+    for data in inventory.get("explainability", {}).values():
         for cf in data.get("casefiles", []):
             if cf.get("json"):
                 inventory_paths.add(cf["json"])
@@ -112,7 +111,7 @@ def verify_output_paths(inventory: dict) -> list[str]:
             if "*" in ref or "{" in ref or "<" in ref:
                 continue
             # Normalize: strip leading "outputs/" to match inventory paths
-            norm_ref = ref[8:] if ref.startswith("outputs/") else ref
+            norm_ref = ref.removeprefix("outputs/")
             norm_ref = norm_ref.rstrip("/")
             if norm_ref not in inventory_paths:
                 errors.append(f"{doc_path}: output path not in inventory: {ref}")

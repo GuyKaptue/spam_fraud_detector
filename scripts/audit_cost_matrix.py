@@ -1,8 +1,10 @@
 """Audit cost matrix wiring."""
 from __future__ import annotations
+
 import json
 import sys
 from pathlib import Path
+
 
 def main():
     msgs = []

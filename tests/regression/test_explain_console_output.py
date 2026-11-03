@@ -6,6 +6,15 @@ RECOMMENDATION) for every persona.
 """
 import subprocess
 import sys
+from pathlib import Path
+
+import pytest
+
+
+def _bundle_dir(persona: str) -> Path:
+    """Return the expected bundle directory for a persona."""
+    domain = "spam_detection" if persona == "spam" else "fraud_detection"
+    return Path("outputs/models") / domain / "all"
 
 
 def _run_explain(persona: str) -> subprocess.CompletedProcess:
@@ -17,11 +26,13 @@ def _run_explain(persona: str) -> subprocess.CompletedProcess:
          "--dataset", dataset,
          "--explainer", "shap",
          "--explain-only", "--persona", persona],
-        capture_output=True, text=True, timeout=600,
+        capture_output=True, text=True, timeout=600, check=False,
     )
 
 
 def test_explain_fraud_console_output():
+    if not _bundle_dir("fraud").exists():
+        pytest.skip("No fraud bundles; run `make train` first")
     proc = _run_explain("fraud")
     assert proc.returncode == 0, proc.stderr
     out = proc.stdout
@@ -38,6 +49,8 @@ def test_explain_fraud_console_output():
 
 
 def test_explain_spam_console_output():
+    if not _bundle_dir("spam").exists():
+        pytest.skip("No spam bundles; run `make train` first")
     proc = _run_explain("spam")
     assert proc.returncode == 0, proc.stderr
     out = proc.stdout
@@ -50,6 +63,8 @@ def test_explain_spam_console_output():
 
 
 def test_explain_anomaly_console_output():
+    if not _bundle_dir("anomaly").exists():
+        pytest.skip("No anomaly bundles; run `make train` first")
     proc = _run_explain("anomaly")
     assert proc.returncode == 0, proc.stderr
     out = proc.stdout

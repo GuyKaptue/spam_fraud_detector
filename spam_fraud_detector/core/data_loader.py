@@ -2,21 +2,22 @@
 # spam_fraud_detector/core/data_loader.py
 from __future__ import annotations
 
-import os
 import hashlib
+import os
 import subprocess
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any
 
 import pandas as pd
 
 try:
     import kagglehub
-except Exception:  # pragma: no cover
+except Exception as e:  # pragma: no cover  # noqa: BLE001, F841
     kagglehub = None
 
 from .exceptions import DatasetNotFoundError
-from .utils import get_dataset_config, deterministic_parquet
+from .utils import deterministic_parquet, get_dataset_config
+
 
 class KaggleDataLoader:
     def __init__(
@@ -24,7 +25,7 @@ class KaggleDataLoader:
         task: str = "spam",
         adapter: Any = None,
         save_dir: str = "datasets",
-        data_root: Union[str, Path] = "data",
+        data_root: str | Path = "data",
         download: bool = False,
         force_rebuild: bool = False,
         **kwargs: Any,
@@ -38,8 +39,8 @@ class KaggleDataLoader:
                 from kagglehub import KaggleDatasetAdapter
 
                 adapter = getattr(KaggleDatasetAdapter, "PANDAS", None)
-            except Exception:  # pragma: no cover
-                adapter = None
+            except Exception as e:  # pragma: no cover  # noqa: BLE001
+                    print(f"Download failed: {e}")
         self.adapter = adapter
         self.save_dir = save_dir
         self.data_root = Path(data_root)
@@ -55,7 +56,7 @@ class KaggleDataLoader:
             return True
         return (Path.home() / ".kaggle" / "kaggle.json").exists()
 
-    def raw_files(self) -> List[Path]:
+    def raw_files(self) -> list[Path]:
         if not self.raw_dir.exists():
             return []
         return sorted(p for p in self.raw_dir.rglob("*") if p.is_file())
@@ -63,7 +64,7 @@ class KaggleDataLoader:
     def has_raw(self) -> bool:
         return len(self.raw_files()) > 0
 
-    def expected_raw_paths(self) -> List[str]:
+    def expected_raw_paths(self) -> list[str]:
         return [str(self.raw_dir / self.file_path), str(self.raw_dir)]
 
     def download_dataset(self) -> str:
@@ -78,20 +79,18 @@ class KaggleDataLoader:
                     path = kagglehub.dataset_download(self.dataset_name)
                     print(f"Dataset downloaded to: {path}")
                     return str(path) if path else str(self.raw_dir)
-                except Exception as exc:  # pragma: no cover
+                except Exception as exc:  # noqa: BLE001
                     print(f"Download failed: {exc}")
-            except Exception as exc:
+            try:
+                subprocess.run(
+                    ["kaggle", "datasets", "download", "-d", self.dataset_name, "-p", str(self.raw_dir), "--unzip"],
+                    check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                )
+            except Exception as exc:  # pragma: no cover  # noqa: BLE001
                 print(f"Download failed: {exc}")
-        try:
-            subprocess.run(
-                ["kaggle", "datasets", "download", "-d", self.dataset_name, "-p", str(self.raw_dir), "--unzip"],
-                check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except Exception as exc:  # pragma: no cover
-            print(f"Download failed: {exc}")
         return str(self.raw_dir)
 
-    def download_if_missing(self, download: Optional[bool] = None) -> Path:
+    def download_if_missing(self, download: bool | None = None) -> Path:
         if download is None:
             download = self.download
         if self.has_raw():
@@ -104,7 +103,7 @@ class KaggleDataLoader:
             "Missing raw dataset files. Expected one of: " + ", ".join(self.expected_raw_paths())
         )
 
-    def ensure_raw(self, download: Optional[bool] = None) -> Path:
+    def ensure_raw(self, download: bool | None = None) -> Path:
         return self.download_if_missing(download=download)
     def _extract_archives(self) -> None:
         import zipfile
@@ -113,7 +112,7 @@ class KaggleDataLoader:
             try:
                 with zipfile.ZipFile(archive) as zf:
                     zf.extractall(archive.parent)
-            except Exception:
+            except Exception:  # noqa: BLE001,S112
                 continue
 
     def _parse_raw(self) -> None:
@@ -136,11 +135,11 @@ class KaggleDataLoader:
                     df = pd.read_excel(src)
                 else:
                     df = pd.read_json(src)
-            except Exception:
+            except Exception:  # noqa: BLE001,S112
                 continue
             try:
                 df = df.drop_duplicates().reset_index(drop=True)
-            except Exception:
+            except Exception:  # noqa: BLE001,S110
                 pass
             stem = src.stem
             out_parquet = self.processed_dir / f"{stem}.parquet"
@@ -194,7 +193,7 @@ class KaggleDataLoader:
     def layer_path(self, domain: str, layer: str) -> Path:
         return self.data_root / "processed" / domain / layer
 
-    def load_raw(self, domain: str = None) -> pd.DataFrame:
+    def load_raw(self, domain: str | None = None) -> pd.DataFrame:
         d = domain or self.task
         loader = KaggleDataLoader(task=d, data_root=self.data_root, download=self.download, force_rebuild=self.force_rebuild)
         files = loader.raw_files()

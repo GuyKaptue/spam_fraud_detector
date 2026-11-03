@@ -1,8 +1,8 @@
 import numpy as np
 
-from spam_fraud_detector.main import SpamFraudDetector
 from spam_fraud_detector.core import ResultStore, RunContext
 from spam_fraud_detector.core.utils import get_git_commit, get_package_versions
+from spam_fraud_detector.main import SpamFraudDetector
 
 
 def test_main_runs_explainability_against_staging(tmp_path):

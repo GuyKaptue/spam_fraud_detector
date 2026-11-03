@@ -10,7 +10,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 
-
 class FeatureEngineer:
     def __init__(self, domain: str, data_root: Any = "data", **kwargs: Any) -> None:
         self.domain = domain

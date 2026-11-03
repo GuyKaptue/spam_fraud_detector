@@ -1,5 +1,5 @@
 """Unit tests for utils."""
-from spam_fraud_detector.core.utils import set_seed, format_metrics
+from spam_fraud_detector.core.utils import format_metrics, set_seed
 
 
 def test_set_seed_returns_generator():

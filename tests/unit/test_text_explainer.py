@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from spam_fraud_detector.core.explainer import TextExplainer, ExplainerError
+from spam_fraud_detector.core.explainer import ExplainerError, TextExplainer
 
 
 def test_vocabulary_required():

@@ -8,7 +8,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import joblib
 import numpy as np
@@ -16,7 +16,13 @@ import pandas as pd
 import pyarrow  # noqa: F401
 
 from .exceptions import ContractViolation
-from .utils import atomic_write_json, atomic_write_text, hash_file, get_git_commit, get_package_versions
+from .utils import (
+    atomic_write_json,
+    atomic_write_text,
+    get_git_commit,
+    get_package_versions,
+    hash_file,
+)
 
 SCHEMA_VERSION = "1.0.0"
 KNOWN_METRICS = [
@@ -125,8 +131,8 @@ class ResultStore:
         return rows, star
 
     def _compute_curves(self, y_true, y_score):
-        from sklearn.metrics import roc_curve, precision_recall_curve
         from sklearn.calibration import calibration_curve
+        from sklearn.metrics import precision_recall_curve, roc_curve
         y_true = np.asarray(y_true).astype(int)
         y_score = np.asarray(y_score, dtype=float)
         fpr, tpr, _ = roc_curve(y_true, y_score)
@@ -135,7 +141,7 @@ class ResultStore:
             prob_true, prob_pred = calibration_curve(y_true, y_score, n_bins=10, strategy="quantile")
             cal = {"prob_pred": [float(x) for x in prob_pred],
                    "prob_true": [float(x) for x in prob_true]}
-        except Exception:
+        except Exception as e:  # noqa: BLE001, F841
             cal = {"prob_pred": [], "prob_true": []}
         fpr_d, tpr_d = _downsample(fpr, tpr)
         prec_d, rec_d = _downsample(prec, rec)
@@ -152,22 +158,22 @@ class ResultStore:
         name: str,
         group: str,
         model: Any = None,
-        hyperparams: Optional[dict] = None,
-        eval_val: Optional[dict] = None,
-        eval_test: Optional[dict] = None,
-        y_true_val: Optional[Any] = None,
-        y_score_val: Optional[Any] = None,
-        y_true_test: Optional[Any] = None,
-        y_score_test: Optional[Any] = None,
-        row_ids_test: Optional[list] = None,
-        threshold: Optional[float] = None,
-        threshold_policy: Optional[str] = None,
-        confusion: Optional[dict] = None,
-        curves: Optional[dict] = None,
-        feature_count: Optional[int] = None,
-        train_rows: Optional[int] = None,
-        test_rows: Optional[int] = None,
-        feature_columns: Optional[list] = None,
+        hyperparams: dict | None = None,
+        eval_val: dict | None = None,
+        eval_test: dict | None = None,
+        y_true_val: Any | None = None,
+        y_score_val: Any | None = None,
+        y_true_test: Any | None = None,
+        y_score_test: Any | None = None,
+        row_ids_test: list | None = None,
+        threshold: float | None = None,
+        threshold_policy: str | None = None,
+        confusion: dict | None = None,
+        curves: dict | None = None,
+        feature_count: int | None = None,
+        train_rows: int | None = None,
+        test_rows: int | None = None,
+        feature_columns: list | None = None,
     ):
         """Persist one fitted model bundle plus its metrics/curves/thresholds."""
         domain = self.ctx.domain
@@ -205,7 +211,7 @@ class ResultStore:
                 cost_fp = int(kpis.get("cost_matrix", {}).get("cost_fp", 1))
                 if policy == "expected_cost" and kpis.get("threshold_policy"):
                     policy = kpis["threshold_policy"]
-            except Exception:
+            except Exception:  # noqa: BLE001, S110
                 pass
             rows, star = self._threshold_sweep(y_true_val, y_score_val, cost_fn=cost_fn, cost_fp=cost_fp)
             threshold = float(star)
@@ -543,7 +549,7 @@ class ResultStore:
     # Skipped / selection / stats / explainability
     # ------------------------------------------------------------------ #
 
-    def write_skipped(self, items: List[dict]) -> None:
+    def write_skipped(self, items: list[dict]) -> None:
         for item in items:
             domain = self.ctx.domain
             self._manifest.append({
@@ -570,7 +576,7 @@ class ResultStore:
                 "explainability": None,
             })
 
-    def write_selection(self, ranking: List[dict]) -> None:
+    def write_selection(self, ranking: list[dict]) -> None:
         self._selection = ranking
 
     def write_stats(self, ab: dict, summary_md: str) -> None:
@@ -683,7 +689,7 @@ class ResultStore:
         dash.mkdir(parents=True, exist_ok=True)
         now = self.created_at
 
-        tables: Dict[str, pd.DataFrame] = {}
+        tables: dict[str, pd.DataFrame] = {}
 
         tables["dim_domain"] = self._dim_domain()
         tables["dim_group"] = self._dim_group()
@@ -899,7 +905,7 @@ class ResultStore:
             deterministic_parquet(df, pq_path)
             try:
                 df.to_csv(csv_path, index=False)
-            except Exception:
+            except Exception:  # noqa: BLE001, S110
                 pass
 
         # selection parquet/csv already handled above via tables; write explicitly too
@@ -916,7 +922,7 @@ class ResultStore:
             table_entries.append({
                 "name": tname,
                 "path": f"{tname}.parquet",
-                "rows": int(len(df)),
+                "rows": len(df),
             })
         index = {
             "created_at": now,
@@ -997,11 +1003,11 @@ class ResultStore:
                     if model_path.exists():
                         loaded = joblib.load(model_path)
                         cls_name = type(loaded).__name__
-            except Exception:
+            except Exception as e:  # noqa: BLE001, F841
                 cls_name = ""
             is_tree = cls_name in tree_models
             expected = expected_persona_by_domain.get(self.domain)
-            if is_tree and expected:
+            if is_tree and expected:  # noqa: SIM102
                 if expl is not None and expl.get("persona") not in (expected, None) \
                         and expl.get("backend") != "off":
                     raise CV(f"tree model {name} in {self.domain} must have persona={expected} or backend=off")
@@ -1108,7 +1114,7 @@ class ResultStore:
                 old_df = pd.read_parquet(dst_path)
                 df = pd.concat([old_df, new_df], ignore_index=True)
                 df = df.drop_duplicates()
-            except Exception:
+            except Exception as e:  # noqa: BLE001, F841
                 df = new_df
         else:
             df = new_df
@@ -1116,5 +1122,5 @@ class ResultStore:
         deterministic_parquet(df, dst_path)
         try:
             df.to_csv(dst_path.with_suffix(".csv"), index=False)
-        except Exception:
+        except Exception:  # noqa: BLE001, S110
             pass

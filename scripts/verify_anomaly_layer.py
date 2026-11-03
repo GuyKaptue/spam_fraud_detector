@@ -1,7 +1,9 @@
 """Verify anomaly layer produced bundles."""
 from __future__ import annotations
+
 import argparse
 from pathlib import Path
+
 
 def main():
     ap = argparse.ArgumentParser()

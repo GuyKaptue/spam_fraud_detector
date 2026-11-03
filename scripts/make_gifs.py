@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate one animated GIF per figure category from docs/figures/*.png."""
-from pathlib import Path
 import sys
+from pathlib import Path
 
 try:
     from PIL import Image, ImageDraw, ImageFont

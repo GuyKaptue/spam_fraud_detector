@@ -8,8 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import numpy as np  
-import pandas as pd  
+import numpy as np
+import pandas as pd
 
 # Predefined dataset configurations
 DATASETS = {
@@ -69,7 +69,7 @@ def save_dataframe(data: pd.DataFrame, path: str, format: str = "csv") -> str:
             raise ValueError("Unsupported format. Use 'csv' or 'xlsx'.")
         print(f"Data saved to: {path}")
         return path
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"Saving failed: {e}")
         return ""
     
@@ -101,7 +101,7 @@ def set_seed(seed: int = 42) -> np.random.Generator:
     try:
         import torch
         torch.manual_seed(seed)
-    except Exception:
+    except Exception:  # noqa: BLE001, S110
         pass
     return np.random.default_rng(seed)
 
@@ -112,7 +112,7 @@ def get_git_commit() -> str:
             ["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL, text=True
         ).strip()
         return out or "unknown"
-    except Exception:
+    except Exception as e:  # noqa: BLE001, F841
         return "unknown"
 
 def get_package_versions() -> dict:
@@ -124,7 +124,7 @@ def get_package_versions() -> dict:
         try:
             mod = importlib.import_module(p.replace("-", "_"))
             versions[p] = getattr(mod, "__version__", "unknown")
-        except Exception:
+        except Exception as e:  # noqa: BLE001, F841
             versions[p] = "not_installed"
     versions["python"] = sys.version.split()[0]
     return versions

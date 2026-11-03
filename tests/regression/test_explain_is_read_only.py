@@ -26,7 +26,7 @@ def _tree_hash(directory: Path, exclude: tuple = ("*.meta.json",)) -> str:
 
 
 def _run_explain(persona: str, task: str) -> subprocess.CompletedProcess:
-    return subprocess.run(
+    return subprocess.run(  # noqa: PLW1510
         [sys.executable, "-m", "spam_fraud_detector.main",
          "--dataset", task,
          "--explainer", "shap",

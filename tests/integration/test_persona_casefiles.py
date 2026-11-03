@@ -1,19 +1,23 @@
 """Integration tests for persona case files (empirical + hypothetical) with recommendations."""
 import json
+
 import numpy as np
 import pandas as pd
 import pytest
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 from spam_fraud_detector.core.explainer import (
-    ModelExplainer, build_casefile, build_hypothetical_casefile,
-    render_case_waterfall, render_hypothetical_case_waterfall,
+    ModelExplainer,
+    build_casefile,
+    build_hypothetical_casefile,
+    render_case_waterfall,
+    render_hypothetical_case_waterfall,
 )
 from spam_fraud_detector.core.fake_subjects import load_scenarios, subject_generator
 from spam_fraud_detector.core.recommendations import recommend
 from spam_fraud_detector.core.result_store import ResultStore, RunContext
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 
 
 @pytest.fixture()

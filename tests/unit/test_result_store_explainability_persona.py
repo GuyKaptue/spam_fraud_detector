@@ -15,7 +15,7 @@ def store(tmp_path):
 
 
 def test_record_explainability_persona(store):
-    rs, out = store
+    rs, _out = store
     y = np.array([0, 1, 0, 1])
     s = np.array([0.1, 0.9, 0.2, 0.8])
     rs.write_model("M", "scaled", object(), hyperparams={},
@@ -34,13 +34,13 @@ def test_record_explainability_persona(store):
 
 
 def test_record_explainability_before_write_model_raises(store):
-    rs, out = store
-    with pytest.raises(Exception):
+    rs, _out = store
+    with pytest.raises(Exception):  # noqa: B017
         rs.record_explainability("NonExistent", "scaled", {"backend": "shap"}, persona="fraud")
 
 
 def test_idempotent(store):
-    rs, out = store
+    rs, _out = store
     y = np.array([0, 1, 0, 1])
     s = np.array([0.1, 0.9, 0.2, 0.8])
     rs.write_model("M", "scaled", object(), hyperparams={},

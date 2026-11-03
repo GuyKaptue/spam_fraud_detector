@@ -1,11 +1,11 @@
 """Top-K model selection from persisted outputs (no re-fitting)."""
 from __future__ import annotations
 
+import json
 import os
 import shutil
-import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 
@@ -33,7 +33,7 @@ class TopKSelector:
         # No longer needed - outputs go directly to outputs/
         return self.out_root / "dashboard"
 
-    def select(self, store: Optional[ResultStore] = None) -> List[Dict[str, Any]]:
+    def select(self, store: ResultStore | None = None) -> list[dict[str, Any]]:
         # Prefer the store's own staging dir when available (avoids picking a
         # stale outputs.staging.* directory from a previous run).
         dash = None
@@ -81,7 +81,7 @@ class TopKSelector:
                         if m.get("threshold_policy") == "expected_cost":
                             has_cost = True
                             break
-                    except Exception:
+                    except Exception:  # noqa: BLE001, S110
                         pass
             policy = "expected_cost" if has_cost else "pr_auc"
 
@@ -91,7 +91,7 @@ class TopKSelector:
             fts = fts[fts["domain"] == self.domain]
             for _, r in fts.iterrows():
                 cost_map[(r["model"], r["group"])] = (r.get("expected_cost_at_star"), r.get("threshold_star"))
-        except Exception:
+        except Exception:  # noqa: BLE001, S110
             pass
 
         if policy == "expected_cost":
@@ -117,7 +117,7 @@ class TopKSelector:
             dst_meta = top3_dir / f"rank_{rank}_{model}.meta.json"
             try:
                 os.link(src_joblib, dst_joblib)
-            except Exception:
+            except Exception as e:  # noqa: BLE001, F841
                 shutil.copyfile(src_joblib, dst_joblib)
             if src_meta.exists():
                 shutil.copyfile(src_meta, dst_meta)

@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from spam_fraud_detector.core.utils import deterministic_parquet, deterministic_parquet_bytes
+from spam_fraud_detector.core.utils import (
+    deterministic_parquet,
+    deterministic_parquet_bytes,
+)
 
 
 def test_byte_identical_writes(tmp_path: Path) -> None:

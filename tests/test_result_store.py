@@ -14,7 +14,7 @@ def store(tmp_path):
 
 
 def test_write_model_creates_bundle_and_buffers(store):
-    rs, out = store
+    rs, _out = store
     y = np.array([0, 1, 0, 1])
     s = np.array([0.1, 0.9, 0.2, 0.8])
     rs.write_model("M", "scaled", object(), hyperparams={}, eval_val={"accuracy": 0.9, "tp": 1, "fp": 0, "tn": 2, "fn": 1, "n": 4, "n_positive": 2},
@@ -54,7 +54,7 @@ def test_atomicity(store, monkeypatch):
     monkeypatch.setattr(os, "replace", boom)
     try:
         rs.finalize()
-    except Exception:
+    except Exception:  # noqa: BLE001, S110
         pass
     monkeypatch.setattr(os, "replace", orig)
     # outputs dir should not exist (staging cleaned)
