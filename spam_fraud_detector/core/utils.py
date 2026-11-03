@@ -15,12 +15,14 @@ import pandas as pd
 DATASETS = {
     "spam": {
         "dataset_name": "balaka18/email-spam-classification-dataset-csv",
-        "file_path": "emails.csv"
+        "file_path": "emails.csv",
+        "fallback_url": "https://archive.ics.uci.edu/ml/machine-learning-databases/spambase/spambase.data",
+        "description": "5172 emails x 3000 bag-of-words features (UCI Spambase compatible)",
     },
     "fraud": {
         "dataset_name": "mlg-ulb/creditcardfraud",
-        "file_path": "creditcard.csv"
-    }
+        "file_path": "creditcard.csv",
+    },
 }
 
 def get_dataset_config(task: str) -> dict:
