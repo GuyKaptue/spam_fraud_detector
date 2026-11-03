@@ -40,8 +40,11 @@ jobs:
       - name: Clear pip cache
         run: pip cache purge
 
-- run: pip install --upgrade --force-reinstall numpy
-      - run: pip install -e ".[dev]"
+      - name: Upgrade numpy
+        run: pip install --upgrade --force-reinstall numpy
+
+      - name: Install
+        run: pip install -e ".[dev]"
       - name: Unit tests with coverage
         run: pytest -q tests/unit --cov=spam_fraud_detector.core --cov-report=term-missing --cov-fail-under=80
 
