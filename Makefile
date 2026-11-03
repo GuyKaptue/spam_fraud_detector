@@ -37,10 +37,28 @@ docs-check: docs-check-paths docs-check-core
 data: data-spam data-fraud
 
 data-spam:
-	@test -f data/processed/spam/01_split/train.parquet && test -f data/processed/spam/01_split/test.parquet && test -f data/processed/spam/01_split/val.parquet && echo "spam data ready"
+	@if [ -f data/processed/spam/01_split/train.parquet ] && [ -f data/processed/spam/01_split/test.parquet ] && [ -f data/processed/spam/01_split/val.parquet ]; then \
+	    echo "spam data ready (cached)"; \
+	else \
+	    echo "Downloading and processing spam data..."; \
+	    $(PYTHON) -c "from spam_fraud_detector.core.data_loader import KaggleDataLoader; \
+	        loader = KaggleDataLoader(task='spam', download=True); \
+	        loader.download_if_missing(); \
+	        loader.build_processed(force=True); \
+	        print('spam data ready')"; \
+	fi
 
 data-fraud:
-	@test -f data/processed/fraud/01_split/train.parquet && test -f data/processed/fraud/01_split/test.parquet && test -f data/processed/fraud/01_split/val.parquet && echo "fraud data ready"
+	@if [ -f data/processed/fraud/01_split/train.parquet ] && [ -f data/processed/fraud/01_split/test.parquet ] && [ -f data/processed/fraud/01_split/val.parquet ]; then \
+	    echo "fraud data ready (cached)"; \
+	else \
+	    echo "Downloading and processing fraud data..."; \
+	    $(PYTHON) -c "from spam_fraud_detector.core.data_loader import KaggleDataLoader; \
+	        loader = KaggleDataLoader(task='fraud', download=True); \
+	        loader.download_if_missing(); \
+	        loader.build_processed(force=True); \
+	        print('fraud data ready')"; \
+	fi
 
 data-stage:
 	@test -f data/processed/$(STAGE)/01_split/train.parquet && echo "$(STAGE) data ready"

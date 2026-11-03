@@ -105,6 +105,7 @@ class KaggleDataLoader:
 
     def ensure_raw(self, download: bool | None = None) -> Path:
         return self.download_if_missing(download=download)
+
     def _extract_archives(self) -> None:
         import zipfile
 
@@ -112,8 +113,16 @@ class KaggleDataLoader:
             try:
                 with zipfile.ZipFile(archive) as zf:
                     zf.extractall(archive.parent)
+                    print(f"Extracted: {archive.name}")
             except Exception:  # noqa: BLE001,S112
                 continue
+
+    def _has_processed(self) -> bool:
+        """Check if processed split files already exist."""
+        split_dir = self.data_root / "processed" / self.task / "01_split"
+        if not split_dir.exists():
+            return False
+        return any(split_dir.glob("*.parquet"))
 
     def _parse_raw(self) -> None:
         self._extract_archives()
@@ -158,20 +167,19 @@ class KaggleDataLoader:
     _parse = _parse_raw
 
     def build_processed(self, force: bool = False) -> Path:
-        processed_data_files = [p for p in self.processed_dir.iterdir() if p.is_file() and p.suffix.lower() in {".csv", ".parquet", ".xlsx", ".json"}]
-        if processed_data_files and not (force or self.force_rebuild):
-            return self.processed_dir
+        """Full pipeline: download → extract → process. Idempotent."""
+        if not force and self._has_processed():
+            print(f"{self.task} data already processed; skipping.")
+            return self.data_root / "processed" / self.task / "01_split"
+        if not self.has_raw():
+            self.download_if_missing(download=self.download)
+        self._extract_archives()
         self._parse_raw()
         return self.processed_dir
 
-    def process(self, force: bool = False) -> Path:
-        return self.build_processed(force=force)
-
-    def prepare(self, force: bool = False) -> Path:
-        return self.build_processed(force=force)
-
-    def build(self, force: bool = False) -> Path:
-        return self.build_processed(force=force)
+    process = build_processed
+    prepare = build_processed
+    build = build_processed
 
     @property
     def dataset_hash(self) -> str:
