@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.0 — Evidence-first documentation: 23 figures, evidence inventory, figure registry
+## v5.1 — GitHub Actions enhanced CI/CD
 
 ### Added
 - `docs/EVIDENCE_INVENTORY.json`: machine-readable evidence inventory (25 models, 2 domains, 15 dashboard tables)
@@ -8,6 +8,7 @@
 - `scripts/collect_evidence.py`: collects artifacts into `docs/EVIDENCE_INVENTORY.json`
 - `scripts/render_doc_figures.py`: renders all documentation figures deterministically from the inventory
 - `scripts/verify_documentation.py`: verifies docs against the evidence inventory
+- GitHub Actions: Enhanced CI/CD with release and security workflows
 - `docs/FRAMEWORK.md`: v5.0 evidence-first methodology and architecture
 - `docs/PAPER.md`: publication-ready results, significance, threshold analysis
 - 23 figure PNGs in `docs/figures/` (hero results, results table, personas triptych, pipeline diagram, layer order, McNemar decision tree, threshold cost curve, class distributions, threshold curves, ROC curves, PR curves, threshold sensitivity, PR-AUC by model, Holm significance, ROC vs PR)

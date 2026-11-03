@@ -2,6 +2,8 @@
 ### Reproducible Model Comparison for Spam & Credit-Card Fraud Detection
 
 [![CI](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/ci.yml)
+[![Release](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/release.yml/badge.svg)](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/release.yml)
+[![Security](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/security.yml/badge.svg)](https://github.com/GuyKaptue/spam-fraud-detector/actions/workflows/security.yml)
 [![codecov](https://codecov.io/gh/GuyKaptue/spam-fraud-detector/branch/main/graph/badge.svg)](https://codecov.io/gh/GuyKaptue/spam-fraud-detector)
 [![PyPI](https://img.shields.io/pypi/v/spam-fraud-detector)](https://pypi.org/project/spam-fraud-detector/)
 [![Python](https://img.shields.io/pypi/pyversions/spam-fraud-detector)](https://pypi.org/project/spam-fraud-detector/)
